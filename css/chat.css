@@ -294,9 +294,15 @@
 }
 
 .unseen-messages:before {
-    content: ' (';
+    content: '\00a0(';
 }
 
 .unseen-messages:after {
     content: ')';
 }
+
+
+
+
+
+

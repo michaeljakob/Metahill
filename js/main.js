@@ -5,7 +5,7 @@ $(function() {
     var main = this;
 
     // this._activeRoom;
-    // this._userName;
+    this._userName = $('#user-name > button').text().trim();
     this.modals = new __modals__(this);
     this.sstatus = new __status__();
     this.chat = new __chat__(this, this.sstatus);
@@ -17,30 +17,32 @@ $(function() {
 
 
     $(document).ready(function() {
-        main._userName = $('#user-name > button').text().trim();
+        openFavoriteRooms();
         bindOnClickListeners();
 
         $(window).resize();
 
-        openRooms();
         (new __tip_poster__(main));
         (new __image_upload__(main));
     });
 
-    function openRooms() {
-        var DELAY = 100;
-        var counter = 0;
-        $('#channels-list > li').hide();
-        $('#channels-list > li.room-favorite').each(function(_, entry) {
-            ++counter;
-            setTimeout(function() {
-                entry = $(entry);
-                var closeButton = entry.find('button > .room-close');
-                closeButton.click(function() { onRoomClosed(closeButton); });
 
-                animateRoomAppearance(entry);
+    /**
+     * Open up all favorite rooms.
+     * @return {[type]}
+     */
+     function openFavoriteRooms() {
+        $('#channels-list > li').hide();
+        var favorites = $('#channels-list > li.room-favorite');
+        favorites.each(function(index, entry) {
+            entry = $(entry);
+            var closeButton = entry.find('button > .room-close');
+            closeButton.click(function() { onRoomClosed(closeButton); });
+
+            animateRoomAppearance(entry);
+            if(index === favorites.length-1) {
                 onRoomSelected(entry);
-            }, counter * DELAY);
+            }
         });
     }
 
@@ -51,47 +53,32 @@ $(function() {
      */
     function bindOnClickListeners() {
         // room navigation
-        $("#channels-list > li").each(function(_, entry) {
-            $(entry).click(function() { onRoomSelected(entry); });
-            $(entry).children('button').each(function(_, be) {
+        $('#channels-list > li.room-favorite').each(function(_, entry) {
+            entry = $(entry);
+            entry.click(function() { onRoomSelected(entry); });
+            entry.children('button').each(function(_, be) {
                 $(be).click(function() { onRoomClosed(be); });
             });
         });
 
-        $("#view-log-button").click(function() {
+        $('#view-log-button').click(function() {
             onViewChatLogClicked($(this));
         });
 
-        $("#help-button").click(function() {
+        $('#help-button').click(function() {
             document.location = 'help';
         });
 
-        $("#submit-message").keydown(messageProcessor);
+        $('#submit-message').keydown(messageProcessor);
 
 
-        // add "onNewRoomClicked" listeners to all currently existing entries
-        $("#add-new-room").click(function() {
+        // add 'onNewRoomClicked' listeners to all currently existing entries
+        $('#add-new-room').click(function() {
             // new rooms that can be clicked to be added
-            $("#add-new-room-rooms > li").each(function(_, entry) {
+            $('#add-new-room-rooms > li').each(function(_, entry) {
                 $(entry).click(function() { onNewRoomClicked(entry); });
             });
         });
-    }
-
-
-    /**
-        Takes an "onkeyevent". Returns the key pressed.
-    **/
-    function getKeyCode(e) {
-        var keynum;
-        // IE
-        if(window.event) {
-            keynum = e.keyCode;
-        // Netscape/Firefox/Opera
-        } else if(e.which) {
-            keynum = e.which;
-        }
-        return keynum;
     }
 
     this.isStatusPersistent = false;
@@ -110,7 +97,7 @@ $(function() {
         var siteStatus= $('#site-status');
         // scroll old message up if necessary
         if(siteStatus.css('margin-top') !== '-50px') {
-            siteStatus.animate({"margin-top": "-50px"}, 1000, function() {
+            siteStatus.animate({'margin-top': '-50px'}, 1000, function() {
                 main.setCurrentStatus(message, alertClass, arguments[2]);
             });
             return;
@@ -120,12 +107,12 @@ $(function() {
         siteStatus.addClass(alertClass);
         siteStatus.html(message);
 
-        siteStatus.animate({"margin-top": "22px"}, 1000);
+        siteStatus.animate({'margin-top': '22px'}, 1000);
         setTimeout(function() {
             if(main.isStatusPersistent) {
                 return;
             }
-            siteStatus.animate({"margin-top": "-50px"}, 1000);
+            siteStatus.animate({'margin-top': '-50px'}, 1000);
         }, duration);
     };
 
@@ -153,86 +140,106 @@ $(function() {
         return content;
     };
 
-    /*
-        Yes, it is case sensitive
-    */
-    function attendeesNameCompletion(text) {
+
+    /**
+     * Try to complete a username from the given input.
+     * If there is no match, the input string is returned.
+     * The function works case insensitive.
+     * @param  {string} message
+     * @return {string} 
+     */
+    function tryToCompleteUsername(message) {
         var roomName = main.helper.getSimpleText(main._activeRoom);
-        var names = main.sstatus.logChannelAttendees[roomName];
+        var userNames = main.sstatus.logChannelAttendees[roomName];
+
+        var lastWord = message.split(' ').pop();
+        var messageWithoutLastWord = message.replace(/\w+$/,'');
+
+        if(lastWord === '') {
+            return messageWithoutLastWord;
+        }
+
         var BreakException = {};
-
-
         try {
-            var lcText = text.toLowerCase();
-            names.forEach(function(entry) {
+            var lcText = lastWord.toLowerCase();
+            userNames.forEach(function(entry) {
                 var lcUsername = entry.userName.toLowerCase();
                 if(lcUsername.indexOf(lcText) === 0) {
-                    text = entry.userName + ' ';
-                    throw BreakException();
+                    lastWord = entry.userName + ' ';
+                    throw BreakException;
                 }
             });
         } catch(e) {
-            // that's a hack for leaving the forEach
+            if(e !== BreakException) {
+                throw e;
+            }
         }
 
-        return text;
+        return messageWithoutLastWord + lastWord;
     }
 
     /**
-        Processes all characters pressed
-    **/
-    function messageProcessor(e) {
+     * Processes all input and acts if necessary (e.g. on "ENTER" or "TAB" hit).
+     * @param  {KeyboardEvent} e
+     */
+    var messageProcessor = (function(e) {
         var INPUT_CHARACTER_LIMIT = 500;
-
-        var keyCode = getKeyCode(e);
         var submitMessage = $('#submit-message');
-        switch(keyCode) {
-            case 13:
-                if(inputLimiter()) {
-                    var message = main.helper.escape(submitMessage.val()).trim();
-                    if(message.length > 0) {
-                        if(message.length > INPUT_CHARACTER_LIMIT) {
-                            message = message.substr(0, INPUT_CHARACTER_LIMIT);
+
+        return function(e) {
+            var keyCode = e.which;
+            switch(keyCode) {
+                // ENTER
+                case 13:
+                    if(isSubmitAllowed()) {
+                        var message = main.helper.escape(submitMessage.val()).trim();
+                        if(message.length > 0) {
+                            if(message.length > INPUT_CHARACTER_LIMIT) {
+                                message = message.substr(0, INPUT_CHARACTER_LIMIT);
+                            }
+                            main.chat.sendMessage(message, $('#user-id').text(), main._userName, main._activeRoom.data('roomid'), main.helper.getSimpleText(main._activeRoom));
+                            submitMessage.val('');
                         }
-                        main.chat.sendMessage(message, $('#user-id').text(), main._userName, main._activeRoom.data('roomid'), main.helper.getSimpleText(main._activeRoom));
-                        submitMessage.val("");
                     }
-                }
-                break;
-            case 9:
-                var text = submitMessage.val();
-                if(text !== '') {
-                    e.preventDefault();
-                    submitMessage.val(attendeesNameCompletion(text));
-                }
-                break;
-            default:
-        }
+                    break;
+                // TAB
+                case 9:
+                    var text = submitMessage.val();
+                    if(text !== '') {
+                        e.preventDefault();
+                        submitMessage.val(tryToCompleteUsername(text));
+                    }
+                    break;
+                default:
+            }
+        };
+    })();
 
 
-    }
+    /**
+     * Test whether the currently logged in user is addressed by this message.
+     * @param  {string} message
+     * @return {bool} isAddressed
+     */
+    // var isThisUserAddressed = (function() {
+    //     var regex1 = new RegExp('.*[\\s:;.,|<>]?'+main._userName+'[\\s:;.,!|<>].*', 'g');
+    //     var regex2 = new RegExp('.*[\\s:;.,|<>]'+main._userName+'[\\s:;.,!|<>]?.*', 'g');
 
-    this.addVisibleImage = function(userName, roomName, url, time) {
-        url = 
-                '<span class="image-tooltip">' +
-                '<img src="' + url + '"></img>' +
-                '<span><img src="' + url + '"></img></span>' +
-                '</span>';
+    //     return function(message) {
+    //         return regex1.test(message) || regex2.test(message);
+    //     };
+    // })();
 
-        main.addVisibleMessage(userName, roomName, url, time, true);
-    };
+    var isThisUserAddressed = (function() {
+        var regex = new RegExp('.*[\\s:;.,|<>]?'+main._userName+'[\\s:;.,!|<>]?.*', 'g');
 
-
-
-    function isCurrentUserAddressed(message) {
-        var regex = new RegExp(".*[\\s:;.,-_!|<>]?"+main._userName+"[\\s:;.,-_!|<>]?.*", "g");
-
-        return function() {
+        return function(message) {
             return regex.test(message);
-        }();
-    }
+        };
+    })();
 
-    this.logChatMessage = function(roomName, userName, message, time) {        
+
+    this.logChatMessage = function(roomName, userName, message, time) {
         if(main.sstatus.logMessages[roomName] === undefined)
             main.sstatus.logMessages[roomName] = [];
         if(main.sstatus.logUsers[roomName] === undefined)
@@ -243,29 +250,35 @@ $(function() {
         main.sstatus.logMessages[roomName].push(message);
         main.sstatus.logUsers[roomName].push(userName);
         main.sstatus.logTimes[roomName].push(time);
-    }
+    };
+
 
     /**
-        A new message was added.
-        Note that it is not necessarily one from the currently logged in user.
-    **/
+     * Add a new message, which must not necessarily come from "this" user.
+     * @param  {string} userName
+     * @param  {string} roomName
+     * @param  {string} message
+     * @param  {string} time
+     */
     this.addVisibleMessage = function(userName, roomName, message, time) {
-        main.logChatMessage(roomName, userName, message, time)
-        if(roomName != main.helper.getSimpleText(main._activeRoom)) {
+        main.logChatMessage(roomName, userName, message, time);
+        if(roomName !== main.helper.getSimpleText(main._activeRoom)) {
             var room = $('#channels-list').find('li:contains("'+roomName+'")');
             // we check for userName, because it might be our joins/quits bot
-            if(userName != '' && isCurrentUserAddressed(message)) {
-                main.sound.playUserAddressed();
-                $.titleAlert("Someone talked to you!");
-                room.removeClass('room-favorite');
-                room.addClass('btn-danger');
-            } else {
-                var unseenMessages = room.children('.unseen-messages');
-                var msgCount = parseInt(unseenMessages.text(), 10);
-                if(msgCount === 0) {
-                    unseenMessages.show('slow');
+            if(userName !== '') {
+                if(isThisUserAddressed(message)) {
+                    main.sound.playUserAddressed();
+                    $.titleAlert("Someone talked to you!");
+                    room.removeClass('room-favorite');
+                    room.addClass('btn-danger');
+                } else {
+                    var unseenMessages = room.children('.unseen-messages');
+                    var msgCount = parseInt(unseenMessages.text(), 10);
+                    if(msgCount === 0) {
+                        unseenMessages.show('slow');
+                    }
+                    unseenMessages.text(msgCount + 1);
                 }
-                unseenMessages.text(msgCount + 1);
             }
         } else {
             var entry;
@@ -290,6 +303,22 @@ $(function() {
         }
     };
 
+    this.addVisibleImage = function(userName, roomName, url, time) {
+        url =   '<span class="image-tooltip">' +
+                    '<img src="' + url + '"></img>' +
+                    '<span><img src="' + url + '"></img></span>' +
+                '</span>';
+
+        main.addVisibleMessage(userName, roomName, url, time, true);
+    };
+
+
+    /**
+     * Reloads all chat messages for the currently active room.
+     * Note that -depending on the number of messages- this function might be slow, 
+     * therefore you should avoid calling it too often.
+     * @return {string}
+     */
     function updateChatBox() {
         var chatEntries = $('#chat-entries');
         chatEntries.empty();
@@ -312,11 +341,19 @@ $(function() {
         chatEntries.scrollTop(chatEntries.height());
     }
 
-    function onViewChatLogClicked(_) {
+    /**
+     * Defines what happens when someone clicks the "Vie Chat Log"-button.
+     */
+    function onViewChatLogClicked() {
         document.location = 'log/' + encodeURIComponent(main.helper.getSimpleText(main._activeRoom));
     }
 
-
+    /**
+     * Reloads all room attendees for the currently active room.
+     * Note that -depending on the number of attednees- this function might be slow, 
+     * therefore you should avoid calling it too often.
+     * @return {string}
+     */
     this.updateAttendeesList = function() {
         var roomName = main.helper.getSimpleText(main._activeRoom);
         if(main.sstatus.logChannelAttendees[roomName] === undefined) {
@@ -333,16 +370,15 @@ $(function() {
         }
     };
 
-
-    var _closeRoomClicked = false;
+    var _closeRoomWasClicked = false;
     function onRoomSelected(newRoom) {
-        if(_closeRoomClicked) {
-            _closeRoomClicked = false;
+        if(_closeRoomWasClicked) {
+            _closeRoomWasClicked = false;
             return;
         }
 
         if(main._activeRoom === undefined) {
-            main._activeRoom = $('<span/>');
+            main._activeRoom = $(document.createElement('span'));
         }
 
         newRoom = $(newRoom);
@@ -359,7 +395,7 @@ $(function() {
             main.sstatus.logChannelAttendees[newRoomName] = [];
         }
 
-        if(room != oldRoom) {
+        if(room !== oldRoom) {
             removeButtonClasses(main._activeRoom);
             removeButtonClasses(newRoom);
             newRoom.addClass('btn-primary');
@@ -382,23 +418,25 @@ $(function() {
     }
 
     function removeButtonClasses(obj) {
-        obj.removeClass('btn-warning');
-        obj.removeClass('btn-danger');
-        obj.removeClass('btn-primary');
-        obj.removeClass('btn-info');
-        obj.removeClass('btn-success');
+        obj
+        .removeClass('btn-warning')
+        .removeClass('btn-danger')
+        .removeClass('btn-primary')
+        .removeClass('btn-info')
+        .removeClass('btn-success');
     }
 
     function removeAlertClasses(obj) {
-        obj.removeClass('alert-warning');
-        obj.removeClass('alert-error');
-        obj.removeClass('alert-info');
-        obj.removeClass('alert-success');
+        obj
+        .removeClass('alert-warning')
+        .removeClass('alert-error')
+        .removeClass('alert-info')
+        .removeClass('alert-success');
     }
 
 
     function onRoomClosed(obj) {
-        _closeRoomClicked = true;
+        _closeRoomWasClicked = true;
 
         var room = $(obj).parent();
         var roomName = main.helper.getSimpleText(room);
@@ -554,42 +592,45 @@ $(function() {
         $('#view-log-button').hide();
     };
 
-    var _inputLimit = [];
-    /*
-        Returns true if input is allowed, false otherwise
-    */
-    function inputLimiter() {
-        var LIMIT = 5;
+
+    /**
+     * Checks wheter we allow or disallow the to submit the message
+     * @return {bool} isAllowed
+     */
+    var isSubmitAllowed = (function(){
+        var MESSAGE_LIMIT = 5;
         var TIME_SPAN = 3000;
+        var submissionTimes = [];
 
-        _inputLimit.push(new Date().getTime());
-        if(_inputLimit.length > LIMIT) {
-            _inputLimit.shift();
+        return function() {
+            submissionTimes.push(new Date().getTime());
+            if(submissionTimes.length > MESSAGE_LIMIT) {
+                submissionTimes.shift();
 
-            if(_inputLimit[LIMIT-1] - _inputLimit[0] > TIME_SPAN) {
-                return true;
-            } else {
-                var submitStatus = $('#submit-status');
-                if(!submitStatus.is(':visible')) {
-                    submitStatus.removeClass();
-                    submitStatus.empty();
-                    submitStatus.addClass('alert alert-error');
+                if(submissionTimes[MESSAGE_LIMIT-1] - submissionTimes[0] > TIME_SPAN) {
+                    return true;
+                } else {
+                    var submitStatus = $('#submit-status');
+                    if(!submitStatus.is(':visible')) {
+                        submitStatus.removeClass();
+                        submitStatus.empty();
+                        submitStatus.addClass('alert alert-error');
 
 
-                    submitStatus.append('<h4>Man, calm down!</h4>');
-                    submitStatus.append('You mission is not to spam the room. :P').hide().show('slow');
+                        submitStatus.append('<h4>Man, calm down!</h4>');
+                        submitStatus.append('You mission is not to spam the room. :P').hide().show('slow');
 
-                    setTimeout(function(){
-                        submitStatus.hide('quick');
-                    }, 5000);
+                        setTimeout(function(){
+                            submitStatus.hide('quick');
+                        }, 5000);
+                    }
+
+                    return false;
                 }
-
-                return false;
             }
-        }
-
-        return true;
-    }
+            return true;
+        };
+    })();
 
     /************************************************************************
         Entry makers
