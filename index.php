@@ -14,8 +14,8 @@
     require_once('feature/head.php'); 
 ?>
 <link rel="stylesheet" type="text/css" href="css/base.css"/>
-<link rel="stylesheet" type="text/css" href="css/chat.css"/><!-- 
-<link rel="stylesheet" type="text/css" href="themes/dark/css/chat.css"/> -->
+<link rel="stylesheet" type="text/css" href="css/chat.css"/>
+<!-- <link rel="stylesheet" type="text/css" href="themes/dark/css/chat.css"/> -->
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css">
 
 
@@ -50,7 +50,7 @@
                     <img src="img/icon/room_settings.png" />
                     Room settings
                 </button>
-                <button class="btn" id="view-chat-log">
+                <button class="btn" id="view-log-button">
                     <img src="img/icon/view_log.png" />
                     View history
                 </button>

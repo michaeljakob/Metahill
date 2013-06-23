@@ -1,5 +1,5 @@
 <header>
-    <a href="../../../../../../../../"><img id="company-icon" alt="roomly icon" /></a>
+    <a href="../../../../../../../../"><img id="company-icon" alt="metahill icon" src="http://www.metahill.com/img/metahill.png" /></a>
 
         
     <?php

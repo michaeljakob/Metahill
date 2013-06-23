@@ -4,8 +4,8 @@
 $(function() {
     var main = this;
 
-    this._activeRoom;
-    this._userName;
+    // this._activeRoom;
+    // this._userName;
     this.modals = new __modals__(this);
     this.sstatus = new __status__();
     this.chat = new __chat__(this, this.sstatus);
@@ -18,15 +18,12 @@ $(function() {
 
     $(document).ready(function() {
         main._userName = $('#user-name > button').text().trim();
-        onRoomSelected($('#channels-list > li:contains("@entry")'));
-        setOnClickListeners();
+        bindOnClickListeners();
 
         $(window).resize();
 
-        // animate new rooms in
         openRooms();
-        
-        __tip_poster__(main);
+        (new __tip_poster__(main));
         (new __image_upload__(main));
     });
 
@@ -48,7 +45,11 @@ $(function() {
     }
 
 
-    function setOnClickListeners() {
+    /**
+     * Bind various onclick listeners to (among others) log, help, submit, add-new-room and room navigation.
+     * This method should only be called once.
+     */
+    function bindOnClickListeners() {
         // room navigation
         $("#channels-list > li").each(function(_, entry) {
             $(entry).click(function() { onRoomSelected(entry); });
@@ -57,8 +58,7 @@ $(function() {
             });
         });
 
-        // log button
-        $("#view-chat-log").click(function() {
+        $("#view-log-button").click(function() {
             onViewChatLogClicked($(this));
         });
 
@@ -539,7 +539,7 @@ $(function() {
         submitMessage.removeAttr('disabled');
         submitMessage.focus();
 
-        $('.view-chat-log').show();
+        $('#view-log-button').show();
     };
 
     this.disableInput = function() {
@@ -551,7 +551,7 @@ $(function() {
         submitMessage.blur();
 
         $('#chat-header-topic').text('');
-        $('.view-chat-log').hide();
+        $('#view-log-button').hide();
     };
 
     var _inputLimit = [];

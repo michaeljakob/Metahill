@@ -92,7 +92,7 @@
                         Just drag the image from your desktop into the chat window, then drop it. And we'll do the rest.
                     </p>
                     <div id="example-share-images">
-                        <p>In the following example, I try to share a super funny picture of a rabbit with a pancake on its head. All I do is drag-and-dropping the desired image it into roomly. </p>
+                        <p>In the following example, I try to share a super funny picture of a rabbit with a pancake on its head. All I do is drag-and-dropping the desired image into metahill tab. </p>
                         <img src="img/share-images-drag-and-drop.jpg" alt="Share images via drag and drop on metahill" />
                         <p>Yaay, it worked! :)</p>
                         <img src="img/share-images-dropped.jpg" alt="Share images via drag and drop on metahill" />
