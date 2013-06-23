@@ -12,13 +12,13 @@
 </head>
 <body>
     <header>
-        <a href="../"><img src="img/metahill-lowres.png" alt="roomly icon" /></a>
+        <a href="../"><img src="img/metahill-lowres.png" alt="metahill icon" /></a>
     </header>
     
     <section id="main-container">
         <article id="welcome">
             <h1>We don't support Internet Explorer</h1>
-            <span>In order to access <b>roomly</b>, please get a state-of-the art browser.
+            <span>In order to access <b>metahill</b>, please get a state-of-the art browser.
                 <br>We have picked out four, which we think are very sensible.</span>
             <ul id="browser-list">
                 <li>

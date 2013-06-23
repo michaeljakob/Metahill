@@ -18,11 +18,11 @@ header {
     height: 70px;
     padding: 10px 20px 20px 20px;
 
-    background: -moz-linear-gradient(top,  rgba(224,224,224,0) 0%, rgba(224,224,224,0.01) 1%, rgba(224,224,224,0.65) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(224,224,224,0)), color-stop(1%,rgba(224,224,224,0.01)), color-stop(100%,rgba(224,224,224,0.65)));
-    background: -webkit-linear-gradient(top,  rgba(224,224,224,0) 0%,rgba(224,224,224,0.01) 1%,rgba(224,224,224,0.65) 100%);
-    background: -o-linear-gradient(top,  rgba(224,224,224,0) 0%,rgba(224,224,224,0.01) 1%,rgba(224,224,224,0.65) 100%);
-    background: linear-gradient(to bottom,  rgba(224,224,224,0) 0%,rgba(224,224,224,0.01) 1%,rgba(224,224,224,0.65) 100%);
+    background: -moz-linear-gradient(top,  #ffffff 0%, #dbdbdb 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#dbdbdb));
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#dbdbdb 100%);
+    background: -o-linear-gradient(top,  #ffffff 0%,#dbdbdb 100%);
+    background: linear-gradient(to bottom,  #ffffff 0%,#dbdbdb 100%);
 }
 
 
@@ -32,11 +32,12 @@ header img {
 
 
 #company-icon {
-    content: url("../img/roomly-default.png");
+    content: url("../img/metahill.png");
 }
 
 header > a > img {
-    margin-top: 5px;
+    margin-top: 15px;
+    height: 50px;
 }
 
 header > a {    

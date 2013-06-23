@@ -1,0 +1,302 @@
+
+#chat {
+    float: left;
+    position: absolute;
+    left: 0;
+}
+
+#chat p {
+    padding: 0;
+    margin: 0;
+}
+
+#chat .chat-entry {
+    display: block;
+    border-bottom: 1px solid #eee;
+}
+
+#chat .chat-entry > * {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+#chat .chat-entry > .chat-entry-options {
+    float: left;
+    padding: 3px;
+}
+
+#chat .chat-entry > .chat-entry-user {
+    width: 150px;
+    float: left;
+    text-align: right;
+    padding: 3px;
+}
+
+#chat .chat-entry > .chat-entry-message {
+    padding: 3px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    word-wrap: break-word;
+}
+
+#chat .chat-entry > .chat-entry-message > code {
+    white-space: pre-line;
+}
+
+#chat-header {
+    height: 40px;
+    padding: 5px;
+    padding-right: 150px;
+}
+
+#chat-header img {
+    width: 20px;
+    /*
+    width: 25px;
+    margin-top: -10px;
+    padding-bottom: -10px;
+    margin-bottom: -8px;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+    */
+}
+
+#chat-entries {
+    overflow-y: scroll;
+    font-size: 11pt;
+}
+
+#view-log-button {
+    float: right;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
+#room-settings {
+    float: right;
+    position: relative;
+    top: 4px;
+}
+
+
+#channels {
+    background: rgba(224,224,224,.65);
+    margin: 0;
+    padding: 3px 0;
+    display: table;
+    width: 100%;
+
+    border-top: 1px solid #ddd;
+}
+
+#channels-list { 
+    margin: 0;
+    padding: 0 0 0 3px;
+    display: table;
+    float: left;
+}
+
+#channels li {
+    cursor: pointer;
+    padding: 4px 30px;
+    margin: 2px 2px;
+    float: left;
+}
+
+#channels li:active {
+    cursor: -webkit-grabbing;
+    cursor: -moz-grabbing;
+    cursor: grabbing;
+}
+
+.popover-content input[type=text] {
+    width: 230px;
+}
+
+.popover-content > form {
+    margin: 0;
+}
+
+.popover-content > form > a {
+    display: table-caption;
+}
+
+#add-new-room-rooms {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-left: 0;
+    list-style-type: none;
+    padding: 0;
+    display: table-caption;
+}
+
+#add-new-room-rooms > li {
+    width: 180px;
+}
+
+.room-favorite:not(.btn-primary):not(.btn-inverse) {
+    color:#000;
+    background-color:#e6e6e6;
+    background-image:-moz-linear-gradient(top,#e6e6e6,#cdcdcd);
+    background-image:-webkit-gradient(linear,0 0,0 100%,from(#e6e6e6),to(#cdcdcd));
+    background-image:-webkit-linear-gradient(top,#e6e6e6,#cdcdcd);
+    background-image:-o-linear-gradient(top,#e6e6e6,#cdcdcd);
+    background-image:linear-gradient(to bottom,#e6e6e6,#cdcdcd);
+    background-repeat:repeat-x;
+    border-color:#cdcdcd #cdcdcd #002a80;
+    border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+}
+    
+.room-favorite:not(.btn-primary):hover,
+.room-favorite:not(.btn-primary):hover:focus,
+.room-favorite:not(.btn-primary):hover:active {
+    background-color: #cdcdcd;
+}
+
+
+#channel-attendees {
+    float: right;
+    width: 200px;
+    height: 486px;
+}
+
+
+#channel-attendees > form {
+    padding: 5px 5px 5px 0;
+}
+
+#channel-attendees > form, #chat-header {
+    background: rgba(224,224,224,.65);
+    border-top: 1px solid #ddd;
+}
+
+#channel-attendees > form  input[type='text'] {
+    width: 175px;
+    margin: 5px 0 10px 5px;
+}
+
+#channel-attendees-entries {
+    padding: 5px;
+    padding-bottom: 0px;
+    overflow-y: scroll;
+    height: 440px;
+    margin: 0 -5px -5px 0;
+}
+
+#channel-attendees-entries > li {
+    margin: 0 0 4px 0;
+}
+
+#channel-attendees-entries > li > button:first-child {
+    /* width: 143px; use this one if you're having dropdown items */
+    width: 173px; /* this one is for simple buttons */
+}
+
+
+
+#submit-area {
+    background: -moz-linear-gradient(bottom,  rgba(224,224,224,0) 0%, rgba(224,224,224,0.01) 1%, rgba(224,224,224,0.65) 100%);
+    background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,rgba(224,224,224,0)), color-stop(1%,rgba(224,224,224,0.01)), color-stop(100%,rgba(224,224,224,0.65)));
+    background: -webkit-linear-gradient(bottom,  rgba(224,224,224,0) 0%,rgba(224,224,224,0.01) 1%,rgba(224,224,224,0.65) 100%);
+    background: -o-linear-gradient(bottom,  rgba(224,224,224,0) 0%,rgba(224,224,224,0.01) 1%,rgba(224,224,224,0.65) 100%);
+    background: linear-gradient(to top,  rgba(224,224,224,0) 0%,rgba(224,224,224,0.01) 1%,rgba(224,224,224,0.65) 100%);
+
+    clear: both;
+    height: 100px;
+    padding: 10px;
+}
+
+#submit-message {
+    height: 20px;
+    width: 600px;
+    position: absolute;
+    left: 218px;
+}
+
+
+
+#submit-status {
+    display:none;
+    margin-top: 40px;
+    margin-left: 210px;
+    width: 560px;    
+}
+
+#add-new-room {
+    padding: 4px 10px !important;    
+}
+
+.room-close {
+    position: relative;
+    left: 20px;
+    bottom: 2px;
+}
+
+
+/* tooltip */
+.image-tooltip {
+    text-decoration:none;
+    position:relative;
+    display: block;
+    line-height: 15px;
+    margin: 0;
+    margin-top: 2px;
+    margin-bottom: -2px;
+}
+
+.image-tooltip img {
+    height: 100px;
+    padding-bottom: 2px;
+}
+
+.image-tooltip span img {
+    float:left;
+    height: auto;
+    width: auto;
+    max-height: 40%;
+    max-width: 40%;
+    position: fixed;
+    right: 215px;
+    top: 209px;
+    background: #ddd;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+.image-tooltip span {
+    display: none;
+}
+
+.image-tooltip:hover span {
+    display: block;    
+    position:absolute;
+    top:0;
+    right:0;
+    z-index:10;
+    width:auto;
+    margin-top:12px;
+    margin-left:32px;
+    overflow:hidden;
+    padding:8px;
+}
+
+.unseen-messages {
+    color: #555;
+    font-size: 80%;
+    display: none;
+}
+
+.btn-danger .unseen-messages {
+    color: #ddd;
+}
+
+.unseen-messages:before {
+    content: ' (';
+}
+
+.unseen-messages:after {
+    content: ')';
+}

@@ -1,7 +1,7 @@
 /// jshint settings
 /*global window, document, $, */
 
-var __tip_poster__ = function(main) {
+function __tip_poster__(main) {
     var interval = 1000 * 60 * 10; // all ten minutes
 
     var tips = [];
@@ -16,6 +16,8 @@ var __tip_poster__ = function(main) {
     tips.push('Hold and drag rooms to change their order.');
     tips.push('Be nice to your mates. Insulting others won\'t be to your benefit.');
     //tips.push('');
+    //tips.push('');
+    //tips.push('');
 
     $(document).ready(function() {
         setTimeout(function() {
@@ -28,4 +30,4 @@ var __tip_poster__ = function(main) {
             }, interval);
         }, interval);
     });
-};
+}
