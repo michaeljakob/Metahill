@@ -158,7 +158,7 @@ function __chat__(main) {
     
     /************************************************************************
         Methods for the outer world following
-    ************************************************************************/    
+    ************************************************************************/
     this.updateAttendeesList = function (list, roomId, roomName) {                
         if(roomName === helper.getSimpleText(main._activeRoom)) {
             $('#channel-attendees-entries').empty();

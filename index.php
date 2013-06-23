@@ -35,6 +35,7 @@
                         $roomId = $room->id;
                         echo  "<li class='btn room-favorite' data-roomid='$roomId' data-topic='$topic'>".
                                 "$roomName<button class='close room-close'>&times;</button>".
+                                "<span class='unseen-messages'></span>".
                               "</li>";
                     }
                 ?>
