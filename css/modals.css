@@ -54,7 +54,7 @@ p.pref-desc {
 }
 
 
-#filter-pref-search-room + ul {
+#pref-select-favorite-channels-search + ul {
     width: auto;
     max-height: 300px;
     overflow: auto;

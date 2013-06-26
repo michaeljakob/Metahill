@@ -24,7 +24,7 @@
             </div>
              
             <div>
-                <input type="text" id="filter-pref-search-room" placeholder="Search room">
+                <input type="text" id="pref-select-favorite-channels-search" placeholder="Search room">
                 <ul id="modal-pref-nonfavorite-rooms" class="connectedSortable">
                 </ul>
             </div>

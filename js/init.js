@@ -4,14 +4,6 @@
 $(function() {
     var helper = new __helper__();
 
-    $(document).ready(function() {
-        $(window).resize();
-    });
-
-    $(window).resize(function() {
-        bringRowHeightInOrder();
-    });
-
     /*
         Make option, username and message div be the same height.
     */
@@ -46,14 +38,14 @@ $(function() {
         $('#submit-message').width(chatWidth - 250);
     });
     
-    $('.selectpicker').selectpicker();
+    //$('.selectpicker').selectpicker();
     $('#add-new-room').popover({ 
         html: true,
         title: function() {
-            return $("#add-new-room-title").html();
+            return $('#add-new-room-title').html();
         },
         content: function() {
-            return $("#add-new-room-content").html();
+            return $('#add-new-room-content').html();
         }
     });
 
@@ -72,14 +64,12 @@ $(function() {
             connectWith: ".connectedSortable"
         }).disableSelection();
 
-        $("#channels-list").sortable();
-        $("#channels-list").disableSelection();
+        $('#channels-list').sortable();
+        $('#channels-list').disableSelection();
     });
     
     // filter
     $(function() {
-        $('#filter-pref-search-room').filterList();
         $('#filter-search-user').filterList();
-        $('#filter-add-new-room-search-room').filterList();
     });
 });

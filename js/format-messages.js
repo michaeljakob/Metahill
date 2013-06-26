@@ -39,7 +39,6 @@ function __format_messages__(modals) {
         smilies['^^'] = 'squint.png';
         smilies['<3'] = 'love.png';
 
-        
         // wordly
         smilies[':angry'] = 'angry.png';
         smilies[':biggrin'] = 'biggrin.png';
@@ -71,7 +70,7 @@ function __format_messages__(modals) {
         function escapeRegExp(str) {
             return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
         }
-        
+
         return function() {
             Object.keys(smilies).forEach(function(entry) {
                 var image = '<img src="img/smilies/' + smilies[entry] + '"></img>';
@@ -137,14 +136,17 @@ function __format_messages__(modals) {
                 </code>
     */
     this.styleMessage = function(text, config) {
-        
         text = this.makeLinksClickable(text);
         text = this.replaceTextSmilies(text);
         text = this.boldItalicsCode(text);
-        
         return text;
     };
 
+    /**
+     * Convert all links to clickable links. Technically, they are just wrapped in <a> tags.
+     * @param  {[type]} text [description]
+     * @return {[type]}      [description]
+     */
     this.makeLinksClickable = function(text) {
         var regex = /(http:\/\/|https:\/\/|www.)([a-zA-Z0-9.-]{3,}\.[a-zA-Z0-9]{2,5}[^\s]*)/g;
 
@@ -157,12 +159,12 @@ function __format_messages__(modals) {
             }
         }
 
-        return function() {
-            if(text === null){
-                return "";
+        return function(text) {
+            if(text === null || text === undefined){
+                return '';
             }
             return text.replace(regex, replaceCallback);
-        }();
-    }
+        };
+    }();
 
 }

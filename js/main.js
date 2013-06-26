@@ -14,8 +14,6 @@ $(function() {
     this.formatMessages = new __format_messages__(this.modals);
 
 
-
-
     $(document).ready(function() {
         openFavoriteRooms();
         bindOnClickListeners();
@@ -25,7 +23,6 @@ $(function() {
         (new __tip_poster__(main));
         (new __image_upload__(main));
     });
-
 
     /**
      * Open up all favorite rooms.
@@ -45,7 +42,6 @@ $(function() {
             }
         });
     }
-
 
     /**
      * Bind various onclick listeners to (among others) log, help, submit, add-new-room and room navigation.
@@ -185,6 +181,9 @@ $(function() {
     var messageProcessor = (function(e) {
         var INPUT_CHARACTER_LIMIT = 500;
         var submitMessage = $('#submit-message');
+        var lastMessages = [];
+        var lastMessagesIndex = -1;
+        var scrollInputValue; // if you scroll through other messages, we store the current input
 
         return function(e) {
             var keyCode = e.which;
@@ -199,6 +198,8 @@ $(function() {
                             }
                             main.chat.sendMessage(message, $('#user-id').text(), main._userName, main._activeRoom.data('roomid'), main.helper.getSimpleText(main._activeRoom));
                             submitMessage.val('');
+                            lastMessages.unshift(message);
+                            lastMessagesIndex = -1;
                         }
                     }
                     break;
@@ -210,6 +211,29 @@ $(function() {
                         submitMessage.val(tryToCompleteUsername(text));
                     }
                     break;
+                // UP ARROW
+                case 38:
+                    if(lastMessagesIndex === -1) {
+                        scrollInputValue = submitMessage.val();
+                    }
+                    if(lastMessagesIndex < lastMessages.length-1) {
+                        lastMessagesIndex++;
+
+                        submitMessage.val(lastMessages[lastMessagesIndex]);
+                    }
+                    break;
+                // DOWN ARROW
+                case 40:
+                    lastMessagesIndex--;
+                    if(lastMessagesIndex <= -1) {
+                        submitMessage.val(scrollInputValue);
+                        lastMessagesIndex = -1;
+                    } else {
+                        submitMessage.val(lastMessages[lastMessagesIndex]);
+                    }
+
+                    break;
+
                 default:
             }
         };
@@ -221,15 +245,6 @@ $(function() {
      * @param  {string} message
      * @return {bool} isAddressed
      */
-    // var isThisUserAddressed = (function() {
-    //     var regex1 = new RegExp('.*[\\s:;.,|<>]?'+main._userName+'[\\s:;.,!|<>].*', 'g');
-    //     var regex2 = new RegExp('.*[\\s:;.,|<>]'+main._userName+'[\\s:;.,!|<>]?.*', 'g');
-
-    //     return function(message) {
-    //         return regex1.test(message) || regex2.test(message);
-    //     };
-    // })();
-
     var isThisUserAddressed = (function() {
         var regex = new RegExp('.*[\\s:;.,|<>]?'+main._userName+'[\\s:;.,!|<>]?.*', 'g');
 
@@ -457,6 +472,11 @@ $(function() {
         delete main.sstatus.logChannelAttendees[roomName];
     }
 
+    /**
+     * Check whether a given room is a favorite or not.
+     * @param  {string}  roomName
+     * @return {bool} isFavorite
+     */
     function isRoomFavorite(roomName) {
         for(var i=0; i<main.sstatus.favoriteRooms.length; ++i) {
             if(main.sstatus.favoriteRooms[i].roomName === roomName) {
@@ -542,7 +562,7 @@ $(function() {
         $('#channels-list').append(entry);
 
         return entry;
-    }
+    };
 
     /*
         Add a room to the list of all available, joinable rooms. 
@@ -550,7 +570,6 @@ $(function() {
     */
     function addAvailableRoom(roomId, roomName, roomTopic) {
         var root = $('#add-new-room-popover > div:nth-child(2) ul');
-        
         var extraClasses = '';
         if(isRoomFavorite(roomName)) {
             extraClasses = 'room-favorite';
@@ -563,7 +582,7 @@ $(function() {
         .text(roomName);
 
         entry.click(function() { onNewRoomClicked(entry[0]); });
-        root.append(entry);
+        root.prepend(entry);
     }
 
     /* 
@@ -645,21 +664,21 @@ $(function() {
         return makeEntry(userName, message, time);
     };
 
-    function makeEntry(userName, message, time) { 
+
+    function makeEntry(userName, message, time) {
         var optionClass = "";
         if(userName === "server") {
             optionClass = "server-message";
         }
-   
         if(userName === main._userName) {
-            userName = '<b>' + userName + '</b>'; 
+            userName = '<b>' + userName + '</b>';
         }
 
-        var entryText = 
+        var entryText =
                 '<div class="chat-entry '+ optionClass +'">' +
                     '<span class="chat-entry-options">'+main.helper.toHHMMSS(time)+'</span>' +
                     '<span class="chat-entry-user ">&nbsp;'+userName+'</span>' +
-                    '<span class="chat-entry-message">'+message+'' + 
+                    '<span class="chat-entry-message">'+message+
                 '</div>';
 
 

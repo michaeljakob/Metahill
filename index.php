@@ -66,7 +66,8 @@
                 </ul>
             </form>
         </aside>
-        </section>
+    </section>
+    
     <article id="submit-area">
         <input type="text" id="submit-message" autofocus autocomplete="off"></input>
         <div id="submit-status">
@@ -78,7 +79,7 @@
         <div id="add-new-room-title">Join new room<button type="button" class="close" onClick="$('#add-new-room').popover('hide');" data-dismiss="modal" aria-hidden="true">×</button></div>
         <div id="add-new-room-content">
             <form>
-                <input type="text" id="filter-add-new-room-search-room" placeholder="Search room" />
+                <input type="text" id="add-new-room-search" placeholder="Search room" />
                 <ul id="add-new-room-rooms">
                 </ul>
                 <a class="btn btn-info" href="#modal-new-room" data-toggle="modal" onclick="">Create new room</a>

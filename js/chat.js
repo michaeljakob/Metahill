@@ -6,12 +6,12 @@
 function __chat__(main) {
     // if user is running mozilla then use it's built-in WebSocket
     window.WebSocket = window.WebSocket || window.MozWebSocket;
-    
+
     // if browser doesn't support WebSocket, just show some notification and exit
     if (!window.WebSocket) {
         console.log($('<p>', { text: 'Sorry, but your browser doesn\'t support WebSockets.'}));
     }
-    
+
     // open connection
     var address = 'ws://127.0.0.1:1337';
     //var address = 'ws://81.169.246.231:80';
@@ -31,24 +31,24 @@ function __chat__(main) {
 
 
         // join favorite rooms    
-        main.sstatus.favoriteRooms.forEach(function(entry) {    
+        main.sstatus.favoriteRooms.forEach(function(entry) {
             thatChat.sendUserJoin(entry.roomId, entry.roomName);
         });
-        
+
         roomProposer = new __room_proposer__(connection, main._userName, main.sstatus.favoriteRooms);
         main.enableInput();
-        setTimeout(function() { 
+        setTimeout(function() {
             main.isStatusPersistent = false;
-            main.setCurrentStatus('Welcome back!', 'alert-success'); 
+            main.setCurrentStatus('Welcome back!', 'alert-success');
         }, 1000);
     };
-    
+
     var connection_onerror = function (error) {
         thatChat.isOnline = false;
         console.log('Sorry, but there\'s some problem with your connection or the server is down.</p>');
     };
 
-    
+
     var connection_onclose = function () {
         thatChat.isOnline = false;
         if(connectionFailedFirstTime) {
@@ -59,7 +59,7 @@ function __chat__(main) {
             main.isStatusPersistent = true;
             main.setCurrentStatus("Awwr. It seems we got a server problem. We're working on it...", 'alert-error', -1);
         }
-        setTimeout(function() {            
+        setTimeout(function() {
             setupConnection();
             console.log('retry');
         }, RETRY_DELAY);
@@ -172,7 +172,7 @@ function __chat__(main) {
     this.sendUserQuit = function(roomId, roomName) {    
         var userId = $('#user-id').html();
         
-        return function() {
+        return function(roomId, roomName) {
             var entryMessage = { 
                 intent: 'quit-room',
                 userId: userId, 
@@ -181,8 +181,8 @@ function __chat__(main) {
                 roomName: roomName 
             };
             connection.send(JSON.stringify(entryMessage));
-        }();        
-    };
+        };        
+    }();
     
     this.sendUserJoin = function(roomId, roomName) {    
         var userId = $('#user-id').html();

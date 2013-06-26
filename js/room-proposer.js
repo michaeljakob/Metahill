@@ -7,28 +7,33 @@
 
 */
 function __room_proposer__(connection, userName, favoriteRooms) {
+    var roomProposer = this;
 
-    addRoomProposals(favoriteRooms);
+    this.addRoomSearcher = function() {
+        return function(inputBox) {
+            inputBox.bind('propertychange keyup input paste', function() {
+                var search = inputBox.val();
+                console.log(search);
+            });
+        };
+    }();
 
-    function addRoomProposals(favoriteRooms) {
+
+    /**
+     * Request rooms that could be interesting for the current user
+     * @param  {array} exclusionList An integer array holding all roomIds that should not be proposed.
+     */
+    this.addRoomProposals = function(exclusionList) {
         var userId = $('#user-id').html();
         
-        return function() {
-            exclusionList = [];
-            favoriteRooms.forEach(function(entry) {
-                exclusionList.push(entry.roomId);
-            });
-
-
-            var message = { 
-                intent: 'room-proposals',
-                userId: userId, 
-                userName: userName, 
-                list: exclusionList
-            };
-            connection.send(JSON.stringify(message));
-        }();  
-    }
+        var message = { 
+            intent: 'room-proposals',
+            userId: userId, 
+            userName: userName, 
+            list: exclusionList
+        };
+        connection.send(JSON.stringify(message));
+    };
 
     this.handleIncomingRoomProposals = function(rooms) {
         var children = "";
@@ -39,6 +44,18 @@ function __room_proposer__(connection, userName, favoriteRooms) {
         }
         $('#add-new-room-rooms').append($(children));
         $('#modal-pref-nonfavorite-rooms').append($(children));
-    }
+    };
+
+
+    exclusionList = [];
+    favoriteRooms.forEach(function(entry) {
+        exclusionList.push(entry.roomId);
+    });
+    this.addRoomProposals(exclusionList);
+
+    $('#add-new-room').click(function() {
+        roomProposer.addRoomSearcher($('#main-container #add-new-room-search'));
+    });
+    this.addRoomSearcher($('#pref-select-favorite-channels-search'));
 
 }
