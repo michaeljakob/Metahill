@@ -36,6 +36,7 @@
     padding: 3px;
     display: -webkit-box;
     display: -moz-box;
+    display: -o-box;
     display: box;
     word-wrap: break-word;
 }
@@ -52,15 +53,6 @@
 
 #chat-header img {
     width: 20px;
-    /*
-    width: 25px;
-    margin-top: -10px;
-    padding-bottom: -10px;
-    margin-bottom: -8px;
-    margin-left: 0;
-    margin-right: 0;
-    padding: 0;
-    */
 }
 
 #chat-entries {
@@ -71,7 +63,7 @@
 #view-log-button {
     float: right;
     position: absolute;
-    right: 15px;
+    right: 5px;
     top: 10px;
 }
 
@@ -79,6 +71,7 @@
     float: right;
     position: relative;
     top: 4px;
+    right: -10px;
 }
 
 
@@ -125,7 +118,7 @@
 }
 
 #add-new-room-rooms {
-    max-height: 300px;
+    max-height: 150px;
     overflow-y: auto;
     margin-left: 0;
     list-style-type: none;
