@@ -95,7 +95,7 @@
         
     </div><!-- end body -->
     <div class="modal-footer">
-        <button id="modal-pref-submit" class="btn btn-primary">Okay</button>
+        <button id="modal-pref-submit" class="btn btn-info">Okay</button>
     </div>
 </div><!-- end preferences -->
 
@@ -106,7 +106,7 @@
           <h3>Profile</h3>
     </div>
     <div class="modal-body">
-    
+        <p>This page is currently under development.</p>
         <br>
         <br>
         <br>
@@ -118,7 +118,7 @@
         
     </div><!-- end body -->
     <div class="modal-footer">
-        <button id="modal-profile-submit" class="btn btn-primary">Okay</button>
+        <button id="modal-profile-submit" class="btn btn-info">Okay</button>
     </div>
 </div><!-- end profile -->
 
@@ -132,14 +132,17 @@
         <p>You can create rooms at any time you wish and it is very uncomplicated.</p>
         <br>
         <label class="checkbox">
-            <p>Roomname</p><input id="modals-new-room-name" type="text" pattern=".{3, 30}" title="3 to 30 characters" />
+            <p>Roomname<span class="heading-desc">Use between 3 and 20 characters</span></p>
+            <input id="modals-new-room-name" type="text" required pattern="[a-zA-Z0-9\-_+]{3,20}" placeholder="A short and meaningful name" />
+            <span id="modals-new-room-name-status" class="label label-warning" style="display:none;">This room already exists.</span>
         </label>
         <label class="checkbox">
-            <p>Roomtopic</p><textarea id="modals-new-room-topic" maxlength="500"></textarea>
+            <p>Roomtopic<span class="heading-desc">Use between 20 and 500 characters</span></p>
+            <textarea id="modals-new-room-topic" maxlength="200" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
         </label>
         
     </div><!-- end body -->
     <div class="modal-footer">
-        <button id="modal-new-room-submit" class="btn btn-primary">Create room</button>
+        <button id="modal-new-room-submit" class="btn btn-info" disabled>Create room</button>
     </div>
 </div><!-- end new room -->

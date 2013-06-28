@@ -4,8 +4,8 @@
 function __image_upload__(main) {
     var dropElement = document.body;
 
-    dropElement.ondragenter = function() {
-    }
+    //dropElement.ondragenter = function() {
+    //};
 
     dropElement.ondragover = function () {
         this.className = 'hover';
@@ -31,7 +31,7 @@ function __image_upload__(main) {
 
         if (file === undefined) {
             return;
-        };
+        }
         
         var acceptedTypes = {
             'image/png': true,

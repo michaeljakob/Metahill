@@ -97,7 +97,7 @@ $(function() {
                 return false;
             }
         
-            var domainParts = parts[1].split(".");
+            var domainParts = parts[1].split('.');
             if(domainParts.some(function(part) { return part.length>63; })) {
                 return false;
             }
@@ -107,7 +107,7 @@ $(function() {
     }
     
     function containsBannedEmailString(email) {
-        var banned = [    '@trash-mail', '@10minutemail', '@cjpeg', '@rmqkr', '@zehnminutenmail', 
+        var banned = [  '@trash-mail', '@10minutemail', '@cjpeg', '@rmqkr', '@zehnminutenmail', 
                         '@meltmail', '@mailinator', 'spam4', '@guerillamail', '@sharklasers', 
                         'mailexpire', '@tempemail'];
         
@@ -164,9 +164,9 @@ $(function() {
     $(window).resize(function() {
         var h = $(window).height();
         if(h < 685) {
-            $("footer").css("bottom", h - 635);
+            $('footer').css('bottom', h - 635);
         } else {
-            $("footer").css("bottom", "50px");
+            $('footer').css('bottom', '50px');
         }
     });
 });
