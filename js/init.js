@@ -4,6 +4,17 @@
 $(function() {
     var helper = new __helper__();
 
+
+    $(document).ready(function() {
+        var isMac = navigator.platform.toLowerCase().indexOf('mac') >= 0;
+        if(isMac) {
+            // move the closing-X to the left side
+            $('.modal-header .close').css('float', 'left');
+        }
+    });
+
+
+
     /*
         Make option, username and message div be the same height.
     */
@@ -35,10 +46,10 @@ $(function() {
         }
         chatWidth -= 200;
         $('#chat').width(chatWidth);
-        $('#submit-message').width(chatWidth - 250);
+        $('#submit-message').width(chatWidth - 230);
     });
     
-    //$('.selectpicker').selectpicker();
+    $('.selectpicker').selectpicker();
     $('#add-new-room').popover({ 
         html: true,
         title: function() {

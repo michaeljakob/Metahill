@@ -21,13 +21,6 @@ Array.prototype.remove = function(from, to) {
 function __helper__() {
 
     /*
-    *    Html-escapes a text
-    */
-    this.escape = function(text) {
-        return $('<span/>').text(text).html();
-    };
-
-    /*
     * Converts milliseconds to the HH:mm:ss format
     */
     this.toHHMMSS = function(time) {
@@ -45,12 +38,12 @@ function __helper__() {
                 .remove()
                 .end()
                 .text().trim();    
-    }
+    };
 
     this.openUrlInNewTab = function(url) {
         var win=window.open(url, '_blank');
         win.focus();
-    }
+    };
 
     /*
     *  Returns a key-value object.
@@ -66,14 +59,14 @@ function __helper__() {
             params[tmparr[0]] = tmparr[1];
         }
         return params;
-    }
+    };
 
     this.htmlEncode = function(value){
-      return $('<div/>').text(value).html();
-    }
+        return $(document.createElement('div')).text(value).html();
+    };
 
     this.htmlDecode = function(value){
-      return $('<div/>').html(value).text();
-    }
+        return $(document.createElement('div')).html(value).text();
+    };
 
 }

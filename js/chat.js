@@ -35,7 +35,7 @@ function __chat__(main) {
             thatChat.sendUserJoin(entry.roomId, entry.roomName);
         });
 
-        roomProposer = new __room_proposer__(connection, main._userName, main.sstatus.favoriteRooms);
+        roomProposer = new __room_proposer__(connection, main._userName, main.sstatus.favoriteRooms, main);
         main.enableInput();
         setTimeout(function() {
             main.isStatusPersistent = false;
@@ -70,20 +70,30 @@ function __chat__(main) {
         console.log('message received: ' + JSON.stringify(message.data));
         var json = JSON.parse(message.data);
         var intent = json.intent;
-        if (intent === 'tell') { 
-            main.addVisibleMessage(json.userName, json.roomName, json.content, json.time);
-        } else if(intent === 'tell-image') {
-            main.addVisibleImage(json.userName, json.roomName, json.content, json.time);
-        } else if(intent === 'attendees-list') {
-            thatChat.updateAttendeesList(json.attendees, json.roomId, json.roomName);
-        } else if(intent === 'quit-room') {
-            onUserQuit(json.userId, json.userName, json.roomName);
-        } else if(intent === 'join-room') {
-            onUserJoin(json.userId, json.userName, json.roomName);
-        } else if(intent === 'room-proposals') {
-            roomProposer.handleIncomingRoomProposals(json.list);
-        } else {
-            console.log('Unknown `intent`.');
+        switch(intent) {
+            case 'tell':
+                main.addVisibleMessage(json.userName, json.roomName, json.content, json.time);
+                break;
+            case 'tell-image':
+                main.addVisibleImage(json.userName, json.roomName, json.content, json.time);
+                break;
+            case 'attendees-list':
+                thatChat.updateAttendeesList(json.attendees, json.roomId, json.roomName);
+                break;
+            case 'quit-room':
+                onUserQuit(json.userId, json.userName, json.roomName);
+                break;
+            case 'join-room':
+                onUserJoin(json.userId, json.userName, json.roomName);
+                break;
+            case 'room-proposals':
+                roomProposer.handleIncomingRoomProposals(json.list);
+                break;
+            case 'search-rooms':
+                roomProposer.handleIncomingSearchResults(json.list, json.inputSource);
+                break;
+            default:
+                console.log('Unknown `intent`.');
         }
     };
     

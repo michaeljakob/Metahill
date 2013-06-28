@@ -77,7 +77,7 @@ function dbGetFavoriteRooms($name) {
     $dbh = getDBH();
 
 
-    $statement = $dbh->prepare('SELECT r.id, r.name, r.topic 
+    $statement = $dbh->prepare('SELECT r.id, r.name, r.topic, r.owner
                                 FROM `favorite_rooms` favs
                                 INNER JOIN rooms r
                                 ON r.id = favs.room_id
