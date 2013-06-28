@@ -30,9 +30,7 @@ function __modals__(main) {
         xhr.onload = function () {
             if (xhr.status === 200) {
                 console.log('http request: ok. '+ xhr.responseText);
-                if(successCallback !== undefined) {
-                    successCallback(xhr.getResponseHeader('Content-Description'));
-                }
+                successCallback(xhr.getResponseHeader('Content-Description'));
             } else {
                 var error = xhr.getResponseHeader('Content-Description');
                 console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
@@ -119,7 +117,7 @@ function __modals__(main) {
 
     this.liveUpdateFont = function() {
         var font = $('#modals-pref-font option:selected').val();
-        $('body *').css('font-family', font);
+        $('body').css('font-family', font);
     };
 
     this.liveUpdateChatTextSize = function() {
@@ -150,6 +148,7 @@ function __modals__(main) {
     ********************************************************************
     *******************************************************************/
     function updateProfile(json) {
+        var json = {};
         submitHttpRequest('update-profile.php', json);
     }
 
@@ -167,56 +166,8 @@ function __modals__(main) {
         submitHttpRequest('update-new-room.php', json, successCallback);
     }
 
-    $('#modal-new-room').on('show', function() {
-        $('#add-new-room').popover('hide');
-        $('#modals-new-room-name').val('');
-        $('#modals-new-room-topic').val('');
-    });
-
     $('#modal-new-room').on('shown', function() {
         $('#modals-new-room-name').focus();
-    });
-
-
-    this.new_room = {};
-    this.new_room.isNameAvailable = false;
-    this.new_room.isNameLengthOk = false;
-    this.new_room.isTopicLengthOk = false;
-
-    this.verifyNewRoomInput = function() {
-        if(modals.new_room.isNameLengthOk && modals.new_room.isTopicLengthOk && modals.new_room.isNameAvailable) {
-            $('#modal-new-room-submit').removeAttr('disabled');
-        } else {
-            $('#modal-new-room-submit').prop('disabled', true);
-        }
-    };
-    $('#modals-new-room-name').bind('propertychange keyup input paste', function() {
-        var roomName = $(this).val().trim();
-        var len = roomName.length;
-        modals.new_room.isNameLengthOk = len >= 3 && len <= 20;
-
-        if(modals.new_room.isNameLengthOk) {
-            var json = {};
-            json.roomname = roomName;
-            submitHttpRequest('does-roomname-exist.php', json, function(resultCode) {
-                if(parseInt(resultCode, 10) === 1) {
-                    // already exists
-                    modals.new_room.isNameAvailable = false;
-                    $('#modals-new-room-name-status').show();
-                } else {
-                    modals.new_room.isNameAvailable = true;
-                    $('#modals-new-room-name-status').hide();
-                }
-                modals.verifyNewRoomInput();
-            });
-        }
-        modals.verifyNewRoomInput();
-    });
-    $('#modals-new-room-topic').bind('propertychange keyup input paste', function() {
-        var len = $(this).val().trim().length;
-        modals.new_room.isTopicLengthOk = len >= 20 && len <= 200;        
-
-        modals.verifyNewRoomInput();
     });
 
 
@@ -228,18 +179,10 @@ function __modals__(main) {
         json.owner = $('#user-id').text();
         json.topic = $('#modals-new-room-topic').val();
 
-
         updateNewRoom(json, function(roomId) {
             main.openRoom(roomId, json.name, json.topic);
             main.chat.sendUserJoin(roomId, json.name);
-            main.chat.sendMessage('You just created the room <b>'+json.name+'</b>, congratulations!', -1, 'server', roomId, json.name);
-            
-            (function(userId, roomId) {
-                var message = {};
-                message.userId = userId;
-                message.roomId = roomId;
-                submitHttpRequest('add-favorite.php', message);
-            })(json.owner, roomId);
+            main.chat.sendMessage("You just created the room <b>"+json.name+"</b>, congratulations!", -1, "server", roomId, json.name);
         });
 
     });

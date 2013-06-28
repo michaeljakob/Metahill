@@ -1,4 +1,3 @@
-
 function __base__() {
     var base = this;
     this.isInternetExplorer = function() {
