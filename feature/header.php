@@ -36,9 +36,9 @@
                           <li><a href="logout.php">Sign out</a></li>
                         </ul>
                       </div>
-                      <button id="help-button" class="btn">Help</button>
+                      <button id="help-button" class="btn btn-info">Help</button>
                     </div>
-                  </div>';
+                  </div>'; // end "class menu"
 
         }
     ?>

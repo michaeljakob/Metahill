@@ -67,14 +67,18 @@ $(function() {
 
         $('#submit-message').keydown(messageProcessor);
 
+
+        // add 'onNewRoomClicked' listeners to all currently existing entries
         $('#add-new-room').click(function() {
+            // new rooms that can be clicked to be added
             $('#add-new-room-rooms > li').each(function(_, entry) {
-                $(entry).click(function() { main.onNewRoomClicked(entry); });
+                $(entry).click(function() { onNewRoomClicked(entry); });
             });
         });
     }
 
     this.isStatusPersistent = false;
+
     /*
         Make a new status message that vanishes after a certain amount of time.
         To let it be persistent, set the main.isStatusPersistent boolean to true. 
@@ -187,7 +191,7 @@ $(function() {
                 // ENTER
                 case 13:
                     if(isSubmitAllowed()) {
-                        var message = main.helper.htmlEncode(submitMessage.val()).trim();
+                        var message = main.helper.escape(submitMessage.val()).trim();
                         if(message.length > 0) {
                             if(message.length > INPUT_CHARACTER_LIMIT) {
                                 message = message.substr(0, INPUT_CHARACTER_LIMIT);
@@ -330,7 +334,7 @@ $(function() {
      * therefore you should avoid calling it too often.
      * @return {string}
      */
-    this.updateChatBox = function() {
+    function updateChatBox() {
         var chatEntries = $('#chat-entries');
         chatEntries.empty();
 
@@ -350,7 +354,7 @@ $(function() {
         main.modals.liveUpdateChatTextSize();
         $(window).resize();
         chatEntries.scrollTop(chatEntries.height());
-    };
+    }
 
     /**
      * Defines what happens when someone clicks the "Vie Chat Log"-button.
@@ -393,8 +397,8 @@ $(function() {
         }
 
         newRoom = $(newRoom);
-        var roomName = newRoom.html();
-        var oldRoomName = main._activeRoom.html();
+        var room = newRoom.html();
+        var oldRoom = main._activeRoom.html();
 
         if(newRoom.attr('id') === 'add-new-room'){
             return;
@@ -406,24 +410,20 @@ $(function() {
             main.sstatus.logChannelAttendees[newRoomName] = [];
         }
 
-        if(roomName !== oldRoomName) {
+        if(room !== oldRoom) {
             removeButtonClasses(main._activeRoom);
             removeButtonClasses(newRoom);
             newRoom.addClass('btn-primary');
-            if(isRoomFavorite(oldRoomName)) {
+            if(isRoomFavorite(oldRoom)) {
                 main._activeRoom.addClass('room-favorite');
             }
 
             main._activeRoom = newRoom;
-            main.updateChatBox();
+            updateChatBox();
             main.updateAttendeesList();
-            $('#chat-header-topic').html(newRoom.data('topic'));
 
-            if(newRoom.data('owner') === parseInt($('#user-id').html(), 10)) {
-                $('#room-settings').show();
-            } else {
-                $('#room-settings').hide();
-            }
+            $('#submit-message').focus();
+            $('#chat-header-topic').text(main.formatMessages.styleMessage(newRoom.data('topic')));
 
             // reset "unseen message" counter
             var unseenMessages = newRoom.children('.unseen-messages');
@@ -486,7 +486,7 @@ $(function() {
         return false;
     }
 
-    this.onNewRoomClicked = function(obj) {
+    function onNewRoomClicked(obj) {
         main.enableInput();
 
         // get basic info
@@ -494,15 +494,13 @@ $(function() {
         var roomName = roomInList.text();
         var roomId = roomInList.data('roomid');
         var roomTopic = roomInList.data('topic');
-        var roomOwner = roomInList.data('owner');
 
         main.chat.sendUserJoin(roomId, roomName);
         main._activeRoom.removeClass('btn-primary');
         $('#chat-header-topic').html(roomTopic);
         $('#chat-entries').empty();
 
-        var entry = main.openRoom(roomId, roomName, roomTopic, roomOwner);
-        //animateRoomAppearance(entry);
+        var entry = main.openRoom(roomId, roomName, roomTopic);
 
         // animate popover
         var popover = $('#add-new-room').next();
@@ -513,6 +511,7 @@ $(function() {
         var newLeft = popoverLeft + newRoomWidth;
         popover.animate({"left": newLeft}, 200);
 
+        animateRoomAppearance(entry);
 
         // animate removed entry
         roomInList.animate({'height': 0, 'padding-top':0, 'padding-bottom':0}, 200, function() {
@@ -522,19 +521,19 @@ $(function() {
         });
 
         main._activeRoom = entry;
-    };
+    }
 
     function animateRoomAppearance(entry) {
         var paddingLeft = entry.css('padding-left');
         var width = entry.width();
 
 
-        entry.css('maxHeight', entry.height());
+        entry.css("maxHeight", entry.height());
         entry.width(0);
         entry.css('padding-left', 0);
         entry.css('padding-right', 0);
         entry.show();
-        entry.animate({'width': width, 'padding-left': paddingLeft, 'padding-right': paddingLeft}, 200, function() {
+        entry.animate({"width": width, "padding-left": paddingLeft, "padding-right": paddingLeft}, 200, function() {
             entry.removeAttr('style');
         });
     }
@@ -544,7 +543,7 @@ $(function() {
         Open a new room within a new tab.
         @return The <li> entry created for this room
     */
-    this.openRoom = function(id, name, topic, owner) {
+    this.openRoom = function(id, name, topic) {
         var classes = '';
         if(isRoomFavorite(name)) {
             classes = 'room-favorite';
@@ -553,7 +552,6 @@ $(function() {
         var entry = $('<li class="btn btn-primary '+classes+'"/>');
         entry.attr('data-roomId', id);
         entry.attr('data-topic', topic);
-        entry.attr('data-owner', owner);
         entry.text(name);
 
         onRoomSelected(entry);
@@ -583,7 +581,7 @@ $(function() {
         .data('topic', roomTopic)
         .text(roomName);
 
-        entry.click(function() { main.onNewRoomClicked(entry[0]); });
+        entry.click(function() { onNewRoomClicked(entry[0]); });
         root.prepend(entry);
     }
 

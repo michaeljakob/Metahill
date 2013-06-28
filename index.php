@@ -33,8 +33,7 @@
                         $topic = $room->topic;
                         $roomName = $room->name;
                         $roomId = $room->id;
-                        $roomOwner = $room->owner;
-                        echo  "<li class='btn room-favorite' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$topic'>".
+                        echo  "<li class='btn room-favorite' data-roomid='$roomId' data-topic='$topic'>".
                                 "$roomName<button class='close room-close'>&times;</button>".
                                 "<span class='unseen-messages'></span>".
                               "</li>";
@@ -110,7 +109,6 @@
     <script src="js/base.js" ></script>
     <script src="js/google-web-fonts.js" ></script>
     <script src="js/chat.js"></script>
-    <script src="js/jquery.transit.min.js"></script>
 </body>
 
 </html>

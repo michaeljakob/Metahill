@@ -7,7 +7,7 @@
     function submitAccountActivationEmail($name, $to) {
         $subject = "Activate your metahill account";
 
-        $verificationLink = "http://www.metahill.com/activate-account.php?name=" . $name . "&email=" . $to . "&code=" . hlpCreateAccoutActivationCode($name, $to);
+        $verificationLink = "http://www.metahill.com/activate_account.php?name=" . $name . "&email=" . $to . "&code=" . hlpCreateAccoutActivationCode($name, $to);
         $message = file_get_contents("feature/verify_email.html");
         $message = str_replace("::name::", $name, $message);
         $message = str_replace("::verification_link::", $verificationLink, $message);
@@ -87,7 +87,7 @@
                 $_SESSION["password"] = $password;
                 $_SESSION["verified"] = false;
                 if(submitAccountActivationEmail($name, $email)) {
-                    header("Location: signup-succeeded.php?" . session_name() . "=" . session_id());
+                    header("Location: signup_succeeded.php?" . session_name() . "=" . session_id());
                 } else {
                     echo "mail() returned FALSE.";
                 }

@@ -14,7 +14,7 @@ function __tip_poster__(main) {
     tips.push('Join <b>@metahill</b> for metahill-questions &amp; feedback.');
     tips.push('We visualize over 25 smilies. View the <a href="help/index.php?tab=messages&anchor=smilies" target="_blank">list</a>.');
     tips.push('Hold and drag rooms to change their order.');
-    tips.push('Be nice to your mates and keep the overall atmosphere nice. :)');
+    tips.push('Be nice to your mates. Insulting others won\'t be to your benefit.');
     //tips.push('');
     //tips.push('');
     //tips.push('');

@@ -18,7 +18,11 @@ header {
     height: 70px;
     padding: 10px 20px 20px 20px;
 
-    background: #f7f7f7;
+    background: -moz-linear-gradient(top,  #ffffff 0%, #dbdbdb 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#dbdbdb));
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#dbdbdb 100%);
+    background: -o-linear-gradient(top,  #ffffff 0%,#dbdbdb 100%);
+    background: linear-gradient(to bottom,  #ffffff 0%,#dbdbdb 100%);
 }
 
 
@@ -32,8 +36,7 @@ header img {
 }
 
 header > a > img {
-    margin-top: 12px;
-    margin-left: 10px;
+    margin-top: 15px;
     height: 50px;
 }
 
@@ -70,7 +73,7 @@ header > .menu {
     margin: 3px;
     margin-right: 20px;
     padding: 3px;
-    background: #f0f0f0;
+    background: #ddd;
     border-radius: 2px;
 }
 

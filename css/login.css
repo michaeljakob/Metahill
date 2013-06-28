@@ -1,11 +1,13 @@
 #main-container {
-    height: 9999px;
+    background-size: 2000px 100%;
+    height: 1000px;
     color: #dfdfdf;
     text-align: center;
 }
 
 #main-container.login {
     background: url('../img/background-login.jpg');
+    
 }
 #main-container.signup {
     background: url('../img/background-signup.jpg');

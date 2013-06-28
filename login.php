@@ -74,7 +74,7 @@
             <p class="desc">And every decision is made by <u>you</u>.</p>
             <form method="post" id="action-chooser">
                 <h2>Sign in</h2>
-                <input type="text" name="username" autofocus="true" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
+                <input type="text" name="username" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
                 <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> /><br/>
                 <input type="submit" value="Sign in" class="btn btn-success" />
                 <?php login(); ?>
