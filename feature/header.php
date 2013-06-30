@@ -30,15 +30,15 @@
                     <div class="btn-group" id="user-name">
                         <button class="btn dropdown-toggle" data-toggle="dropdown">'. $name .'&nbsp;<span class="caret"></span></button>
                         <ul class="dropdown-menu pull-right">
-                          <li><a href="#modal-profile" data-toggle="modal">Profile</a></li>
                           <li><a href="#modal-pref" data-toggle="modal">Preferences</a></li>
+                          <li><a href="#modal-profile" data-toggle="modal">Profile</a></li>
                           <li class="divider"></li>
                           <li><a href="logout.php">Sign out</a></li>
                         </ul>
                       </div>
-                      <button id="help-button" class="btn btn-info">Help</button>
+                      <button id="help-button" class="btn">Help</button>
                     </div>
-                  </div>'; // end "class menu"
+                  </div>';
 
         }
     ?>

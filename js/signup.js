@@ -13,12 +13,25 @@ $(function() {
     reg_name.keyup(nameVerifier);
     reg_password.keyup(passwordVerifier);
     
+    $(document).ready(function() {
+        $(window).resize();
+    });
 
     $("#action-chooser").submit(function() {
-        return function() {
-            return $.trim(reg_name.val()).length > 0 && $.trim(reg_email.val()).length > 0 && $.trim(reg_password.val()).length > 0 && totalStatus[0] && totalStatus[1] && totalStatus[2];
-        }();
+        return isSubmitAvailable();
     });
+
+    function isSubmitAvailable() {
+        return $.trim(reg_name.val()).length > 0 && $.trim(reg_email.val()).length > 0 && $.trim(reg_password.val()).length > 0 && totalStatus[0] && totalStatus[1] && totalStatus[2];
+    }
+
+    function updateSubmitButton() {
+        if(isSubmitAvailable()) {
+            $(':submit').removeAttr('disabled');
+        } else {
+            $(':submit').prop('disabled', true);
+        }
+    }
 
 
     function emailVerifier(_) {
@@ -34,6 +47,7 @@ $(function() {
             status.text("This does not look quite right :(");
             totalStatus[0] = false;
         }
+        updateSubmitButton();
     }
 
     
@@ -50,6 +64,11 @@ $(function() {
             status.addClass('label-alert');
             status.text("Your name should be no longer than 20 characters.");
             totalStatus[1] = false;
+        } else if(name.indexOf('@') !== -1) {
+            status.removeClass('label-success');
+            status.addClass('label-alert');
+            status.text("Please do not use the @-sign.");
+            totalStatus[1] = false;
         } else {
             doesUsernameExist(name, $(this), status);
             status.removeClass('label-alert');
@@ -57,6 +76,7 @@ $(function() {
             status.text("Seems legit.");
             totalStatus[1] = true;
         }
+        updateSubmitButton();
     }
     
     function passwordVerifier(_) {
@@ -72,6 +92,7 @@ $(function() {
             status.text("Your password should be at least 8 characters.");
             totalStatus[2] = false;
         }
+        updateSubmitButton();
     }
     
     function isEmailValid(email) {        
@@ -97,7 +118,7 @@ $(function() {
                 return false;
             }
         
-            var domainParts = parts[1].split(".");
+            var domainParts = parts[1].split('.');
             if(domainParts.some(function(part) { return part.length>63; })) {
                 return false;
             }
@@ -107,7 +128,8 @@ $(function() {
     }
     
     function containsBannedEmailString(email) {
-        var banned = [    '@trash-mail', '@10minutemail', '@cjpeg', '@rmqkr', '@zehnminutenmail', 
+        return false;
+        var banned = [  '@trash-mail', '@10minutemail', '@cjpeg', '@rmqkr', '@zehnminutenmail', 
                         '@meltmail', '@mailinator', 'spam4', '@guerillamail', '@sharklasers', 
                         'mailexpire', '@tempemail'];
         
@@ -164,9 +186,9 @@ $(function() {
     $(window).resize(function() {
         var h = $(window).height();
         if(h < 685) {
-            $("footer").css("bottom", h - 635);
+            $('footer').css('bottom', h - 635);
         } else {
-            $("footer").css("bottom", "50px");
+            $('footer').css('bottom', '50px');
         }
     });
 });

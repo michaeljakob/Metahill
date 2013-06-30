@@ -1,2 +1,2 @@
-<link rel="icon" type="image/png" href="img/metahill-icon.png">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <title>Metahill | Where experts talk</title>

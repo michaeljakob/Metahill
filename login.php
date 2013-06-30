@@ -31,24 +31,27 @@
             $name = htmlspecialchars($_POST['username']);
             $password = $_POST['password'];
             $verifyLoginResult = dbVerifyLogin($name, $password);
-            switch($verifyLoginResult) {
-                case 1:
-                    $_SESSION['logged_in'] = true;
-                    $_SESSION['name'] = htmlspecialchars($name);
-                    $_SESSION['password'] = $password;
-                    $_SESSION['verified'] = true;
-                    header('Location: index.php?' . session_name() . '=' . session_id());
-                    break;
-                case -1:
-                    echo '<div class="alert alert-error">
-                            This username/password combination is invalid.
-                         </div>';
-                    break;
-                case -2:
-                    echo '<div class="alert alert-error">
-                            Your account hasn\'t been verified, yet. To do so, <a href="login.php?intent=resend_verification_email&name='.$_POST['username'].'">request a verification email</a>.
-                         </div>';
-                    break;
+            if(gettype($verifyLoginResult) === "string") {
+                // login succeeded
+                $name = $verifyLoginResult;
+                $_SESSION['logged_in'] = true;
+                $_SESSION['name'] = htmlspecialchars($name);
+                $_SESSION['password'] = $password;
+                $_SESSION['verified'] = true;
+                header('Location: index.php?' . session_name() . '=' . session_id());
+            } else {
+                switch($verifyLoginResult) {
+                    case -1:
+                        echo '<div class="alert alert-error">
+                                This username/password combination is invalid.
+                             </div>';
+                        break;
+                    case -2:
+                        echo '<div class="alert alert-error">
+                                Your account hasn\'t been verified, yet. To do so, <a href="login.php?intent=resend_verification_email&name='.$_POST['username'].'">request a verification email</a>.
+                             </div>';
+                        break;
+                }
             }
         }
     }
@@ -69,12 +72,13 @@
     
     <section id="main-container" class="login">
         <article id="welcome">
-            <p class="desc">Meet other enthusiasts and chat with them in real-time.</p>
-            <p class="desc">It is entirely free and community-driven.</p>
+            <p class="desc">At metahill, you can meet other enthusiasts and chat with them in real-time.</p>
+            <p class="desc">It is entirely free, ad-free and community-driven.</p>
             <p class="desc">And every decision is made by <u>you</u>.</p>
+            <p class="desc">Simple.</p>
             <form method="post" id="action-chooser">
                 <h2>Sign in</h2>
-                <input type="text" name="username" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
+                <input type="text" name="username" autofocus="true" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
                 <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> /><br/>
                 <input type="submit" value="Sign in" class="btn btn-success" />
                 <?php login(); ?>
@@ -88,10 +92,8 @@
 
     </section>
     
-    <script src="js/vendor/jquery-1.9.1.min.js" ></script>
-    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
-    <script src="js/vendor/jquery-ui-1.10.2.custom.min.js" ></script>
-    <script src="js/base.js" ></script>
-    <script src="js/login.js" ></script>
+    <script src="js/vendor/jquery-2.0.2.min.js"></script>
+    <script async src="js/base.js" ></script>
+    <script async src="js/login.js" ></script>
 </body>
 </html>

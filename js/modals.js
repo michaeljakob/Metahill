@@ -30,7 +30,9 @@ function __modals__(main) {
         xhr.onload = function () {
             if (xhr.status === 200) {
                 console.log('http request: ok. '+ xhr.responseText);
-                successCallback(xhr.getResponseHeader('Content-Description'));
+                if(successCallback !== undefined) {
+                    successCallback(xhr.getResponseHeader('Content-Description'));
+                }
             } else {
                 var error = xhr.getResponseHeader('Content-Description');
                 console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
@@ -49,20 +51,9 @@ function __modals__(main) {
 
     /*******************************************************************
     ********************************************************************
-    preferences
+    (user) preferences
     ********************************************************************
     *******************************************************************/
-
-    /*
-        
-        @param json This json string should hold the following attributes:
-                    enable_smilies,
-                    enable_formatting,
-                    enable_notification_sounds,
-                    chat_text_size,
-                    favorite_rooms,
-                    chat_show_traffic
-    */
     function updatePreferences(json) {
         submitHttpRequest('update-preferences.php', json);
     }
@@ -117,7 +108,7 @@ function __modals__(main) {
 
     this.liveUpdateFont = function() {
         var font = $('#modals-pref-font option:selected').val();
-        $('body').css('font-family', font);
+        $('body *').css('font-family', font);
     };
 
     this.liveUpdateChatTextSize = function() {
@@ -147,14 +138,57 @@ function __modals__(main) {
     profile
     ********************************************************************
     *******************************************************************/
-    function updateProfile(json) {
-        var json = {};
-        submitHttpRequest('update-profile.php', json);
+    function updateProfile(json, successCallback) {
+        submitHttpRequest('update-profile.php', json, successCallback);
     }
 
     $('#modal-profile-submit').click(function(_) {
-        $('#modal-profile').modal('hide');
+        var deleteCheckBox = $('#modals-profile-delete');
+        if(deleteCheckBox.is(':checked')) {
+            var isDeletionConfirmed = confirm('If you continue, your account will be deleted permanently and you will not be able to log in with this user again. Do you still want to continue?');
+            if(isDeletionConfirmed) {
+                $('#modal-profile').modal('hide');
+
+                var json = {};
+                json.intent = 'delete-account';
+                json.userId = $('#user-id').html();
+                json.currentPassword = $('#modals-profile-current-password');
+                updateProfile(json);
+            } else {
+                deleteCheckBox.prop('checked', false); 
+            }
+        } else {
+            $('#modal-profile').modal('hide');
+
+            var json = {};
+            json.intent = 'change-password';
+            json.userId = $('#user-id').html();
+            json.currentPassword = $('#modals-profile-current-password');
+            json.newPassword = $('#modals-profile-new-password');
+
+            updateProfile(json, function(r) {
+                console.log(r);
+            });
+        }
     });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /*******************************************************************
@@ -166,8 +200,56 @@ function __modals__(main) {
         submitHttpRequest('update-new-room.php', json, successCallback);
     }
 
+    $('#modal-new-room').on('show', function() {
+        $('#add-new-room').popover('hide');
+        $('#modals-new-room-name').val('');
+        $('#modals-new-room-topic').val('');
+    });
+
     $('#modal-new-room').on('shown', function() {
         $('#modals-new-room-name').focus();
+    });
+
+
+    this.new_room = {};
+    this.new_room.isNameAvailable = false;
+    this.new_room.isNameLengthOk = false;
+    this.new_room.isTopicLengthOk = false;
+
+    this.verifyNewRoomInput = function() {
+        if(modals.new_room.isNameLengthOk && modals.new_room.isTopicLengthOk && modals.new_room.isNameAvailable) {
+            $('#modal-new-room-submit').removeAttr('disabled');
+        } else {
+            $('#modal-new-room-submit').prop('disabled', true);
+        }
+    };
+    $('#modals-new-room-name').bind('propertychange keyup input paste', function() {
+        var roomName = $(this).val().trim();
+        var len = roomName.length;
+        modals.new_room.isNameLengthOk = len >= 3 && len <= 20;
+
+        if(modals.new_room.isNameLengthOk) {
+            var json = {};
+            json.roomname = roomName;
+            submitHttpRequest('does-roomname-exist.php', json, function(resultCode) {
+                if(parseInt(resultCode, 10) === 1) {
+                    // already exists
+                    modals.new_room.isNameAvailable = false;
+                    $('#modals-new-room-name-status').show();
+                } else {
+                    modals.new_room.isNameAvailable = true;
+                    $('#modals-new-room-name-status').hide();
+                }
+                modals.verifyNewRoomInput();
+            });
+        }
+        modals.verifyNewRoomInput();
+    });
+    $('#modals-new-room-topic').bind('propertychange keyup input paste', function() {
+        var len = $(this).val().trim().length;
+        modals.new_room.isTopicLengthOk = len >= 20 && len <= 200;        
+
+        modals.verifyNewRoomInput();
     });
 
 
@@ -175,20 +257,78 @@ function __modals__(main) {
         $('#modal-new-room').modal('hide');
 
         var json = {};
-        json.name  = $('#modals-new-room-name').val();
+        json.name  = $('#modals-new-room-name').val().trim();
         json.owner = $('#user-id').text();
-        json.topic = $('#modals-new-room-topic').val();
+        json.topic = $('#modals-new-room-topic').val().trim();
+
 
         updateNewRoom(json, function(roomId) {
             main.openRoom(roomId, json.name, json.topic);
             main.chat.sendUserJoin(roomId, json.name);
-            main.chat.sendMessage("You just created the room <b>"+json.name+"</b>, congratulations!", -1, "server", roomId, json.name);
+            main.chat.sendMessage('You just created the room <b>'+json.name+'</b>, congratulations!', -1, 'server', roomId, json.name);
+            
+            (function(userId, roomId) {
+                var message = {};
+                message.userId = userId;
+                message.roomId = roomId;
+                submitHttpRequest('add-favorite.php', message);
+            })(json.owner, roomId);
         });
 
     });
 
 
+    /*******************************************************************
+    ********************************************************************
+    room preferences
+    ********************************************************************
+    *******************************************************************/
+    function updateRoomPreferences(json, successCallback) {
+        submitHttpRequest('update-room-pref.php', json, successCallback);
+    }
 
+    this.room_pref = {};
+    this.room_pref.isRoomNameToTitleAdded = false;
 
+    $('#modal-room-pref').on('show', function() {
+        if(!modals.room_pref.isRoomNameToTitleAdded) {
+            modals.room_pref.isRoomNameToTitleAdded = true;
+            var title =$('#modal-room-pref h3');
+            title.html('<u>' + main.helper.getSimpleText(main._activeRoom) + '</u>' + title.html());
+        }
 
+        $('#modals-room-pref-topic').val(main._activeRoom.data('topic'));
+        $('#modals-room-pref-topic').keyup(); // verify topic input
+    });
+
+    $('#modal-room-pref').on('shown', function() {
+        var textarea = $('#modals-room-pref-topic');
+        textarea
+        .focus()
+        .val('')
+        .val(main._activeRoom.data('topic'));
+    });
+
+    $('#modal-room-pref-submit').click(function() {
+        $('#modal-room-pref').modal('hide');
+        var json = {};
+        json.roomTopic = $('#modals-room-pref-topic').val().trim();
+        json.roomId = main._activeRoom.data('roomid');
+
+        main._activeRoom.data('topic', json.roomTopic);
+        $('#chat-header-topic').html(json.roomTopic);
+
+        updateRoomPreferences(json);
+    });
+
+    $('#modals-room-pref-topic').bind('propertychange keyup input paste', function() {
+        var len = $(this).val().trim().length;
+        var isTopicLengthOk = len >= 20 && len <= 200;        
+
+        if(isTopicLengthOk) {
+            $('#modal-room-pref-submit').removeAttr('disabled');
+        } else {
+            $('#modal-room-pref-submit').prop('disabled', true);
+        }
+    });
 }

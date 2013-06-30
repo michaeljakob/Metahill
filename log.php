@@ -88,7 +88,7 @@
             }
         ?>
     </section>
-    <script src="js/vendor/jquery-1.9.1.min.js" ></script>
+    <script src="js/vendor/jquery-2.0.2.min.js" ></script>
     <script src="js/format-messages.js" ></script>
     <script src="js/base.js" ></script>
     <script>

@@ -4,20 +4,47 @@
     
     require_once("php/db-interface.php");
 
-    function submitAccountActivationEmail($name, $to) {
-        $subject = "Activate your metahill account";
+    //submitAccountActivationEmailPear('Michael', 'michael@jakob.tv');
+    function submitAccountActivationEmailPear($name, $to) {
+        require_once "Mail.php";
 
-        $verificationLink = "http://www.metahill.com/activate_account.php?name=" . $name . "&email=" . $to . "&code=" . hlpCreateAccoutActivationCode($name, $to);
-        $message = file_get_contents("feature/verify_email.html");
-        $message = str_replace("::name::", $name, $message);
-        $message = str_replace("::verification_link::", $verificationLink, $message);
+        $verificationLink = "http://www.metahill.com/activate-account.php?name=" . $name . "&email=" . $to . "&code=" . hlpCreateAccoutActivationCode($name, $to);
+        $body = file_get_contents("feature/verify_email.html");
+        $body = str_replace("::name::", $name, $body);
+        $body = str_replace("::verification_link::", $verificationLink, $body);
 
+        $from     = "Metahill <welcome@metahill.com>";
+        $subject  = "Activate your metahill account";
+        //$body     = "";
 
-        $headers = "From: welcome@metahill.com\r\n";
-        $headers .= "MIME-Version: 1.0\r\n";
-        $headers .= "Content-type: text/html; charset=iso-8859-1\r\n";
+        $host     = "ssl://smtp.gmail.com";
+        $port     = "465";
+        $username = "metahill_mail@jakob.tv";  //<> give errors
+        $password = 'j';
 
-        return mail($to, $subject, $message, $headers);
+        $headers = array(
+            'From'    => $from,
+            'To'      => $to,
+            'Subject' => $subject,
+            'MIME-Version' => "1.0",
+            'Content-type' => "text/html; charset=iso-8859-1",
+        );
+        $smtp = Mail::factory('smtp', array(
+            'host'     => $host,
+            'port'     => $port,
+            'auth'     => true,
+            'username' => $username,
+            'password' => $password
+        ));
+
+        $mail = $smtp->send($to, $headers, $body);
+
+        if (PEAR::isError($mail)) {
+            echo("<p>" . $mail->getMessage() . "</p>");
+            return false;
+        } else {
+            return true;
+        }
     }
     
     function verifyInput($name, $password, $email) {
@@ -32,6 +59,10 @@
         if($lenName > 20) {
             echo "Please choose a username with not more than 20 characters."; 
             return false;    
+        }
+        if(strpos($name, '@') !== false) {
+            echo "Please do not use the @-sign.";
+            return false;
         }
         if($lenEmail < 6) {
             echo "An email address with less than 8 characters? <i>REALLY?!</i> Not with us.";
@@ -86,10 +117,8 @@
                 $_SESSION["name"] = htmlspecialchars($name);
                 $_SESSION["password"] = $password;
                 $_SESSION["verified"] = false;
-                if(submitAccountActivationEmail($name, $email)) {
-                    header("Location: signup_succeeded.php?" . session_name() . "=" . session_id());
-                } else {
-                    echo "mail() returned FALSE.";
+                if(submitAccountActivationEmailPear($name, $email)) {
+                    header("Location: signup-succeeded.php?" . session_name() . "=" . session_id());
                 }
             } else {
                 echo "<div class=\"alert alert-error\">";
@@ -120,7 +149,7 @@
             <form method="post" id="action-chooser">
                 <p class="desc">Sign up using Email</p>
                 
-                <input type="text" placeholder="Username" name="username" id="reg_name" value="<?php if(isset($_POST["username"])) echo htmlspecialchars($_POST["username"]); ?>" />
+                <input type="text" placeholder="Username" pattern="[^@]*" name="username" id="reg_name" value="<?php if(isset($_POST["username"])) echo htmlspecialchars($_POST["username"]); ?>" />
                 <span class="label"></span>
                 <input type="text" placeholder="Email" name="email" id="reg_email" value="<?php if(isset($_POST["email"])) echo htmlspecialchars($_POST["email"]); ?>" />
                 <span class="label"></span>
@@ -128,7 +157,7 @@
                 <span class="label"></span>
                 
 
-                <input type="submit" value="Sign up" class="btn btn-success" />
+                <input type="submit" disabled value="Sign up" class="btn btn-success" />
                 <?php createUser(); ?>
             </form>
             <p>I have an account. <a href="login.php">Sign in</a>.</p>
@@ -139,10 +168,8 @@
       </article>
     </section>
     
-    <script src="js/vendor/jquery-1.9.1.min.js" ></script>
-    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
-    <script src="js/vendor/jquery-ui-1.10.2.custom.min.js" ></script>
-    <script src="js/base.js" ></script>
-    <script src="js/signup.js" ></script>
+    <script src="js/vendor/jquery-2.0.2.min.js" ></script>
+    <script async src="js/base.js" ></script>
+    <script async src="js/signup.js" ></script>
 </body>
 </html>
