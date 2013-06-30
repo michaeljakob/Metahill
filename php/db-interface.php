@@ -26,7 +26,7 @@ function getDBH() {
 function dbVerifyLogin($name, $pass) {
     $dbh = getDBH();
                 
-    $statement = $dbh->prepare('SELECT * FROM accounts WHERE name=:name AND password=:password' );
+    $statement = $dbh->prepare('SELECT * FROM accounts WHERE (name=:name OR email=:name) AND password=:password' );
     $statement->execute(array(':name' => $name, ':password' => $pass));
     
     if($statement->rowCount() == 0) {
@@ -35,7 +35,7 @@ function dbVerifyLogin($name, $pass) {
 
     $account = $statement->fetch(PDO::FETCH_OBJ);
     if($account->is_verified) {
-        return 1;
+        return $account->name;
     } else {
         return -2;
     }
@@ -77,7 +77,7 @@ function dbGetFavoriteRooms($name) {
     $dbh = getDBH();
 
 
-    $statement = $dbh->prepare('SELECT r.id, r.name, r.topic 
+    $statement = $dbh->prepare('SELECT r.id, r.name, r.topic, r.owner
                                 FROM `favorite_rooms` favs
                                 INNER JOIN rooms r
                                 ON r.id = favs.room_id

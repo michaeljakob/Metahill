@@ -55,12 +55,12 @@
         </article>
     </section>
     
-    <script src="js/vendor/jquery-1.9.1.min.js" ></script>
+    <script src="js/vendor/jquery-2.0.2.min.js" ></script>
     <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
     <script src="js/vendor/jquery-ui-1.10.2.custom.min.js" ></script>
     <script src="js/base.js" ></script>
     <script>
-        //var base = new __base__();
+        var base = new __base__();
         if(!base.isInternetExplorer()) {
             $('#browser-list').css('display', 'none');
             $('#welcome > h1').html('You\'re using a modern browser! :)');
@@ -68,7 +68,7 @@
             welcome.html('Redirecting to login page');
 
             function addDot() { welcome.html('&nbsp;' + welcome.html() + '.'); }
-            for(var i=0; i<3; ++i) {
+            for(var i=0; i<4; ++i) {
                 setTimeout(addDot, i * 1000);
             }
             setTimeout(function() { 

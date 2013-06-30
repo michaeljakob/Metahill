@@ -67,18 +67,14 @@ $(function() {
 
         $('#submit-message').keydown(messageProcessor);
 
-
-        // add 'onNewRoomClicked' listeners to all currently existing entries
         $('#add-new-room').click(function() {
-            // new rooms that can be clicked to be added
             $('#add-new-room-rooms > li').each(function(_, entry) {
-                $(entry).click(function() { onNewRoomClicked(entry); });
+                $(entry).click(function() { main.onNewRoomClicked(entry); });
             });
         });
     }
 
     this.isStatusPersistent = false;
-
     /*
         Make a new status message that vanishes after a certain amount of time.
         To let it be persistent, set the main.isStatusPersistent boolean to true. 
@@ -103,7 +99,7 @@ $(function() {
         siteStatus.addClass(alertClass);
         siteStatus.html(message);
 
-        siteStatus.animate({'margin-top': '22px'}, 1000);
+        siteStatus.animate({'margin-top': '20px'}, 1000);
         setTimeout(function() {
             if(main.isStatusPersistent) {
                 return;
@@ -191,7 +187,7 @@ $(function() {
                 // ENTER
                 case 13:
                     if(isSubmitAllowed()) {
-                        var message = main.helper.escape(submitMessage.val()).trim();
+                        var message = main.helper.htmlEncode(submitMessage.val()).trim();
                         if(message.length > 0) {
                             if(message.length > INPUT_CHARACTER_LIMIT) {
                                 message = message.substr(0, INPUT_CHARACTER_LIMIT);
@@ -334,7 +330,7 @@ $(function() {
      * therefore you should avoid calling it too often.
      * @return {string}
      */
-    function updateChatBox() {
+    this.updateChatBox = function() {
         var chatEntries = $('#chat-entries');
         chatEntries.empty();
 
@@ -354,7 +350,7 @@ $(function() {
         main.modals.liveUpdateChatTextSize();
         $(window).resize();
         chatEntries.scrollTop(chatEntries.height());
-    }
+    };
 
     /**
      * Defines what happens when someone clicks the "Vie Chat Log"-button.
@@ -397,8 +393,8 @@ $(function() {
         }
 
         newRoom = $(newRoom);
-        var room = newRoom.html();
-        var oldRoom = main._activeRoom.html();
+        var roomName = newRoom.html();
+        var oldRoomName = main._activeRoom.html();
 
         if(newRoom.attr('id') === 'add-new-room'){
             return;
@@ -410,20 +406,28 @@ $(function() {
             main.sstatus.logChannelAttendees[newRoomName] = [];
         }
 
-        if(room !== oldRoom) {
+        if(roomName !== oldRoomName) {
             removeButtonClasses(main._activeRoom);
             removeButtonClasses(newRoom);
             newRoom.addClass('btn-primary');
-            if(isRoomFavorite(oldRoom)) {
+            if(isRoomFavorite(oldRoomName)) {
                 main._activeRoom.addClass('room-favorite');
             }
 
             main._activeRoom = newRoom;
-            updateChatBox();
+            main.updateChatBox();
             main.updateAttendeesList();
+            $('#chat-header-topic').html(newRoom.data('topic'));
 
-            $('#submit-message').focus();
-            $('#chat-header-topic').text(main.formatMessages.styleMessage(newRoom.data('topic')));
+            if(newRoom.data('owner') === parseInt($('#user-id').html(), 10)) {
+                var code = '<button class="btn" id="room-settings" href="#modal-room-pref" data-toggle="modal">'+
+                                '<img src="img/icon/room_settings.png" />'+
+                                'Room settings'+
+                            '</button>';
+                $('#chat-header-topic').after(code);
+            } else {
+                $('#room-settings').remove();
+            }
 
             // reset "unseen message" counter
             var unseenMessages = newRoom.children('.unseen-messages');
@@ -486,7 +490,7 @@ $(function() {
         return false;
     }
 
-    function onNewRoomClicked(obj) {
+    this.onNewRoomClicked = function(obj) {
         main.enableInput();
 
         // get basic info
@@ -494,14 +498,15 @@ $(function() {
         var roomName = roomInList.text();
         var roomId = roomInList.data('roomid');
         var roomTopic = roomInList.data('topic');
+        var roomOwner = roomInList.data('owner');
 
         main.chat.sendUserJoin(roomId, roomName);
         main._activeRoom.removeClass('btn-primary');
         $('#chat-header-topic').html(roomTopic);
         $('#chat-entries').empty();
 
-        var entry = main.openRoom(roomId, roomName, roomTopic);
-
+        var entry = main.openRoom(roomId, roomName, roomTopic, roomOwner);
+        
         // animate popover
         var popover = $('#add-new-room').next();
         var popoverLeft = parseInt(popover.css('left'), 10);
@@ -509,9 +514,14 @@ $(function() {
         var paddingLeft = entry.css('padding-left');
         var newRoomWidth = width + 2 * parseInt(paddingLeft, 10) + 6; // width, padding, margin
         var newLeft = popoverLeft + newRoomWidth;
-        popover.animate({"left": newLeft}, 200);
+        popover.animate({'left': newLeft}, 200);
 
-        animateRoomAppearance(entry);
+        var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+        var isOpera = navigator.userAgent.toLowerCase().indexOf('opera') > -1;
+        var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+        if(isChrome || isOpera || isFirefox) {
+            animateRoomAppearance(entry);
+        }
 
         // animate removed entry
         roomInList.animate({'height': 0, 'padding-top':0, 'padding-bottom':0}, 200, function() {
@@ -521,19 +531,19 @@ $(function() {
         });
 
         main._activeRoom = entry;
-    }
+    };
 
     function animateRoomAppearance(entry) {
         var paddingLeft = entry.css('padding-left');
         var width = entry.width();
 
 
-        entry.css("maxHeight", entry.height());
+        entry.css('maxHeight', entry.height());
         entry.width(0);
         entry.css('padding-left', 0);
         entry.css('padding-right', 0);
         entry.show();
-        entry.animate({"width": width, "padding-left": paddingLeft, "padding-right": paddingLeft}, 200, function() {
+        entry.animate({'width': width, 'padding-left': paddingLeft, 'padding-right': paddingLeft}, 200, function() {
             entry.removeAttr('style');
         });
     }
@@ -543,7 +553,7 @@ $(function() {
         Open a new room within a new tab.
         @return The <li> entry created for this room
     */
-    this.openRoom = function(id, name, topic) {
+    this.openRoom = function(id, name, topic, owner) {
         var classes = '';
         if(isRoomFavorite(name)) {
             classes = 'room-favorite';
@@ -552,13 +562,16 @@ $(function() {
         var entry = $('<li class="btn btn-primary '+classes+'"/>');
         entry.attr('data-roomId', id);
         entry.attr('data-topic', topic);
+        entry.attr('data-owner', owner);
         entry.text(name);
 
         onRoomSelected(entry);
         entry.click(function() { onRoomSelected(entry); });
-        var closeButton = $('<button class="close room-close">&times;</button>');
+        var closeButton = $('<button class="close room-close" style="margin-top:-2px;">&times;</button>');
+        var unseenMessages = $('<span class="unseen-messages"></span>');
         closeButton.click(function () { onRoomClosed(closeButton[0]); });
         entry.append(closeButton);
+        entry.append(unseenMessages);
         $('#channels-list').append(entry);
 
         return entry;
@@ -581,7 +594,7 @@ $(function() {
         .data('topic', roomTopic)
         .text(roomName);
 
-        entry.click(function() { onNewRoomClicked(entry[0]); });
+        entry.click(function() { main.onNewRoomClicked(entry[0]); });
         root.prepend(entry);
     }
 
@@ -637,7 +650,7 @@ $(function() {
 
 
                         submitStatus.append('<h4>Man, calm down!</h4>');
-                        submitStatus.append('You mission is not to spam the room. :P').hide().show('slow');
+                        submitStatus.append('Your mission is not to spam the room. :P').hide().show('slow');
 
                         setTimeout(function(){
                             submitStatus.hide('quick');

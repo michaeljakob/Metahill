@@ -9,6 +9,7 @@
 
 </head>
 <body>
+    <a name="#top"></a>
     <header>
         <a href="../"><img src="../img/metahill.png" alt="metahill icon" /></a>
     </header>
@@ -46,7 +47,7 @@
                                     $name = substr($text, strrpos($text, '/')+1, -4);
                                     $out .= "<tr>";
                                     $out .= "    <td><img src='$text' alt='$name'/></td>";
-                                    $out .= "    <td>". $name ."</td>";
+                                    $out .= "    <td>:". $name ."</td>";
                                     $out .= "    <td>". getSpecial($name) ."</td>";
                                     $out .= "</tr>";
                                 }
@@ -76,17 +77,17 @@
                             ?>
                         </tbody>
                     </table>
-                    <h1>Formatting</h1>
+                    <h1>Formatting<a href="#top"><img class="anchor" title="go to top" src="img/up.png"/></a></h1>
                     <p>
                         Add some formatting to your messages to emphasize important parts and make others easier comprehend.
                         Doing so is tremendousley easy, just wrap your text into a special symbol.
                         <ul>
-                            <li><b>**bold**</b></li>
+                            <li><b>*bold*</b></li>
                             <li><i>_italics_</i></li>
                             <li><code>`code`</code></li>
                         </ul>
                     </p>
-                    <h1>Share images</h1>
+                    <h1>Share images<a href="#top"><img class="anchor" title="go to top" src="img/up.png"/></a></h1>
                     <p>
                         You want to share images? A business-plan, a table or a funny cat. Whatever it might be, it is super easy. 
                         Just drag the image from your desktop into the chat window, then drop it. And we'll do the rest.
@@ -117,7 +118,15 @@
                         <li>
                             <h2>It is easy to get involved</h2>
                             <p>
-                                You can register by using your existing facebook or google+ account. And even if you don't wish so, it is still just a 20-seconds ride to make a new one.
+                                Creating an account doesn't even take 20 seconds. A username, an email and a password. That's it.
+                            </p>
+                        </li>
+                        <li>
+                            <h2>It is lightning fast</h2>
+                            <p>
+                                No flash, no silverlight and no java applets. With open-standard techniques HTML5, CSS3 and JavaScript
+                                metahill.com works everywhere and is incredibly fast among all devices. And you don't get annoyed by
+                                installing arbitrary plugins.
                             </p>
                         </li>
                         <li>
@@ -191,7 +200,7 @@
         </article>
     </section>
     
-    <script src="../js/vendor/jquery-1.9.1.min.js" ></script>
+    <script src="../js/vendor/jquery-2.0.2.min.js" ></script>
     <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
     <script src="../js/vendor/bootstrap.min.js" ></script>
     <script src="../js/helper.js" ></script>

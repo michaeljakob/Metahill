@@ -33,7 +33,8 @@
                         $topic = $room->topic;
                         $roomName = $room->name;
                         $roomId = $room->id;
-                        echo  "<li class='btn room-favorite' data-roomid='$roomId' data-topic='$topic'>".
+                        $roomOwner = $room->owner;
+                        echo  "<li class='btn room-favorite' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$topic'>".
                                 "$roomName<button class='close room-close'>&times;</button>".
                                 "<span class='unseen-messages'></span>".
                               "</li>";
@@ -47,10 +48,7 @@
                 <span class='label'>Topic</span>
                 <span id="chat-header-topic"></span>
 
-                <button class="btn" id="room-settings">
-                    <img src="img/icon/room_settings.png" />
-                    Room settings
-                </button>
+                
                 <button class="btn" id="view-log-button">
                     <img src="img/icon/view_log.png" />
                     View history
@@ -82,13 +80,13 @@
                 <input type="text" id="add-new-room-search" placeholder="Search room" />
                 <ul id="add-new-room-rooms">
                 </ul>
-                <a class="btn btn-info" href="#modal-new-room" data-toggle="modal" onclick="">Create new room</a>
+                <a class="btn btn-info" href="#modal-new-room" data-toggle="modal">Create new room</a>
             </form>
         </div>
     </div>
 
     <?php require_once('feature/modals.php'); ?>
-    <script src="js/vendor/jquery-1.9.1.min.js" ></script>
+    <script src="js/vendor/jquery-2.0.2.min.js" ></script>
     <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
     <script src="js/vendor/bootstrap.min.js" ></script>
     <script src="js/vendor/bootstrap-select.min.js" ></script>

@@ -79,7 +79,7 @@
             <input id="modals-pref-enable-smilies" type="checkbox" <?php if($user->enable_smilies) { echo 'checked="checked"'; } ?> value="enable_smilies" />Enable smilies
         </label>
         <label class="checkbox">
-            <input id="modals-pref-enable-formatting" type="checkbox" <?php if($user->enable_formatting) { echo 'checked="checked"'; } ?> value="enable_formatting" />Enable formatting (<b>**bold**</b>, <i>_italics_</i>, <i>*italics*</i>, <code>`code`</code>)
+            <input id="modals-pref-enable-formatting" type="checkbox" <?php if($user->enable_formatting) { echo 'checked="checked"'; } ?> value="enable_formatting" />Enable formatting (<b>*bold*</b>, <i>_italics_</i>, <code>`code`</code>)
         </label>
         <label class="checkbox">
             <input id="modals-pref-enable-notification-sounds" type="checkbox" <?php if($user->enable_notification_sounds) { echo 'checked="checked"'; } ?> value="enable_notification_sounds" />Notification sounds
@@ -95,7 +95,7 @@
         
     </div><!-- end body -->
     <div class="modal-footer">
-        <button id="modal-pref-submit" class="btn btn-primary">Okay</button>
+        <button id="modal-pref-submit" class="btn btn-info">Save</button>
     </div>
 </div><!-- end preferences -->
 
@@ -106,22 +106,29 @@
           <h3>Profile</h3>
     </div>
     <div class="modal-body">
-    
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        
+        <h3>What's your pass again?</h3>
+        <p class="desc">
+            To apply any changes in you profile, we need to ask for you password.<br>
+            If you forgot you password, you can request a new one <a href="request-new-password.php">here</a>.
+        </p>
+        <label>
+            <input id="modals-profile-current-password" required type="password" pattern=".{8,30}" placeholder="Your password" />
+        </label>
+        <h3>Change your password</h3>
+        <p class="heading-desc">Use between 8 and 30 characters</p>
+        <label>
+            <input id="modals-profile-new-password" type="password" pattern=".{8,30}" placeholder="Your new password" />
+        </label>
+        <h3>Delete account</h3>
+        <label class="checkbox">
+            Delete your account and all associated information
+            <input id="modals-profile-delete" type="checkbox" />
+        </label>
     </div><!-- end body -->
     <div class="modal-footer">
-        <button id="modal-profile-submit" class="btn btn-primary">Okay</button>
+        <button id="modal-profile-submit" class="btn btn-info">Save</button>
     </div>
 </div><!-- end profile -->
-
 
 <div id="modal-new-room" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-header">
@@ -132,14 +139,61 @@
         <p>You can create rooms at any time you wish and it is very uncomplicated.</p>
         <br>
         <label class="checkbox">
-            <p>Roomname</p><input id="modals-new-room-name" type="text" pattern=".{3, 30}" title="3 to 30 characters" />
+            <p>Roomname<span class="heading-desc">Use between 3 and 20 characters</span></p>
+            <input id="modals-new-room-name" type="text" required pattern="[a-zA-Z0-9\-_+]{3,20}" placeholder="A short and meaningful name" />
+            <span id="modals-new-room-name-status" class="label label-warning" style="display:none;">This room already exists.</span>
         </label>
         <label class="checkbox">
-            <p>Roomtopic</p><textarea id="modals-new-room-topic" maxlength="500"></textarea>
+            <p>Roomtopic<span class="heading-desc">Use between 20 and 200 characters</span></p>
+            <textarea id="modals-new-room-topic" maxlength="200" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
         </label>
         
     </div><!-- end body -->
     <div class="modal-footer">
-        <button id="modal-new-room-submit" class="btn btn-primary">Create room</button>
+        <button id="modal-new-room-submit" class="btn btn-info" disabled>Create room</button>
     </div>
 </div><!-- end new room -->
+
+
+<div id="modal-room-pref" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3> room preferences</h3>
+    </div>
+    <div class="modal-body">
+        <p>For the room owner it is possible to change the room topic.</p>
+        <br>
+        <label class="checkbox">
+            <p>Roomtopic<span class="heading-desc">Use between 20 and 200 characters</span></p>
+            <textarea id="modals-room-pref-topic" maxlength="200" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
+        </label>
+        
+    </div><!-- end body -->
+    <div class="modal-footer">
+        <button id="modal-room-pref-submit" class="btn btn-info" disabled>Save</button>
+    </div>
+</div><!-- end new room -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

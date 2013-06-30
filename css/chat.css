@@ -12,7 +12,7 @@
 
 #chat .chat-entry {
     display: block;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 #chat .chat-entry > * {
@@ -46,9 +46,9 @@
 }
 
 #chat-header {
-    height: 40px;
+    min-height: 40px;
     padding: 5px;
-    padding-right: 150px;
+    padding-right: 280px;
 }
 
 #chat-header img {
@@ -61,28 +61,24 @@
 }
 
 #view-log-button {
-    float: right;
     position: absolute;
     right: 5px;
     top: 10px;
 }
 
 #room-settings {
-    float: right;
-    position: relative;
-    top: 4px;
-    right: -10px;
+    position: absolute;
+    top: 10px;
+    right: 140px;
 }
 
 
 #channels {
-    background: rgba(224,224,224,.65);
+    background: #f0f0f0;
     margin: 0;
     padding: 3px 0;
     display: table;
     width: 100%;
-
-    border-top: 1px solid #ddd;
 }
 
 #channels-list { 
@@ -119,6 +115,7 @@
 
 #add-new-room-rooms {
     max-height: 150px;
+    min-width: 245px;
     overflow-y: auto;
     margin-left: 0;
     list-style-type: none;
@@ -162,8 +159,7 @@
 }
 
 #channel-attendees > form, #chat-header {
-    background: rgba(224,224,224,.65);
-    border-top: 1px solid #ddd;
+    background: #f7f7f7;
 }
 
 #channel-attendees > form  input[type='text'] {
@@ -184,18 +180,16 @@
 }
 
 #channel-attendees-entries > li > button:first-child {
-    /* width: 143px; use this one if you're having dropdown items */
-    width: 173px; /* this one is for simple buttons */
+    width: 185px;
+    margin-left: 2px;
+    background: #f0f0f0;
+    border: none;
 }
 
 
 
 #submit-area {
-    background: -moz-linear-gradient(bottom,  rgba(224,224,224,0) 0%, rgba(224,224,224,0.01) 1%, rgba(224,224,224,0.65) 100%);
-    background: -webkit-gradient(linear, left bottom, left top, color-stop(0%,rgba(224,224,224,0)), color-stop(1%,rgba(224,224,224,0.01)), color-stop(100%,rgba(224,224,224,0.65)));
-    background: -webkit-linear-gradient(bottom,  rgba(224,224,224,0) 0%,rgba(224,224,224,0.01) 1%,rgba(224,224,224,0.65) 100%);
-    background: -o-linear-gradient(bottom,  rgba(224,224,224,0) 0%,rgba(224,224,224,0.01) 1%,rgba(224,224,224,0.65) 100%);
-    background: linear-gradient(to top,  rgba(224,224,224,0) 0%,rgba(224,224,224,0.01) 1%,rgba(224,224,224,0.65) 100%);
+    background: #f7f7f7;
 
     clear: both;
     height: 100px;
@@ -225,7 +219,6 @@
 .room-close {
     position: relative;
     left: 20px;
-    bottom: 2px;
 }
 
 
@@ -294,8 +287,26 @@
     content: ')';
 }
 
+.btn-primary {
+    background: #3990E5 !important;
+}
 
+.btn-primary:hover {
+    background: #317cc5 !important;
+}
 
+.btn-info, .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-submenu:hover>a, .dropdown-submenu:focus>a {
+    background: #265f97 !important;
+}
 
+.btn-info:not([disabled]):hover {
+    background: #1c4670 !important;
+}
 
+.popover-title {
+    text-align: center;
+}
 
+.room-favorite:not(.btn-primary):not(.btn-inverse), .btn {
+    background-image: none;
+}

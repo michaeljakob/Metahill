@@ -27,7 +27,7 @@
         </article>
     </section>
     
-    <script src="js/vendor/jquery-1.9.1.min.js" ></script>
+    <script src="js/vendor/jquery-2.0.2.min.js" ></script>
     <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
     <script src="js/vendor/jquery-ui-1.10.2.custom.min.js" ></script>
     <script src="js/base.js" ></script>
