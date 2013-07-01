@@ -7,12 +7,15 @@ $(function() {
         return $.trim(userName.val()).length > 0 && $.trim(password.val()).length > 0;
     });
 
+    var login = this;
+    this.footer = $('footer');
+    this.window = $(window);
     $(window).resize(function() {
-        var h = $(window).height();
+        var h = login.window.height();
         if(h < 685) {
-            $('footer').css('bottom', h - 635);
+            login.footer.css('bottom', h - 635);
         } else {
-            $('footer').css('bottom', '50px');
+            login.footer.css('bottom', '50px');
         }
     });
 

@@ -19,8 +19,8 @@
 
         $host     = "ssl://smtp.gmail.com";
         $port     = "465";
-        $username = "metahill_mail@jakob.tv";  //<> give errors
-        $password = 'j';
+        $username = "metahill_mail@jakob.tv";
+        $password = '7!+/*f}<^Hjy+Ff[}}@>?.Dz8';
 
         $headers = array(
             'From'    => $from,

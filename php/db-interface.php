@@ -204,6 +204,42 @@ function hlpCreateAccoutActivationCode($name, $email) {
     return $hash;
 }
 
+function dbCreateEntryPasswordChangeRequests($email) {
+    $dbh = getDBH();
+
+    $id = sha1($email . "w8Q&TXfd!vx1D2{V<@%:b^^3a". microtime(true));
+                
+    $statement = $dbh->prepare("INSERT INTO `password_change_requests` (id, user_id) VALUES(:id, (SELECT id FROM `accounts` WHERE email=:email))");
+    $statement->execute(array(':id' => $id, ':email' => $email));
+
+    return $id;
+}
+
+function dbGetPasswordChangeRequest($id) {
+    $dbh = getDBH();
+                
+    $statement = $dbh->prepare("SELECT * FROM `password_change_requests` WHERE id=:id");
+    $statement->execute(array(':id' => $id));
+
+    return $statement->fetch(PDO::FETCH_OBJ);
+}
+
+function dbConfirmPasswordChangeRequest($userId, $newPassword) {
+    $dbh = getDBH();
+    
+    // update pass            
+    $query = "UPDATE `accounts` SET password=:new_password WHERE id=:user_id";
+    $statement = $dbh->prepare($query);
+    $success = $statement->execute(array(':user_id' => $userId, ':new_password' => $newPassword));
+
+    // delete link
+    $query = "DELETE FROM `password_change_requests` WHERE user_id=:user_id";
+    $statement = $dbh->prepare($query);
+    $success = $statement->execute(array(':user_id' => $userId));
+    
+
+    return $success;
+}
 
 
 

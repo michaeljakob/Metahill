@@ -74,7 +74,6 @@
         <article id="welcome">
             <p class="desc">At metahill, you can meet other enthusiasts and chat with them in real-time.</p>
             <p class="desc">It is entirely free, ad-free and community-driven.</p>
-            <p class="desc">And every decision is made by <u>you</u>.</p>
             <p class="desc">Simple.</p>
             <form method="post" id="action-chooser">
                 <h2>Sign in</h2>
