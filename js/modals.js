@@ -142,10 +142,23 @@ function __modals__(main) {
         submitHttpRequest('update-profile.php', json, successCallback);
     }
 
+    $('#modal-profile').on('shown', function() {
+        $('#modals-profile-current-password').focus(); 
+    });
+
+    $('#modals-profile-current-password').bind('propertychange keyup input paste', function() {
+        var len = $(this).val().length;
+        if(len >= 8 && len <= 20) {
+            $('#modal-profile-submit').removeAttr('disabled');
+        } else {
+            $('#modal-profile-submit').prop('disabled', true);
+        }
+    });
+
     $('#modal-profile-submit').click(function(_) {
         var deleteCheckBox = $('#modals-profile-delete');
         if(deleteCheckBox.is(':checked')) {
-            var isDeletionConfirmed = confirm('If you continue, your account will be deleted permanently and you will not be able to log in with this user again. Do you still want to continue?');
+            var isDeletionConfirmed = confirm('If you confirm now, your account will be permanently removed and you will not be able to log in with this user again. Do you still want to confirm the account deletion?');
             if(isDeletionConfirmed) {
                 $('#modal-profile').modal('hide');
 
@@ -154,42 +167,45 @@ function __modals__(main) {
                 json.userId = $('#user-id').html();
                 json.currentPassword = $('#modals-profile-current-password');
                 updateProfile(json);
+                document.location.href = 'why-account-deletion.php';
             } else {
                 deleteCheckBox.prop('checked', false); 
             }
         } else {
             $('#modal-profile').modal('hide');
 
+            var currentPassInput = $('#modals-profile-current-password');
+            var newPassInput = $('#modals-profile-new-password');
+
             var json = {};
             json.intent = 'change-password';
             json.userId = $('#user-id').html();
-            json.currentPassword = $('#modals-profile-current-password');
-            json.newPassword = $('#modals-profile-new-password');
+            json.currentPassword = currentPassInput.val();
+            json.newPassword = newPassInput.val();
+
+            currentPassInput.val('');
+            newPassInput.val('');
 
             updateProfile(json, function(r) {
-                console.log(r);
+                var result = r.split('>');
+                var intent = result[0];
+                var resultCode = parseInt(result[1], 10);
+                switch(intent) {
+                    case 'delete-account':
+                        break;
+                    case 'change-password':
+                        if(parseInt(resultCode, 10) === 1) {
+                            main.setCurrentStatus('Password changed successfully.', 'alert-success');
+                        } else {
+                            main.setCurrentStatus('Your password was not changed.', 'alert-warningu');
+                        }
+                        break;
+                    default:
+                        console.log('unknown intent returned');
+                }
             });
         }
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /*******************************************************************
     ********************************************************************

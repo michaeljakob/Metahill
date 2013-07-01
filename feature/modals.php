@@ -108,7 +108,7 @@
     <div class="modal-body">
         <h3>What's your pass again?</h3>
         <p class="desc">
-            To apply any changes in you profile, we need to ask for you password.<br>
+            To apply any changes in you profile, we need to ask you for your password.<br>
             If you forgot you password, you can request a new one <a href="request-new-password.php">here</a>.
         </p>
         <label>
@@ -126,7 +126,7 @@
         </label>
     </div><!-- end body -->
     <div class="modal-footer">
-        <button id="modal-profile-submit" class="btn btn-info">Save</button>
+        <button id="modal-profile-submit" disabled class="btn btn-info">Save</button>
     </div>
 </div><!-- end profile -->
 

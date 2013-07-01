@@ -28,6 +28,7 @@ switch($intent) {
 
 if($success) {
     header('Status: 200 OK');
+    header('Content-Description: ' . $intent . '>' . $statement->rowCount());
 } else {
     header('Status: 400 Bad Request');
     header('Content-Description: ' . var_dump($statement->errorInfo()));
