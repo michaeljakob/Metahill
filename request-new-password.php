@@ -52,9 +52,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php
-    require_once('feature/head.php'); 
-?>
+<title>Metahill | Request a new password</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 
@@ -70,7 +68,7 @@
     
     <section id="main-container" class="login">
         <article id="welcome">
-            <p class="desc">Lost you passord?</p>
+            <p class="desc">Lost your passord?</p>
             <p class="desc">No problem, request a new one here.</p>
             <form method="post">
                 <h2></h2><br>

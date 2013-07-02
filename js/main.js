@@ -14,7 +14,14 @@ $(function() {
     this.formatMessages = new __format_messages__(this.modals);
 
 
+    this.support = {};
+    var lowerUserAgent = navigator.userAgent.toLowerCase();
+    this.support.isChrome = lowerUserAgent.indexOf('chrome') > -1;
+    this.support.isOpera = lowerUserAgent.indexOf('opera') > -1;
+    this.support.isFirefox = lowerUserAgent.indexOf('firefox') > -1;
+
     $(document).ready(function() {
+
         openFavoriteRooms();
         bindOnClickListeners();
 
@@ -192,7 +199,7 @@ $(function() {
                             if(message.length > INPUT_CHARACTER_LIMIT) {
                                 message = message.substr(0, INPUT_CHARACTER_LIMIT);
                             }
-                            main.chat.sendMessage(message, $('#user-id').text(), main._userName, main._activeRoom.data('roomid'), main.helper.getSimpleText(main._activeRoom));
+                            main.chat.sendMessage(message, $('#user-id').text(), main._userName, main._activeRoom.attr('data-roomid'), main.helper.getSimpleText(main._activeRoom));
                             submitMessage.val('');
                             lastMessages.unshift(message);
                             lastMessagesIndex = -1;
@@ -393,20 +400,18 @@ $(function() {
         }
 
         newRoom = $(newRoom);
-        var roomName = newRoom.html();
-        var oldRoomName = main._activeRoom.html();
-
         if(newRoom.attr('id') === 'add-new-room'){
             return;
         }
 
 
+        var oldRoomName = main._activeRoom.html();
         var newRoomName = main.helper.getSimpleText(newRoom);
         if(main.sstatus.logChannelAttendees[newRoomName] === undefined) {
             main.sstatus.logChannelAttendees[newRoomName] = [];
         }
 
-        if(roomName !== oldRoomName) {
+        if(newRoomName !== oldRoomName) {
             removeButtonClasses(main._activeRoom);
             removeButtonClasses(newRoom);
             newRoom.addClass('btn-primary');
@@ -417,9 +422,9 @@ $(function() {
             main._activeRoom = newRoom;
             main.updateChatBox();
             main.updateAttendeesList();
-            $('#chat-header-topic').html(newRoom.data('topic'));
+            $('#chat-header-topic').html((newRoom.attr('data-topic')));
 
-            if(newRoom.data('owner') === parseInt($('#user-id').html(), 10)) {
+            if(newRoom.attr('data-owner') === $('#user-id').html()) {
                 var code = '<button class="btn" id="room-settings" href="#modal-room-pref" data-toggle="modal">'+
                                 '<img src="img/icon/room_settings.png" />'+
                                 'Room settings'+
@@ -458,18 +463,25 @@ $(function() {
         _closeRoomWasClicked = true;
 
         var room = $(obj).parent();
+        var roomId = room.attr('data-roomid');
         var roomName = main.helper.getSimpleText(room);
-        var roomId = room.data('roomid');
+        var roomTopic = room.attr('data-topic');
+        var roomOwner = room.attr('data-owner');
 
-        room.css("maxHeight", room.height());
-        room.animate({"width": "0", "padding-left": "0", "padding-right":"0"}, 200, 'swing', function() {room.remove();});
+
+        if(main.support.isChrome || main.support.isFirefox || main.support.isOpera) {
+            room.css('maxHeight', room.height());
+            room.animate({'width': '0', 'padding-left': '0', 'padding-right':'0'}, 200, 'swing', function() {room.remove();});
+        } else {
+            room.remove();
+        }
 
         if(room.parent().children().length <= 1) {
             main.disableInput();
         }
 
         // make it available to be added
-        addAvailableRoom(room.data('roomid'), main.helper.getSimpleText(room), room.data('topic'));
+        addAvailableRoom(roomId, roomName, roomTopic, roomOwner);
 
         // announce
         main.chat.sendUserQuit(roomId, roomName);
@@ -496,13 +508,13 @@ $(function() {
         // get basic info
         var roomInList = $(obj);
         var roomName = roomInList.text();
-        var roomId = roomInList.data('roomid');
-        var roomTopic = roomInList.data('topic');
-        var roomOwner = roomInList.data('owner');
+        var roomId = roomInList.attr('data-roomid');
+        var roomTopic = roomInList.attr('data-topic');
+        var roomOwner = roomInList.attr('data-owner');
 
         main.chat.sendUserJoin(roomId, roomName);
         main._activeRoom.removeClass('btn-primary');
-        $('#chat-header-topic').html(roomTopic);
+        $('#chat-header-topic').html(main.formatMessages.makeLinksClickable(roomTopic));
         $('#chat-entries').empty();
 
         var entry = main.openRoom(roomId, roomName, roomTopic, roomOwner);
@@ -516,10 +528,7 @@ $(function() {
         var newLeft = popoverLeft + newRoomWidth;
         popover.animate({'left': newLeft}, 200);
 
-        var isChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-        var isOpera = navigator.userAgent.toLowerCase().indexOf('opera') > -1;
-        var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-        if(isChrome || isOpera || isFirefox) {
+        if(main.support.isChrome || main.support.isFirefox || main.support.isOpera) {
             animateRoomAppearance(entry);
         }
 
@@ -560,7 +569,7 @@ $(function() {
         }
 
         var entry = $('<li class="btn btn-primary '+classes+'"/>');
-        entry.attr('data-roomId', id);
+        entry.attr('data-roomid', id);
         entry.attr('data-topic', topic);
         entry.attr('data-owner', owner);
         entry.text(name);
@@ -581,7 +590,7 @@ $(function() {
         Add a room to the list of all available, joinable rooms. 
         If you add a room, it will be displayed within the list after you click the '+' to add a room. 
     */
-    function addAvailableRoom(roomId, roomName, roomTopic) {
+    function addAvailableRoom(roomId, roomName, roomTopic, roomOwner) {
         var root = $('#add-new-room-popover > div:nth-child(2) ul');
         var extraClasses = '';
         if(isRoomFavorite(roomName)) {
@@ -590,8 +599,9 @@ $(function() {
 
         var entry = $(document.createElement('li'))
         .addClass('ui-bootstrap-list-item btn ' + extraClasses)
-        .data('roomid', roomId)
-        .data('topic', roomTopic)
+        .attr('data-roomid', roomId)
+        .attr('data-topic', roomTopic)
+        .attr('data-owner', roomOwner)
         .text(roomName);
 
         entry.click(function() { main.onNewRoomClicked(entry[0]); });

@@ -10,9 +10,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php
-    require_once('feature/head.php'); 
-?>
+<title>Metahill | Where experts talk</title>
 <link rel="stylesheet" type="text/css" href="css/base.css"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css"/>
 <!-- <link rel="stylesheet" type="text/css" href="themes/dark/css/chat.css"/> -->
@@ -78,9 +76,11 @@
         <div id="add-new-room-content">
             <form>
                 <input type="text" id="add-new-room-search" placeholder="Search room" />
-                <ul id="add-new-room-rooms">
-                </ul>
-                <a class="btn btn-info" href="#modal-new-room" data-toggle="modal">Create new room</a>
+                
+                <div id="add-new-room-rooms-parent">
+                    <ul id="add-new-room-rooms"></ul>
+                </div>
+                <a id="add-new-room-create-new-room" class="btn btn-info" href="#modal-new-room" data-toggle="modal">Create new room</a>
             </form>
         </div>
     </div>

@@ -4,12 +4,11 @@
 function __sound__(modals) {
 
     this.playUserAddressed = function() {
-        var audioTag = document.createElement('audio');
-        audioTag.setAttribute('src', 'sound/user-addressed.mp3');
+        var snd = new Audio("sound/user-addressed.wav"); // buffers automatically when created
 
         return function() {
             if(modals.preferences.enable_notification_sounds){
-                audioTag.play();
+                snd.play();
             }
         };
     }();

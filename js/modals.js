@@ -22,6 +22,13 @@ function __modals__(main) {
     $(document).ready(function() {
         modals.liveUpdateChatTextSize();
         modals.liveUpdateFont();
+
+        $('#modals-profile-current-password-info, #modals-room-pref-current-password-info').popover({
+            trigger: 'hover',
+            placement: 'left',
+            title: 'Why do I need to confirm my password?',
+            content: 'Security. It is all about confidential information which we try to keep as secure as possible.'
+        });
     });
 
     function submitHttpRequest(phpFile, json, successCallback) {
@@ -197,7 +204,7 @@ function __modals__(main) {
                         if(parseInt(resultCode, 10) === 1) {
                             main.setCurrentStatus('Password changed successfully.', 'alert-success');
                         } else {
-                            main.setCurrentStatus('Your password was not changed.', 'alert-warningu');
+                            main.setCurrentStatus('The entered password was wrong :S.', 'alert-warning');
                         }
                         break;
                     default:
@@ -218,8 +225,6 @@ function __modals__(main) {
 
     $('#modal-new-room').on('show', function() {
         $('#add-new-room').popover('hide');
-        $('#modals-new-room-name').val('');
-        $('#modals-new-room-topic').val('');
     });
 
     $('#modal-new-room').on('shown', function() {
@@ -279,6 +284,9 @@ function __modals__(main) {
 
 
         updateNewRoom(json, function(roomId) {
+            $('#modals-new-room-name').val('');
+            $('#modals-new-room-topic').val('');
+
             main.openRoom(roomId, json.name, json.topic);
             main.chat.sendUserJoin(roomId, json.name);
             main.chat.sendMessage('You just created the room <b>'+json.name+'</b>, congratulations!', -1, 'server', roomId, json.name);
@@ -305,6 +313,9 @@ function __modals__(main) {
 
     this.room_pref = {};
     this.room_pref.isRoomNameToTitleAdded = false;
+    this.room_pref.isPasswordLengthOk = false;
+    this.room_pref.isTopicLengthOk = false;
+    this.room_pref.currentTopic = '';
 
     $('#modal-room-pref').on('show', function() {
         if(!modals.room_pref.isRoomNameToTitleAdded) {
@@ -313,8 +324,10 @@ function __modals__(main) {
             title.html('<u>' + main.helper.getSimpleText(main._activeRoom) + '</u>' + title.html());
         }
 
-        $('#modals-room-pref-topic').val(main._activeRoom.data('topic'));
-        $('#modals-room-pref-topic').keyup(); // verify topic input
+        modals.room_pref.currentTopic = main._activeRoom.data('topic');
+        $('#modals-room-pref-topic')
+        .val(modals.room_pref.currentTopic)
+        .keyup();
     });
 
     $('#modal-room-pref').on('shown', function() {
@@ -327,24 +340,46 @@ function __modals__(main) {
 
     $('#modal-room-pref-submit').click(function() {
         $('#modal-room-pref').modal('hide');
+
         var json = {};
         json.roomTopic = $('#modals-room-pref-topic').val().trim();
         json.roomId = main._activeRoom.data('roomid');
+        json.userId = $('#user-id').html();
+        json.userPassword = $('#modals-room-pref-current-password').val();
 
-        main._activeRoom.data('topic', json.roomTopic);
-        $('#chat-header-topic').html(json.roomTopic);
+        if(json.roomTopic === modals.room_pref.currentTopic) {
+            return;
+        }
 
-        updateRoomPreferences(json);
+        updateRoomPreferences(json, function(returnCode) {
+            $('#modals-room-pref-current-password').val('');
+            if(parseInt(returnCode, 10) >= 1) {
+                main._activeRoom.data('topic', json.roomTopic);
+                $('#chat-header-topic').html(main.formatMessages.makeLinksClickable(json.roomTopic));
+
+            } else {
+                main.setCurrentStatus('The entered password was wrong :S.', 'alert-warning');
+            }
+        });
+    });
+
+    $('#modals-room-pref-current-password').bind('propertychange keyup input paste', function() {
+        var len = $(this).val().trim().length;
+        modals.room_pref.isPasswordLengthOk = len >= 8 && len <= 30;
+        verifyRoomPreferencesInput();
     });
 
     $('#modals-room-pref-topic').bind('propertychange keyup input paste', function() {
         var len = $(this).val().trim().length;
-        var isTopicLengthOk = len >= 20 && len <= 200;        
+        modals.room_pref.isTopicLengthOk = len >= 20 && len <= 200;        
+        verifyRoomPreferencesInput();
+    });
 
-        if(isTopicLengthOk) {
+    function verifyRoomPreferencesInput() {
+        if(modals.room_pref.isTopicLengthOk && modals.room_pref.isPasswordLengthOk) {
             $('#modal-room-pref-submit').removeAttr('disabled');
         } else {
             $('#modal-room-pref-submit').prop('disabled', true);
         }
-    });
+    }
 }

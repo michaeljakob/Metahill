@@ -6,17 +6,8 @@ function __base__() {
     };
 
     if(base.isInternetExplorer() && window.location.toString().indexOf('get-a-modern-browser') === -1) {
-        window.location = 'get-a-modern-browser.php';
+        window.location = 'http://www.metahill.com/get-a-modern-browser.php';
     }
-
-    // change header icon on hover
-    $('#company-icon').mouseover(function() {
-        $(this).attr('src', 'http://www.metahill.com/img/metahill-hover.png');
-    });
-    $('#company-icon').mouseout(function() {
-        $(this).attr('src', 'http://www.metahill.com/img/metahill.png');
-    });
-
 }
 
 new __base__();

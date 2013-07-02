@@ -38,9 +38,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php
-    require_once('feature/head.php'); 
-?>
+<title>Metahill | Confirm new password</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 

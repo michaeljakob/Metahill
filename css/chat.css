@@ -114,13 +114,19 @@
 }
 
 #add-new-room-rooms {
-    max-height: 150px;
     min-width: 245px;
-    overflow-y: auto;
-    margin-left: 0;
     list-style-type: none;
+    margin: 0;
     padding: 0;
     display: table-caption;
+}
+
+#add-new-room-rooms-parent {
+    margin: 0;
+    padding: 0;
+    max-height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #add-new-room-rooms > li {
@@ -153,6 +159,11 @@
     height: 486px;
 }
 
+#add-new-room-create-new-room {
+    width: 215px;
+    margin-left: 2px;
+    margin-top: 10px;
+}
 
 #channel-attendees > form {
     padding: 5px 5px 5px 0;

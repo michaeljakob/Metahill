@@ -103,7 +103,10 @@ p > span.heading-desc {
     text-align: center;
 }
 
+.modals-current-password {
+    margin: 0 !important;
+}
 
-
-
-
+#modals-profile-new-password, .modals-current-password {
+    width: 150px !important;
+}

@@ -106,14 +106,6 @@
           <h3>Profile</h3>
     </div>
     <div class="modal-body">
-        <h3>What's your pass again?</h3>
-        <p class="desc">
-            To apply any changes in you profile, we need to ask you for your password.<br>
-            If you forgot you password, you can request a new one <a href="request-new-password.php">here</a>.
-        </p>
-        <label>
-            <input id="modals-profile-current-password" required type="password" pattern=".{8,30}" placeholder="Your password" />
-        </label>
         <h3>Change your password</h3>
         <p class="heading-desc">Use between 8 and 30 characters</p>
         <label>
@@ -126,6 +118,8 @@
         </label>
     </div><!-- end body -->
     <div class="modal-footer">
+        <button id="modals-profile-current-password-info" class="btn">?</button>
+        <input id="modals-profile-current-password" class="modals-current-password" required type="password" pattern=".{8,30}" placeholder="Your current password" />
         <button id="modal-profile-submit" disabled class="btn btn-info">Save</button>
     </div>
 </div><!-- end profile -->
@@ -170,6 +164,8 @@
         
     </div><!-- end body -->
     <div class="modal-footer">
+        <button id="modals-room-pref-current-password-info" class="btn">?</button>
+        <input id="modals-room-pref-current-password" class="modals-current-password" required type="password" pattern=".{8,30}" placeholder="Your current password" />
         <button id="modal-room-pref-submit" class="btn btn-info" disabled>Save</button>
     </div>
 </div><!-- end new room -->

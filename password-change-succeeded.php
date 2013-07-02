@@ -2,12 +2,9 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php
-    require_once('feature/head.php');
-?>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
-
+<title>Metahill | Password change succeeded</title>
 </head>
 <body>
     <?php require_once('feature/header.php'); ?>
