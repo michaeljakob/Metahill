@@ -9,9 +9,9 @@ $(function() {
     var reg_email = $('#reg_email');
     var reg_password = $('#reg_password');
     
-    reg_email.keyup(emailVerifier);
-    reg_name.keyup(nameVerifier);
-    reg_password.keyup(passwordVerifier);
+    reg_email.bind('propertychange keyup input paste', emailVerifier);
+    reg_name.bind('propertychange keyup input paste', nameVerifier);
+    reg_password.bind('propertychange keyup input paste', passwordVerifier);
     
     $(document).ready(function() {
         $(window).resize();
@@ -86,6 +86,11 @@ $(function() {
             status.addClass('label-success');
             status.text("Alrighty.");
             totalStatus[2] = true;
+        } else if(name.length > 30){
+            status.removeClass('label-success');
+            status.addClass('label-alert');
+            status.text("Your password should be no longer than 30 characters.");
+            totalStatus[1] = false;
         } else {
             status.removeClass('label-success');
             status.addClass('label-alert');

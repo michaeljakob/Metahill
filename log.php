@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
-<base href="../" >
-<?php
-    require_once('feature/head.php'); 
-?>
-<link rel="stylesheet" type="text/css" href="css/base.css">
-<link rel="stylesheet" type="text/css" href="css/log.css">
-<link rel="stylesheet" type="text/css" href="css/chat.css">
-
-
-</head>
 <?php
     require_once('php/db-interface.php');
 
@@ -24,6 +10,10 @@
     }
 
 
+    /**
+     * Parses the GET parameters and returns the requested time span in days
+     * @return int Timespan in days. The default is 3 days.
+     */
     function getRequestedTimeSpan() {
         if(isset($_GET['timespan']) && is_numeric($_GET['timespan'])) {
             $days = intval($_GET['timespan']);
@@ -31,11 +21,23 @@
                 return $days;
             }
         }
-        // default timespan is 3
+        // default timespan is 3 days
         return 3;
     }
     
-?>
+?><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+<base href="../" >
+<title>Metahill | Log <?php if($room != NULL && $roomExists) { echo "of $room"; } ?></title>
+<link rel="stylesheet" type="text/css" href="css/base.css">
+<link rel="stylesheet" type="text/css" href="css/log.css">
+<link rel="stylesheet" type="text/css" href="css/chat.css">
+
+
+</head>
+
 
 <body>
     <?php require_once('feature/header.php'); ?>

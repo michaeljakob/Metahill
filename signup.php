@@ -27,7 +27,7 @@
             'To'      => $to,
             'Subject' => $subject,
             'MIME-Version' => "1.0",
-            'Content-type' => "text/html; charset=iso-8859-1",
+            'Content-type' => "text/html; charset=iso-8859-1"
         );
         $smtp = Mail::factory('smtp', array(
             'host'     => $host,
@@ -40,7 +40,7 @@
         $mail = $smtp->send($to, $headers, $body);
 
         if (PEAR::isError($mail)) {
-            echo("<p>" . $mail->getMessage() . "</p>");
+            var_dump($mail->getMessage());
             return false;
         } else {
             return true;
@@ -133,9 +133,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<?php
-    require_once("feature/head.php");
-?>
+<title>Metahill | Where experts talk | Sign up</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 

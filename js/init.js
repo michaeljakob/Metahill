@@ -7,16 +7,16 @@ $(function() {
 
     $(document).ready(function() {
         var isMac = navigator.platform.toLowerCase().indexOf('mac') >= 0;
+        var isWindows = navigator.appVersion.indexOf('Win') >= 0;
         if(isMac) {
-            // move the closing-X to the left side
-            //$('.close').css('float', 'left');
-
-            //var roomClose = $('.room-close');
-            //roomClose.css('right', roomClose.css('left')).css('left', 'auto');
             var css = '<style>.room-close{left:auto;right:20px;}.close{float:left;}</style>';
             $(css).appendTo('body');
-            
         }
+        if(isWindows) {
+            var css = '<link rel="stylesheet" type="text/css" href="css/windows-fixes.css"/>';
+            $(css).appendTo('head');
+        }
+
     });
 
 
@@ -57,6 +57,7 @@ $(function() {
     
     $('.selectpicker').selectpicker();
     $('#add-new-room').popover({ 
+        trigger: 'click',
         html: true,
         title: function() {
             return $('#add-new-room-title').html();
@@ -65,6 +66,7 @@ $(function() {
             return $('#add-new-room-content').html();
         }
     });
+    
 
     // remove "add-new-room"-popover if you click anywhere
     $('body').on('click', function (e) {
