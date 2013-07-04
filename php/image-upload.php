@@ -1,9 +1,4 @@
 <?php
-
-    
-    
-    
-    
     
     $info = pathinfo($_FILES['file']['name']);
     $fileSize = $_FILES['file']['size'];

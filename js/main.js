@@ -697,7 +697,7 @@ $(function() {
             optionClass = "server-message";
         }
         if(userName === main._userName) {
-            userName = '<b>' + userName + '</b>';
+            userName = '<b>' + userName + '&nbsp;</b>';
         }
 
         var entryText =
