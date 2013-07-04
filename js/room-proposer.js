@@ -9,13 +9,51 @@
 function __room_proposer__(connection, userName, favoriteRooms, main) {
     var roomProposer = this;
 
-    this.createHtmlChildren = function(rooms) {
-        var children = "";
+
+    this.getOpenRoomNames = function(inputSource) {
+        if(inputSource === undefined) {
+            return [];
+        }
+
+        var entries;
+
+        switch(inputSource) {
+            case 'main':
+                entries = $('#channels-list > li');
+                break;
+            case 'pref':
+                entries = $('#modal-pref-favorite-rooms > li');
+                break;
+        }
+
+        var names = [];
+        entries.each(function(index) {
+            names.push(main.helper.getSimpleText($(this)));
+        });
+        return names;
+    };
+
+
+    this.createHtmlChildren = function(rooms, inputSource) {
+        var alreadyListedRoomNames = roomProposer.getOpenRoomNames(inputSource);
+
+        console.log(JSON.stringify(alreadyListedRoomNames));
+
+        var children = '';
         for(var i=0; i<rooms.length; i++) {
             var room = rooms[i];
-            children += "<li class='ui-bootstrap-list-item btn' data-owner="+room.owner+" data-roomid='"+room.id+
+            if($.inArray(room.name, alreadyListedRoomNames) === -1) {
+                children += "<li class='ui-bootstrap-list-item btn' data-owner="+room.owner+" data-roomid='"+room.id+
                                               "' data-topic='"+room.topic+"'>"+room.name+"</li>";
+            }
         }
+
+        // add "No rooms found" message if neccessary
+        if(children === '') {
+            children += '<p class="btn" disabled>No rooms found :(</p>';
+        }
+
+
         return children;
     };
 
@@ -37,7 +75,7 @@ function __room_proposer__(connection, userName, favoriteRooms, main) {
     };
 
     this.handleIncomingSearchResults = function(rooms, inputSource) {
-        var children = roomProposer.createHtmlChildren(rooms);
+        var children = roomProposer.createHtmlChildren(rooms, inputSource);
 
         switch(inputSource) {
             case 'main':

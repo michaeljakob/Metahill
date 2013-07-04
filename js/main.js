@@ -321,15 +321,18 @@ $(function() {
         }
     };
 
-    this.addVisibleImage = function(userName, roomName, url, time) {
-        url =   '<span class="image-tooltip">' +
+    this.makeImageTagFromUrl = function(url) {
+        var tag =   '<span class="image-tooltip">' +
                     '<img src="' + url + '"></img>' +
                     '<span><img src="' + url + '"></img></span>' +
                 '</span>';
-
-        main.addVisibleMessage(userName, roomName, url, time, true);
+        return tag;
     };
 
+    this.addVisibleImage = function(userName, roomName, url, time) {
+        var tag = main.makeImageTagFromUrl(url);
+        main.addVisibleMessage(userName, roomName, tag, time, true);
+    };
 
     /**
      * Reloads all chat messages for the currently active room.

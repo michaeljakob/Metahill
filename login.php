@@ -70,6 +70,19 @@
     
     <section id="main-container" class="login">
         <article id="welcome">
+            <aside id="share">
+                <div><a href="https://twitter.com/share" class="twitter-share-button">Tweet</a></div>
+                <div class="g-plusone" data-size="medium"></div>
+                <div class="fb-like" data-href="http://www.metahill.com" data-send="false" data-layout="button_count" data-width="30" data-show-faces="true"></div>
+                <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=392494720871725";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+            </aside>
             <p class="desc">At metahill, you can meet other enthusiasts and chat with them in real-time.</p>
             <p class="desc">It is entirely free, ad-free and community-driven.</p>
             <p class="desc">Simple.</p>
@@ -88,9 +101,20 @@
         </footer>
 
     </section>
-    
+
     <script src="js/vendor/jquery-2.0.2.min.js"></script>
     <script async src="js/base.js" ></script>
     <script async src="js/login.js" ></script>
+    <script type="text/javascript">
+        // Google+
+        (function() {
+            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+            po.src = 'https://apis.google.com/js/plusone.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
+
+        // Twitter
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
 </body>
 </html>

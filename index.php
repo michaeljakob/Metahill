@@ -12,6 +12,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Metahill | Where experts talk</title>
 <link rel="stylesheet" type="text/css" href="css/base.css"/>
+<link rel="stylesheet" type="text/css" href="css/index.css"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css"/>
 <!-- <link rel="stylesheet" type="text/css" href="themes/dark/css/chat.css"/> -->
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css">
@@ -19,6 +20,7 @@
 
 </head>
 <body>
+    <div id="drag-and-drop-overlay"><h1>Upload</h1></div>
     <?php require_once('feature/header.php'); ?>
     <section id="main-container">
         <div id="channels">
@@ -57,7 +59,7 @@
         </article>
         <aside id="channel-attendees">
             <form>
-                <input type="text" id="filter-search-user" placeholder="Search user">
+                <input type="text" id="filter-search-user" autocomplete="off" placeholder="Search user">
                 <ul id="channel-attendees-entries">
                 </ul>
             </form>
@@ -69,13 +71,12 @@
         <div id="submit-status">
         </div>
     </article>
-    <div id="drag-and-drop-overlay"></div>
     <!-- data section -->
     <div id="add-new-room-popover" style="display:none">
         <div id="add-new-room-title">Join new room<button type="button" class="close" onClick="$('#add-new-room').popover('hide');" data-dismiss="modal" aria-hidden="true">×</button></div>
         <div id="add-new-room-content">
-            <form>
-                <input type="text" id="add-new-room-search" placeholder="Search room" />
+            <form onsubmit="return false;">
+                <input type="text" id="add-new-room-search" autocomplete="off" placeholder="Search room" />
                 
                 <div id="add-new-room-rooms-parent">
                     <ul id="add-new-room-rooms"></ul>

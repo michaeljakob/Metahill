@@ -66,7 +66,6 @@ $(function() {
             return $('#add-new-room-content').html();
         }
     });
-    
 
     // remove "add-new-room"-popover if you click anywhere
     $('body').on('click', function (e) {

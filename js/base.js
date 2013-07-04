@@ -1,4 +1,6 @@
-
+/**
+ * File included by -all- main php files.
+ */
 function __base__() {
     var base = this;
     this.isInternetExplorer = function() {
