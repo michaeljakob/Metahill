@@ -247,6 +247,7 @@ function __chat__(main) {
         console.log(JSON.stringify(messageObject));
         connection.send(JSON.stringify(messageObject));
     };
+
 }
 
 

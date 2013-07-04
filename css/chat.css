@@ -133,6 +133,11 @@
     width: 180px;
 }
 
+#add-new-room-rooms > p {
+    width: 220px;
+    border: none;
+}
+
 .room-favorite:not(.btn-primary):not(.btn-inverse) {
     color:#000;
     background-color:#e6e6e6;
@@ -193,8 +198,11 @@
 #channel-attendees-entries > li > button:first-child {
     width: 185px;
     margin-left: 2px;
-    background: #f0f0f0;
     border: none;
+}
+
+.btn.disabled, .btn[disabled] {
+    background: #f0f0f0;
 }
 
 
@@ -258,7 +266,7 @@
     position: fixed;
     right: 215px;
     top: 209px;
-    background: #ddd;
+    background: #f0f0f0;
     border-radius: 3px;
     padding: 3px;
 }

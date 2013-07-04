@@ -100,10 +100,10 @@ $(function() {
         updateSubmitButton();
     }
     
-    function isEmailValid(email) {        
+    var isEmailValid = function() {        
         var tester = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z{|}~])*@[a-zA-Z0-9](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9]){1,})+$/;
         
-        return function() {
+        return function(email) {
             if(email.length>254) {
                 return false;
             }
@@ -129,11 +129,10 @@ $(function() {
             }
         
             return true;
-        }();
-    }
+        };
+    }();
     
     function containsBannedEmailString(email) {
-        return false;
         var banned = [  '@trash-mail', '@10minutemail', '@cjpeg', '@rmqkr', '@zehnminutenmail', 
                         '@meltmail', '@mailinator', 'spam4', '@guerillamail', '@sharklasers', 
                         'mailexpire', '@tempemail'];
@@ -172,7 +171,7 @@ $(function() {
         xhr.onload = function () {
             if (xhr.status === 200) {
                 var result = xhr.getResponseHeader('Content-Description');
-                callback(result === "1");
+                callback(result === '1');
             } else {
                 var error = xhr.getResponseHeader('Content-Description');
                 console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
