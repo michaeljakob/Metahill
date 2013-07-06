@@ -26,7 +26,7 @@
                 we sent you.</p>
             <p>Afterwards, you can <a href="login.php">sign in</a>.</p>
             <footer>
-                <a href="blog" target="_blank">Blog</a>&nbsp;|
+                <a href="forum" target="_blank">Forum</a>&nbsp;|
                 <a href="help" target="_blank">Help</a>
             </footer>
       </article>

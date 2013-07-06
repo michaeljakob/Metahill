@@ -692,9 +692,9 @@ $(function() {
 
 
     function makeEntry(userName, message, time) {
-        var optionClass = "";
-        if(userName === "server") {
-            optionClass = "server-message";
+        var optionClass = '';
+        if(userName === 'server') {
+            optionClass = 'server-message';
         }
         if(userName === main._userName) {
             userName = '<b>' + userName + '&nbsp;</b>';

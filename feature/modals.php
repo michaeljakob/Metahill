@@ -155,13 +155,19 @@
           <h3> room preferences</h3>
     </div>
     <div class="modal-body">
+        <h3>Change topic</h3>
         <p>For the room owner it is possible to change the room topic.</p>
-        <br>
         <label class="checkbox">
-            <p>Roomtopic<span class="heading-desc">Use between 20 and 200 characters</span></p>
+            <span class="heading-desc-large">Use between 20 and 200 characters</span>
             <textarea id="modals-room-pref-topic" maxlength="200" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
         </label>
         
+        <h3>Delete room</h3>
+        <label class="checkbox">
+            If you don't want to use this room anymore, just drag it out of your favorite rooms in you preferences. 
+            You can access them by clicking you name on the top right.
+            Rooms without users are automatically deleted after a while.
+        </label>
     </div><!-- end body -->
     <div class="modal-footer">
         <button id="modals-room-pref-current-password-info" class="btn">?</button>

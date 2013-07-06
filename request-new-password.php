@@ -79,7 +79,7 @@
         <footer>
             <a href="login.php">Sign in</a>&nbsp;|
             <a href="signup.php">Sign up</a>&nbsp;|
-            <a href="blog">Blog</a>&nbsp;|
+            <a href="forum">forum</a>&nbsp;|
             <a href="help">Help</a>
         </footer>
 
@@ -99,6 +99,16 @@
                 $('#request-new-password').prop('disabled', true);
             }
         });
+    </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-42248349-1', 'metahill.com');
+      ga('send', 'pageview');
+
     </script>
 </body>
 </html>

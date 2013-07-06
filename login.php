@@ -96,7 +96,7 @@
             <p>I don't have an account. <a href="signup.php">Sign up</a>.</p>
         </article>
         <footer>
-            <a href="blog" target="_blank">Blog</a>&nbsp;|
+            <a href="forum" target="_blank">Forum</a>&nbsp;|
             <a href="help" target="_blank">Help</a>
         </footer>
 
@@ -114,7 +114,18 @@
         })();
 
         // Twitter
-        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+    </script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-42248349-1', 'metahill.com');
+      ga('send', 'pageview');
+
+    </script>
 
 </body>
 </html>

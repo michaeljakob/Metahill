@@ -204,7 +204,7 @@ function __modals__(main) {
                         if(parseInt(resultCode, 10) === 1) {
                             main.setCurrentStatus('Password changed successfully.', 'alert-success');
                         } else {
-                            main.setCurrentStatus('The entered password was wrong :S.', 'alert-warning');
+                            main.setCurrentStatus('Sorry man, I couldn\'t verify that password.', 'alert-warning');
                         }
                         break;
                     default:
@@ -320,7 +320,7 @@ function __modals__(main) {
     $('#modal-room-pref').on('show', function() {
         if(!modals.room_pref.isRoomNameToTitleAdded) {
             modals.room_pref.isRoomNameToTitleAdded = true;
-            var title =$('#modal-room-pref h3');
+            var title =$('#modal-room-pref h3:first');
             title.html('<u>' + main.helper.getSimpleText(main._activeRoom) + '</u>' + title.html());
         }
 
@@ -341,6 +341,7 @@ function __modals__(main) {
     $('#modal-room-pref-submit').click(function() {
         $('#modal-room-pref').modal('hide');
 
+
         var json = {};
         json.roomTopic = $('#modals-room-pref-topic').val().trim();
         json.roomId = main._activeRoom.data('roomid');
@@ -358,7 +359,7 @@ function __modals__(main) {
                 $('#chat-header-topic').html(main.formatMessages.makeLinksClickable(json.roomTopic));
 
             } else {
-                main.setCurrentStatus('The entered password was wrong :S.', 'alert-warning');
+                main.setCurrentStatus('Sorry man, I couldn\'t verify that password.', 'alert-warning');
             }
         });
     });
@@ -375,8 +376,13 @@ function __modals__(main) {
         verifyRoomPreferencesInput();
     });
 
-    function verifyRoomPreferencesInput() {
-        if(modals.room_pref.isTopicLengthOk && modals.room_pref.isPasswordLengthOk) {
+    function verifyRoomPreferencesInput() { 
+        var topicOkay = modals.room_pref.isTopicLengthOk;
+        if($('#modals-room-pref-delete').is(':checked')) {
+            topicOkay = true;
+        }
+
+        if(modals.room_pref.isPasswordLengthOk && topicOkay) {
             $('#modal-room-pref-submit').removeAttr('disabled');
         } else {
             $('#modal-room-pref-submit').prop('disabled', true);
