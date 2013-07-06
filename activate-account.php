@@ -43,7 +43,7 @@
             </form>
             <p class="desc" id="redirect-message">We redirect you to the main page</p>
             <footer>
-                <a href="blog" target="_blank">Blog</a>&nbsp;|
+                <a href="forum" target="_blank">Forum</a>&nbsp;|
                 <a href="help" target="_blank">Help</a>
             </footer>
       </article>

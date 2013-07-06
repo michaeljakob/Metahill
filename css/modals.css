@@ -85,9 +85,13 @@ p.pref-desc {
     bottom: 5px;
 }
 
-p > span.heading-desc {
+span.heading-desc {
     padding-left: 5px;
     font-size: 80%;
+    color: #265f97;
+}
+
+span.heading-desc-large {
     color: #265f97;
 }
 

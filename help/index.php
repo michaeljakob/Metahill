@@ -79,7 +79,7 @@
                     <h1>Formatting<a href="#top"><img class="anchor" title="go to top" src="img/up.png"/></a></h1>
                     <p>
                         Add some formatting to your messages to emphasize important parts and make others easier comprehend.
-                        Doing so is tremendousley easy, just wrap your text into a special symbol.
+                        Doing so is tremendously easy, just wrap your text into a special symbol.
                         <ul>
                             <li><b>*bold*</b></li>
                             <li><i>_italics_</i></li>
@@ -89,14 +89,13 @@
                     <h1>Share images<a href="#top"><img class="anchor" title="go to top" src="img/up.png"/></a></h1>
                     <p>
                         You want to share images? A business-plan, a table or a funny cat. Whatever it might be, it is super easy. 
-                        Just drag the image from your desktop into the chat window, then drop it. And we'll do the rest.
+                        Just drag the image to metahill.com, then drop it. Yeah, that's it.
                     </p>
                     <div id="example-share-images">
-                        <p>In the following example, I try to share a super funny picture of a rabbit with a pancake on its head. All I do is drag-and-dropping the desired image into metahill tab. </p>
+                        <p>In the following example, I try to share a cute squirrel with my friends. All I do is drag-and-dropping the desired image into the metahill tab. </p>
                         <img src="img/share-images-drag-and-drop.jpg" alt="Share images via drag and drop on metahill" />
-                        <p>Yaay, it worked! :)</p>
                         <img src="img/share-images-dropped.jpg" alt="Share images via drag and drop on metahill" />
-                        <p>If I want to take a closer look at the image I just move my mouse cursor over it, and it will magnify. This is especially useful for images with diagrams and text.</p>
+                        <p>If I want to take a closer look at the image I just move my mouse over it, and it will magnify on the right hand side. This is especially useful for images with diagrams or text.</p>
                         <img src="img/share-images-magnify.jpg" alt="Magnify images that were shared via metahill" />
                     </div>
                 </div>
@@ -162,7 +161,7 @@
                             <p>
                                 Everything you see here has been created by engaged professionals in their spare time. All members -no matter for how long- can participate in <a href="#">forum</a>
                                 discussions where <i>we all</i> decide what's going to happen next. New features and the modification of existing ones - everything from design to functionality is decided by you.
-                                Additionally, we maintain a <a href="#">blog</a> to keep interested users posted, ask for feedback and make polls.
+                                Additionally, we maintain a <a href="../forum">forum</a> to keep interested users posted, ask for feedback and make polls.
                                 At IRC disputes are very commonly only about <i>hating</i>, <i>egocentricity</i> and <i>power</i>. We try to be different. If you encounter any issues, get in touch with the support.
                             </p>
                         </li>

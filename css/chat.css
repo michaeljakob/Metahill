@@ -323,3 +323,7 @@
 .room-favorite:not(.btn-primary):not(.btn-inverse), .btn {
     background-image: none;
 }
+
+.server-message {
+    color: green;
+}
