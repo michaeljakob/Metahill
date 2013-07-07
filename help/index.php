@@ -12,7 +12,7 @@
     <header>
         <a href="../"><img src="../img/metahill.png" alt="metahill icon" /></a>
     </header>
-    
+
     <section id="main-container">
         <article>
             <ul class="nav nav-tabs" id="help-sections">
@@ -102,9 +102,9 @@
                 <div class="tab-pane active" id="why-metahill">
                     <h1>Why metahill?</h1>
                     <p>
-                        We think that metahill is unique in the way that it combines several established and amazing technologies and takes out the best each, for your benefit.
+                        We think that metahill is unique in the way that it combines several established and amazing technologies and takes out the best of each, for your benefit.
                         For a variety of reasons -which are listed below- we think metahill surpasses email, forums, facebook, twitter, <a href="http://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> and <a href="http://en.wikipedia.org/wiki/Usenet_newsgroup">Usenet newsgroups</a>.
-                        Therefore we invite you to read through our points to <u>make your own decision</u> afterwards.
+                        Therefore we invite you to read through our points and <u>fell your own decision</u> afterwards.
                     </p>
                     <ol>
                         <li>

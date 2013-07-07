@@ -167,12 +167,17 @@ function dbAddAccount($name, $password, $email) {
                 
     $ret = $statement->execute(array(':name' => $name, ':password' => $password, ':email' => $email));
                 
-    if($ret != 0 && $ret[0] != 0) {
+    if($ret === TRUE) {
+        // success
+        // add default favorite rooms (entry)
+        $userId = $dbh->lastInsertId();
+        $statement = $dbh->prepare('INSERT INTO `favorite_rooms`(`account_id`, `room_id`) VALUES ('.$userId.',5)');
+        $statement->execute();
+    } else {
         print_r($dbh->errorInfo());
-        return false;
     }
     
-    return true;
+    return $ret;
 }
 
 
@@ -203,6 +208,14 @@ function hlpCreateAccoutActivationCode($name, $email) {
     $hash = strrev(sha1(strrev($name) . 'itN5Io91i' . strrev($email)));
     return $hash;
 }
+
+function dbActivateAccount($name) {
+    $dbh = getDBH();
+                
+    $statement = $dbh->prepare("UPDATE `accounts` SET is_verified=1 WHERE name=:name");
+    $statement->execute(array(':name' => $name));
+}
+
 
 function dbCreateEntryPasswordChangeRequests($email) {
     $dbh = getDBH();
@@ -241,6 +254,48 @@ function dbConfirmPasswordChangeRequest($userId, $newPassword) {
     return $success;
 }
 
+
+ function submitAccountActivationEmailPear($name, $to) {
+        require_once "Mail.php";
+
+        $verificationLink = "http://www.metahill.com/activate-account.php?name=" . $name . "&email=" . $to . "&code=" . hlpCreateAccoutActivationCode($name, $to);
+        $body = file_get_contents("feature/verify_email.html");
+        $body = str_replace("::name::", $name, $body);
+        $body = str_replace("::verification_link::", $verificationLink, $body);
+
+        $from     = "Metahill <welcome@metahill.com>";
+        $subject  = "Activate your metahill account";
+        //$body     = "";
+
+        $host     = "ssl://smtp.gmail.com";
+        $port     = "465";
+        $username = "metahill_mail@jakob.tv";
+        $password = '7!+/*f}<^Hjy+Ff[}}@>?.Dz8';
+
+        $headers = array(
+            'From'    => $from,
+            'To'      => $to,
+            'Subject' => $subject,
+            'MIME-Version' => "1.0",
+            'Content-type' => "text/html; charset=iso-8859-1"
+        );
+        $smtp = Mail::factory('smtp', array(
+            'host'     => $host,
+            'port'     => $port,
+            'auth'     => true,
+            'username' => $username,
+            'password' => $password
+        ));
+
+        $mail = $smtp->send($to, $headers, $body);
+
+        if (PEAR::isError($mail)) {
+            var_dump($mail->getMessage());
+            return false;
+        } else {
+            return true;
+        }
+    }
 
 
 

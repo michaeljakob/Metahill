@@ -5,47 +5,7 @@
     require_once("php/db-interface.php");
 
     //submitAccountActivationEmailPear('Michael', 'michael@jakob.tv');
-    function submitAccountActivationEmailPear($name, $to) {
-        require_once "Mail.php";
-
-        $verificationLink = "http://www.metahill.com/activate-account.php?name=" . $name . "&email=" . $to . "&code=" . hlpCreateAccoutActivationCode($name, $to);
-        $body = file_get_contents("feature/verify_email.html");
-        $body = str_replace("::name::", $name, $body);
-        $body = str_replace("::verification_link::", $verificationLink, $body);
-
-        $from     = "Metahill <welcome@metahill.com>";
-        $subject  = "Activate your metahill account";
-        //$body     = "";
-
-        $host     = "ssl://smtp.gmail.com";
-        $port     = "465";
-        $username = "metahill_mail@jakob.tv";
-        $password = '7!+/*f}<^Hjy+Ff[}}@>?.Dz8';
-
-        $headers = array(
-            'From'    => $from,
-            'To'      => $to,
-            'Subject' => $subject,
-            'MIME-Version' => "1.0",
-            'Content-type' => "text/html; charset=iso-8859-1"
-        );
-        $smtp = Mail::factory('smtp', array(
-            'host'     => $host,
-            'port'     => $port,
-            'auth'     => true,
-            'username' => $username,
-            'password' => $password
-        ));
-
-        $mail = $smtp->send($to, $headers, $body);
-
-        if (PEAR::isError($mail)) {
-            var_dump($mail->getMessage());
-            return false;
-        } else {
-            return true;
-        }
-    }
+   
     
     function verifyInput($name, $password, $email) {
         $lenName = strlen($name);
@@ -91,10 +51,7 @@
             $name = htmlspecialchars($_POST["username"]);
             $password = $_POST["password"];
             $email = $_POST["email"];
-            
-                    
-            
-                        
+
             if(!verifyInput($name, $password, $email)) {
                 return;
             }
@@ -105,9 +62,6 @@
                 echo "</div>";
                 return;
             }
-
-            // TODO user check + create account should be one transaction!
-            // TODO no multiple emails
             
             $ret = dbAddAccount($name, $password, $email);
             
@@ -141,6 +95,10 @@
 <body>
     <?php require_once("feature/header.php"); ?>
     
+    
+    <section id="banner-topright">
+        <a href="signup.php"><img src="img/beta-banner.png" alt="Beta. Register now and benefit!" /></a>
+    </section>
     <section id="main-container" class="signup">
         <article id="welcome">
             <h1>Join metahill today!</h1>
@@ -155,7 +113,7 @@
                 <span class="label"></span>
                 
 
-                <input type="submit" disabled value="Sign up" class="btn btn-success" />
+                <input type="submit" value="Sign up" class="btn btn-success" />
                 <?php createUser(); ?>
             </form>
             <p>I have an account. <a href="login.php">Sign in</a>.</p>

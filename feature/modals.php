@@ -111,6 +111,8 @@
         <label>
             <input id="modals-profile-new-password" type="password" pattern=".{8,30}" placeholder="Your new password" />
         </label>
+        <h3>I forgot my password</h3>
+        <p>No worries, you can request a new password <a href="request-new-password.php">here</a>.</p>
         <h3>Delete account</h3>
         <label class="checkbox">
             Delete your account and all associated information
