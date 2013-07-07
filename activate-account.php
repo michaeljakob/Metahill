@@ -4,7 +4,7 @@
 
     function activateAccount() {
         $ERROR = 'I could not activate that. :(';
-        $SUCCESS = 'Your account has been activated!';
+        $SUCCESS = 'Your account has been activated!<b>You are logged in.';
 
         if(!isset($_GET['name']) || !isset($_GET['code']) || !isset($_GET['email'])) {
             return $ERROR;
@@ -18,6 +18,7 @@
         $generatedCode = hlpCreateAccoutActivationCode($name, $email);
         if($generatedCode == $code) {
             $_SESSION['verified'] = true;
+            dbActivateAccount($name);
             return $SUCCESS;
         }
 
@@ -58,12 +59,12 @@
         var redirectMessage = $('#redirect-message');
 
         function addDot() { redirectMessage.html('&nbsp;' + redirectMessage.html() + '.'); }
-        for(var i=0; i<3; ++i) {
+        for(var i=0; i<4; ++i) {
             setTimeout(addDot, i * 1000);
         }
         setTimeout(function() { 
             window.location = 'index.php';
-         }, 3000);
+        }, 4000);
     </script>
 </body>
 </html>

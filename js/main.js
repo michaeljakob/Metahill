@@ -643,7 +643,7 @@ $(function() {
      * @return {bool} isAllowed
      */
     var isSubmitAllowed = (function(){
-        var MESSAGE_LIMIT = 5;
+        var MESSAGE_LIMIT = 3;
         var TIME_SPAN = 3000;
         var submissionTimes = [];
 

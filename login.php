@@ -10,6 +10,7 @@
 
     require_once('php/db-interface.php');
     
+    $wasAccountActivationEmailSent = false;
 
     // check the intent
     if( isset($_GET['intent'])  && strlen(trim($_GET['intent']))>0 && 
@@ -19,7 +20,9 @@
         $name = $_GET['name'];
 
         if($intent == 'resend_verification_email') {
-            dbSendVerificationEmail($name);
+            $user = dbGetUserObject($name);
+            submitAccountActivationEmailPear($name, $user->email);
+            $wasAccountActivationEmailSent = true;
         }
     } 
 
@@ -43,7 +46,7 @@
                 switch($verifyLoginResult) {
                     case -1:
                         echo '<div class="alert alert-error">
-                                This username/password combination is invalid.
+                                This username/password combination is invalid. Request a new password <a href="request-new-password.php">here</a>.
                              </div>';
                         break;
                     case -2:
@@ -68,6 +71,10 @@
 <body>
     <?php require_once('feature/header.php'); ?>
     
+    
+    <section id="banner-topright">
+        <a href="signup.php"><img src="img/beta-banner.png" alt="Beta. Register now and benefit!" /></a>
+    </section>
     <section id="main-container" class="login">
         <article id="welcome">
             <aside id="share">
@@ -91,7 +98,16 @@
                 <input type="text" name="username" autofocus="true" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
                 <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> /><br/>
                 <input type="submit" value="Sign in" class="btn btn-success" />
-                <?php login(); ?>
+                <?php 
+                    login();
+
+                    if($wasAccountActivationEmailSent) {
+                        echo '<div class="alert alert-success">
+                                We have sent you an email. Please check your inbox (+spam folder).
+                             </div>';
+                    }
+
+                ?>
             </form>
             <p>I don't have an account. <a href="signup.php">Sign up</a>.</p>
         </article>
