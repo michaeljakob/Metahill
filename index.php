@@ -10,13 +10,20 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Metahill | Where experts talk</title>
+<title>Metahill | Where enthusiasts talk</title>
 <link rel="stylesheet" type="text/css" href="css/base.css"/>
 <link rel="stylesheet" type="text/css" href="css/index.css"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css"/>
-<!-- <link rel="stylesheet" type="text/css" href="themes/dark/css/chat.css"/> -->
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css">
 
+<?php
+    if(isset($_GET['theme']) && trim($_GET['theme']) != '') {
+        $theme = $_GET['theme'];
+        if(file_exists("themes/".basename($theme)."/css/chat.css")) {
+            echo "<link rel='stylesheet' type='text/css' href='themes/$theme/css/chat.css'/>";
+        }
+    }
+?>
 
 </head>
 <body>

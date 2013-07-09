@@ -23,6 +23,7 @@
 #chat .chat-entry > .chat-entry-user {
     width: 150px;
     float: left;
+    padding: 3px;
     text-align: right;
 }
 
@@ -131,26 +132,6 @@
     width: 220px;
     border: none;
 }
-
-.room-favorite:not(.btn-primary):not(.btn-inverse) {
-    color:#000;
-    background-color:#e6e6e6;
-    background-image:-moz-linear-gradient(top,#e6e6e6,#cdcdcd);
-    background-image:-webkit-gradient(linear,0 0,0 100%,from(#e6e6e6),to(#cdcdcd));
-    background-image:-webkit-linear-gradient(top,#e6e6e6,#cdcdcd);
-    background-image:-o-linear-gradient(top,#e6e6e6,#cdcdcd);
-    background-image:linear-gradient(to bottom,#e6e6e6,#cdcdcd);
-    background-repeat:repeat-x;
-    border-color:#cdcdcd #cdcdcd #002a80;
-    border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
-}
-    
-.room-favorite:not(.btn-primary):hover,
-.room-favorite:not(.btn-primary):hover:focus,
-.room-favorite:not(.btn-primary):hover:active {
-    background-color: #cdcdcd;
-}
-
 
 #channel-attendees {
     float: right;

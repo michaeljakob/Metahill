@@ -78,10 +78,6 @@ $(function() {
     
     // sortables
     $(function() {
-        $("#modal-pref-favorite-rooms, #modal-pref-nonfavorite-rooms").sortable({
-            connectWith: ".connectedSortable"
-        }).disableSelection();
-
         $('#channels-list').sortable();
         $('#channels-list').disableSelection();
     });

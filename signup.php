@@ -72,7 +72,7 @@
                 $_SESSION["password"] = $password;
                 $_SESSION["verified"] = false;
                 if(submitAccountActivationEmailPear($name, $email)) {
-                    header("Location: signup-succeeded.php?" . session_name() . "=" . session_id());
+                    header("Location: signup-succeeded.php");
                 }
             } else {
                 echo "<div class=\"alert alert-error\">";
@@ -87,7 +87,7 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Metahill | Where experts talk | Sign up</title>
+<title>Metahill | Where enthusiasts talk | Sign up</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 
@@ -103,7 +103,7 @@
         <article id="welcome">
             <h1>Join metahill today!</h1>
             <form method="post" id="action-chooser">
-                <p class="desc">Sign up using Email</p>
+                <h2 class="desc">Sign up using email</h2>
                 
                 <input type="text" placeholder="Username" pattern="[^@]*" name="username" id="reg_name" value="<?php if(isset($_POST["username"])) echo htmlspecialchars($_POST["username"]); ?>" />
                 <span class="label"></span>

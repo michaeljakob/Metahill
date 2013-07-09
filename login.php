@@ -3,7 +3,7 @@
     session_regenerate_id(true);
     
     if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true && $_SESSION['verified']) {
-        header('Location: index.php?' . session_name() . '=' . session_id());
+        header('Location: index.php');
         exit();
     }
     
@@ -41,7 +41,7 @@
                 $_SESSION['name'] = htmlspecialchars($name);
                 $_SESSION['password'] = $password;
                 $_SESSION['verified'] = true;
-                header('Location: index.php?' . session_name() . '=' . session_id());
+                header('Location: index.php');
             } else {
                 switch($verifyLoginResult) {
                     case -1:
@@ -63,7 +63,13 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Metahill | Where experts talk | Login</title>
+
+<meta name="description" content="Metahill is the easiest way to chat, text, message and share images in real time with other enthusiasts all across the web. The ability to exchange a lot of information including diagrams and links real-time makes it a first class business solution.">
+<meta name="author" content="">
+<meta name="keywords" content="realtime, real-time, chat, share-images, share images, image upload, community based, community driven, adfree, free, better irc, enthusiasts, community-based, online meetings, troubi, social network, better facebook, better twitter, better google plus, facebook alternative, twitter alternative, metahill, troubi, fun, enthusiasts, experts, connection, network, community, forum, internet relay chat, usenet newsgroups, knowledge, science, learning, homework, self-helping, users help users">
+<link rel="canonical" href="https://www.facebook.com/metahillcommunity"/>
+
+<title>Metahill | Where enthusiasts talk. Chat and share images within chatrooms in realtime with enthusiasts all around the web.</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 
@@ -82,20 +88,20 @@
                 <div class="g-plusone" data-size="medium"></div>
                 <div class="fb-like" data-href="http://www.metahill.com" data-send="false" data-layout="button_count" data-width="30" data-show-faces="true"></div>
                 <div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=392494720871725";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+                <script>(function(d, s, id) {
+                  var js, fjs = d.getElementsByTagName(s)[0];
+                  if (d.getElementById(id)) return;
+                  js = d.createElement(s); js.id = id;
+                  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=392494720871725";
+                  fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk'));</script>
             </aside>
-            <p class="desc">At metahill, you can meet other enthusiasts and chat with them in real-time.</p>
-            <p class="desc">It is entirely free, ad-free and community-driven.</p>
-            <p class="desc">Simple.</p>
+            <h1 class="desc">At metahill, you can meet other enthusiasts and chat with them in real-time.</h1>
+            <h1 class="desc">It is entirely free, ad-free and community-driven.</h1>
+            <h1 class="desc">Simple.</h1>
             <form method="post" id="action-chooser">
                 <h2>Sign in</h2>
-                <input type="text" name="username" autofocus="true" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
+                <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
                 <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> /><br/>
                 <input type="submit" value="Sign in" class="btn btn-success" />
                 <?php 

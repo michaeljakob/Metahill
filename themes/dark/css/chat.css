@@ -1,41 +1,38 @@
 body {
-    background: rgba(42, 42, 42, 1);
+    background: rgb(42, 42, 42);
+    color: #f0f0f0;
 }
 
-#channels, #channel-attendees > form, #chat-header, #channel-attendees-entries {
-    background: #666;
+#channels {
+    background: rgb(90,90,90);
 }
+
+#channel-attendees > form, #chat-header, #channel-attendees-entries, #submit-area  {
+    background: rgb(70,70,70);
+}
+
 
 #chat-header-topic {
     color: #ccc;
 }
 
-#submit-area {
-    background: rgb(50,50,50);
-    background: -moz-linear-gradient(top,  rgba(50,50,50,1) 0%, rgba(66,66,66,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(50,50,50,1)), color-stop(100%,rgba(66,66,66,1)));
-    background: -webkit-linear-gradient(top,  rgba(50,50,50,1) 0%,rgba(66,66,66,1) 100%);
-    background: -o-linear-gradient(top,  rgba(50,50,50,1) 0%,rgba(66,66,66,1) 100%);
-    background: linear-gradient(to bottom,  rgba(50,50,50,1) 0%,rgba(66,66,66,1) 100%);
-}
-
 header {
-    background: rgb(66,66,66);
-    background: -moz-linear-gradient(top,  rgba(66,66,66,1) 0%, rgba(50,50,50,1) 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(66,66,66,1)), color-stop(100%,rgba(50,50,50,1)));
-    background: -webkit-linear-gradient(top,  rgba(66,66,66,1) 0%,rgba(50,50,50,1) 100%);
-    background: -o-linear-gradient(top,  rgba(66,66,66,1) 0%,rgba(50,50,50,1) 100%);
-    background: linear-gradient(to bottom,  rgba(66,66,66,1) 0%,rgba(50,50,50,1) 100%);
+    background: rgb(50,50,50);
 }
 
 .dropdown-menu, .modal, .modal-footer, .popover-title, .popover-content {
-    background: #999 !important;
+    background: #444;
+}
+.dropdown-menu>li>a {
+    color: #f0f0f0;
 }
 
-
+span.heading-desc, span.heading-desc-large {
+    color: #81CFF0 !important;
+}
 
 input {
-    background: #ddd !important;
+    background: #ddd;
 }
 
 #chat-entries {
@@ -45,6 +42,7 @@ input {
 .label {
     background: #ccc;
     color: #555;
+    text-shadow: none;
 }
 
 #chat .chat-entry {
@@ -54,4 +52,9 @@ input {
 
 #company-icon {
     content: url("../img/metahill.png");
+}
+
+.btn.disabled, .btn[disabled] {
+    background: #999;
+    text-shadow: none;
 }
