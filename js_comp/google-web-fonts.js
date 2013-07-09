@@ -1,0 +1,1 @@
+$(function(){WebFontConfig={google:{families:["Noto+Sans::latin","Noto+Serif::latin"]}};var a=document.createElement("script");a.src=("https:"==document.location.protocol?"https":"http")+"://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";a.async="true";var b=document.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b)});
