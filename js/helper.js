@@ -20,6 +20,31 @@ Array.prototype.remove = function(from, to) {
 */
 function __helper__() {
 
+
+    this.submitHttpRequest = function(phpFile, json, successCallback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'php/' + phpFile);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log('http request: ok. '+ xhr.responseText);
+                if(successCallback !== undefined) {
+                    successCallback(xhr.getResponseHeader('Content-Description'));
+                }
+            } else {
+                var error = xhr.getResponseHeader('Content-Description');
+                console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
+            }
+        };
+
+        var formData = new FormData();
+        for(var key in json) {
+            formData.append(key, json[key]);
+        }
+
+        xhr.send(formData);
+    };
+
+
     /*
     * Converts milliseconds to the HH:mm:ss format
     */

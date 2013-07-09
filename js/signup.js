@@ -2,7 +2,8 @@
 /*global $ */
 
 $(function() {
-    
+    var signup = this;
+    this.helper = new __helper__();
     var totalStatus = [false, false, false];
     
     var reg_name = $('#reg_name');
@@ -161,30 +162,7 @@ $(function() {
             }
         }
         var json = { 'username': name };
-        var result = submitHttpRequest('does-username-exist.php', json, callback);
-    }
-
-    function submitHttpRequest(phpFile, json, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'php/' + phpFile);
-
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                var result = xhr.getResponseHeader('Content-Description');
-                callback(result === '1');
-            } else {
-                var error = xhr.getResponseHeader('Content-Description');
-                console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
-            }
-        };
-
-        var formData = new FormData();
-        formData.append('user_id', $('#user-id').text());
-        for(var key in json) {
-            formData.append(key, json[key]);
-        }
-
-        xhr.send(formData);
+        var result = signup.helper.submitHttpRequest('does-username-exist.php', json, callback);
     }
     
     $(window).resize(function() {

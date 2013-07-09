@@ -14,9 +14,9 @@ function __modals__(main) {
     this.preferences.chat_text_size = $('#modals-pref-textsize').val();
     this.preferences.chat_text_font = $('#modals-pref-font').val();
     this.preferences.enable_tips = $('#modals-pref-enable-tips').val();
+    this.preferences.user_id = $('#user-id').html();
 
     this.updateChatBoxCallback = main.updateCheckBox;
-    this.helper = new __helper__();
 
 
     $(document).ready(function() {
@@ -31,29 +31,6 @@ function __modals__(main) {
         });
     });
 
-    function submitHttpRequest(phpFile, json, successCallback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'php/' + phpFile);
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                console.log('http request: ok. '+ xhr.responseText);
-                if(successCallback !== undefined) {
-                    successCallback(xhr.getResponseHeader('Content-Description'));
-                }
-            } else {
-                var error = xhr.getResponseHeader('Content-Description');
-                console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
-            }
-        };
-
-        var formData = new FormData();
-        formData.append('user_id', $('#user-id').text());
-        for(var key in json) {
-            formData.append(key, json[key]);
-        }
-
-        xhr.send(formData);
-    }
 
 
     /*******************************************************************
@@ -62,20 +39,12 @@ function __modals__(main) {
     ********************************************************************
     *******************************************************************/
     function updatePreferences(json) {
-        submitHttpRequest('update-preferences.php', json);
+        main.helper.submitHttpRequest('update-preferences.php', json);
     }
 
     // preferences
     $('#modal-pref-submit').click(function(_) {
         $('#modal-pref').modal('hide');
-        
-        var favRooms = $('#modal-pref-favorite-rooms');
-        var favorite_rooms = [];
-        favRooms.children().each(function(_, element) {
-            favorite_rooms.push($(element).data('roomid'));
-        });
-        
-        modals.preferences.favorite_rooms = favorite_rooms;
         updatePreferences(modals.preferences);
     });
 
@@ -146,7 +115,7 @@ function __modals__(main) {
     ********************************************************************
     *******************************************************************/
     function updateProfile(json, successCallback) {
-        submitHttpRequest('update-profile.php', json, successCallback);
+        main.helper.submitHttpRequest('update-profile.php', json, successCallback);
     }
 
     $('#modal-profile').on('shown', function() {
@@ -220,7 +189,7 @@ function __modals__(main) {
     ********************************************************************
     *******************************************************************/
     function updateNewRoom(json, successCallback) {
-        submitHttpRequest('update-new-room.php', json, successCallback);
+        main.helper.submitHttpRequest('update-new-room.php', json, successCallback);
     }
 
     $('#modal-new-room').on('show', function() {
@@ -252,7 +221,7 @@ function __modals__(main) {
         if(modals.new_room.isNameLengthOk) {
             var json = {};
             json.roomname = roomName;
-            submitHttpRequest('does-roomname-exist.php', json, function(resultCode) {
+            main.helper.submitHttpRequest('does-roomname-exist.php', json, function(resultCode) {
                 if(parseInt(resultCode, 10) === 1) {
                     // already exists
                     modals.new_room.isNameAvailable = false;
@@ -295,7 +264,7 @@ function __modals__(main) {
                 var message = {};
                 message.userId = userId;
                 message.roomId = roomId;
-                submitHttpRequest('add-favorite.php', message);
+                main.helper.submitHttpRequest('add-favorite.php', message);
             })(json.owner, roomId);
         });
 
@@ -308,7 +277,7 @@ function __modals__(main) {
     ********************************************************************
     *******************************************************************/
     function updateRoomPreferences(json, successCallback) {
-        submitHttpRequest('update-room-pref.php', json, successCallback);
+        main.helper.submitHttpRequest('update-room-pref.php', json, successCallback);
     }
 
     this.room_pref = {};

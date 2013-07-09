@@ -65,22 +65,25 @@
                 
                 $messages = dbGetMessagesObject($room, $spanInDays);
                 $entries = "";
+
+                $imageEntryTemplate =   '<div class="chat-entry">'.
+                                            '<span class="chat-entry-options">%s</span>'.
+                                            '<span class="chat-entry-user">%s</span>'.
+                                            '<span class="image-tooltip"><a href="%s"><img src="%s"/></a></span>'.
+                                        '</div>';
+
+                $textEntryTemplate =    '<div class="chat-entry">'.
+                                            '<span class="chat-entry-options">%s</span>'.
+                                            '<span class="chat-entry-user">%s</span>'.
+                                            '<span class="chat-entry-message">%s</span>'.
+                                        '</div>';
+
                 for($i=0; $i < count($messages); ++$i) {
                     $msg = $messages[$i];
                     if($msg->is_image) {
-                        $entries .=    sprintf('<div class="chat-entry">'.
-                                                '<span class="chat-entry-options">%s</span>'.
-                                                '<span class="chat-entry-user">%s</span>'.
-                                                '<span class="image-tooltip"><a href="%s"><img src="%s"/></a></span>'.
-                                            '</div>',
-                                            $msg->submitted_time, $msg->account_name, $msg->content, $msg->content);
+                        $entries .= sprintf($imageEntryTemplate, $msg->submitted_time, $msg->account_name, $msg->content, $msg->content);
                     } else {
-                        $entries .=    sprintf('<div class="chat-entry">'.
-                                                '<span class="chat-entry-options">%s</span>'.
-                                                '<span class="chat-entry-user">%s</span>'.
-                                                '<span class="chat-entry-message">%s</span>'.
-                                            '</div>',
-                                            $msg->submitted_time, $msg->account_name, $msg->content);
+                        $entries .= sprintf($textEntryTemplate, $msg->submitted_time, $msg->account_name, $msg->content);
                     }
                 }
                 echo $entries;
@@ -91,7 +94,6 @@
         ?>
     </section>
     <script src="js/vendor/jquery-2.0.2.min.js" ></script>
-    <script src="js/format-messages.js" ></script>
     <script src="js/base.js" ></script>
     <script>
         $('#chat-entries').scrollTop(10000000000);

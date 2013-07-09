@@ -48,6 +48,7 @@ $(function() {
                 onRoomSelected(entry);
             }
         });
+
     }
 
     /**
@@ -407,8 +408,9 @@ $(function() {
             return;
         }
 
+        main.enableInput();
 
-        var oldRoomName = main._activeRoom.html();
+        var oldRoomName = main.helper.getSimpleText(main._activeRoom);
         var newRoomName = main.helper.getSimpleText(newRoom);
         if(main.sstatus.logChannelAttendees[newRoomName] === undefined) {
             main.sstatus.logChannelAttendees[newRoomName] = [];
@@ -418,9 +420,8 @@ $(function() {
             removeButtonClasses(main._activeRoom);
             removeButtonClasses(newRoom);
             newRoom.addClass('btn-primary');
-            if(isRoomFavorite(oldRoomName)) {
-                main._activeRoom.addClass('room-favorite');
-            }
+            main._activeRoom.addClass('room-favorite');
+            
 
             main._activeRoom = newRoom;
             main.updateChatBox();
@@ -428,11 +429,13 @@ $(function() {
             $('#chat-header-topic').html((newRoom.attr('data-topic')));
 
             if(newRoom.attr('data-owner') === $('#user-id').html()) {
-                var code = '<button class="btn" id="room-settings" href="#modal-room-pref" data-toggle="modal">'+
-                                '<img src="img/icon/room_settings.png" />'+
-                                'Room settings'+
-                            '</button>';
-                $('#chat-header-topic').after(code);
+                if($('#room-settings').length === 0) {
+                    var code = '<button class="btn" id="room-settings" href="#modal-room-pref" data-toggle="modal">'+
+                                    '<img src="img/icon/room_settings.png" />'+
+                                    'Room settings'+
+                                '</button>';
+                    $('#chat-header-topic').after(code);
+                }
             } else {
                 $('#room-settings').remove();
             }
@@ -445,22 +448,12 @@ $(function() {
     }
 
     function removeButtonClasses(obj) {
-        obj
-        .removeClass('btn-warning')
-        .removeClass('btn-danger')
-        .removeClass('btn-primary')
-        .removeClass('btn-info')
-        .removeClass('btn-success');
+        obj.removeClass('btn-warning btn-danger btn-primary btn-info btn-success');
     }
 
     function removeAlertClasses(obj) {
-        obj
-        .removeClass('alert-warning')
-        .removeClass('alert-error')
-        .removeClass('alert-info')
-        .removeClass('alert-success');
+        obj.removeClass('alert-warning alert-error alert-info alert-success');
     }
-
 
     function onRoomClosed(obj) {
         _closeRoomWasClicked = true;
@@ -471,6 +464,7 @@ $(function() {
         var roomTopic = room.attr('data-topic');
         var roomOwner = room.attr('data-owner');
 
+        main.helper.submitHttpRequest('remove-favorite.php', { userId: $('#user-id').html(), roomId: roomId });
 
         if(main.support.isChrome || main.support.isFirefox || main.support.isOpera) {
             room.css('maxHeight', room.height());
@@ -479,7 +473,8 @@ $(function() {
             room.remove();
         }
 
-        if(room.parent().children().length <= 1) {
+        var wasActiveRoomClosed = main.helper.getSimpleText(room) === main.helper.getSimpleText(main._activeRoom);
+        if(room.parent().children().length <= 1 || wasActiveRoomClosed) {
             main.disableInput();
         }
 
@@ -491,20 +486,6 @@ $(function() {
         delete main.sstatus.logChannelAttendees[roomName];
     }
 
-    /**
-     * Check whether a given room is a favorite or not.
-     * @param  {string}  roomName
-     * @return {bool} isFavorite
-     */
-    function isRoomFavorite(roomName) {
-        for(var i=0; i<main.sstatus.favoriteRooms.length; ++i) {
-            if(main.sstatus.favoriteRooms[i].roomName === roomName) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     this.onNewRoomClicked = function(obj) {
         main.enableInput();
 
@@ -514,6 +495,8 @@ $(function() {
         var roomId = roomInList.attr('data-roomid');
         var roomTopic = roomInList.attr('data-topic');
         var roomOwner = roomInList.attr('data-owner');
+
+        main.helper.submitHttpRequest('add-favorite.php', { userId: $('#user-id').html(), roomId: roomId });
 
         main.chat.sendUserJoin(roomId, roomName);
         main._activeRoom.removeClass('btn-primary');
@@ -566,12 +549,7 @@ $(function() {
         @return The <li> entry created for this room
     */
     this.openRoom = function(id, name, topic, owner) {
-        var classes = '';
-        if(isRoomFavorite(name)) {
-            classes = 'room-favorite';
-        }
-
-        var entry = $('<li class="btn btn-primary '+classes+'"/>');
+        var entry = $('<li class="btn btn-primary room-favorite"/>');
         entry.attr('data-roomid', id);
         entry.attr('data-topic', topic);
         entry.attr('data-owner', owner);
@@ -595,13 +573,9 @@ $(function() {
     */
     function addAvailableRoom(roomId, roomName, roomTopic, roomOwner) {
         var root = $('#add-new-room-popover > div:nth-child(2) ul');
-        var extraClasses = '';
-        if(isRoomFavorite(roomName)) {
-            extraClasses = 'room-favorite';
-        }
 
         var entry = $(document.createElement('li'))
-        .addClass('ui-bootstrap-list-item btn ' + extraClasses)
+        .addClass('ui-bootstrap-list-item btn room-favorite')
         .attr('data-roomid', roomId)
         .attr('data-topic', roomTopic)
         .attr('data-owner', roomOwner)
@@ -623,6 +597,7 @@ $(function() {
         submitMessage.focus();
 
         $('#view-log-button').show();
+        $('#room-settings').show();
     };
 
     this.disableInput = function() {
@@ -635,6 +610,7 @@ $(function() {
 
         $('#chat-header-topic').text('');
         $('#view-log-button').hide();
+        $('#room-settings').hide();
     };
 
 

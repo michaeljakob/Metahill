@@ -1,11 +1,3 @@
-/*
-    #add-new-room-rooms
-    -> "<li class='ui-bootstrap-list-item btn' data-roomid='$roomId' data-topic='$topic'>$roomName</li>";
-
-    #modal-pref-nonfavorite-rooms
-    -> same inhere
-
-*/
 function __room_proposer__(connection, userName, favoriteRooms, main) {
     var roomProposer = this;
 
@@ -43,7 +35,7 @@ function __room_proposer__(connection, userName, favoriteRooms, main) {
         for(var i=0; i<rooms.length; i++) {
             var room = rooms[i];
             if($.inArray(room.name, alreadyListedRoomNames) === -1) {
-                children += "<li class='ui-bootstrap-list-item btn' data-owner="+room.owner+" data-roomid='"+room.id+
+                children += "<li class='ui-bootstrap-list-item btn' data-owner='"+room.owner+"'sn data-roomid='"+room.id+
                                               "' data-topic='"+room.topic+"'>"+room.name+"</li>";
             }
         }

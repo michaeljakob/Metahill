@@ -6,29 +6,6 @@
         <h3>Preferences</h3>
     </div>
     <div class="modal-body">
-        <h3>Favorite rooms</h3>
-        <p class="pref-desc">Favorite rooms are joined when you log in.<br />
-                             Drag rooms from right to left to add favorites.</p>
-         <div id="pref-select-favorite-channels">
-            <div>
-                <span>Favorite rooms</span>
-                <ul id="modal-pref-favorite-rooms" class="connectedSortable">
-                    <?php
-                        foreach($rooms as $room) {
-                            $name = $room->name;
-                            $id = $room->id;
-                            echo "<li class='room-favorite ui-bootstrap-list-item btn' data-roomid='$id'>$name</li>";
-                        }
-                    ?>
-                </ul>
-            </div>
-             
-            <div>
-                <input type="text" id="pref-select-favorite-channels-search" autocomplete="off" placeholder="Search room">
-                <ul id="modal-pref-nonfavorite-rooms" class="connectedSortable">
-                </ul>
-            </div>
-        </div>
         <h3>Messaging</h3>
         <table id="modals-pref-table">
             <tr>
@@ -107,7 +84,7 @@
     </div>
     <div class="modal-body">
         <h3>Change your password</h3>
-        <p class="heading-desc">Use between 8 and 30 characters</p>
+        <p class="heading-desc">Use between 8 and 30 characters.</p>
         <label>
             <input id="modals-profile-new-password" type="password" pattern=".{8,30}" placeholder="Your new password" />
         </label>
@@ -115,7 +92,7 @@
         <p>No worries, you can request a new password <a href="request-new-password.php">here</a>.</p>
         <h3>Delete account</h3>
         <label class="checkbox">
-            Delete your account and all associated information
+            Delete your account and all associated information.
             <input id="modals-profile-delete" type="checkbox" />
         </label>
     </div><!-- end body -->
@@ -165,11 +142,7 @@
         </label>
         
         <h3>Delete room</h3>
-        <label class="checkbox">
-            If you don't want to use this room anymore, just drag it out of your favorite rooms in you preferences. 
-            You can access them by clicking you name on the top right.
-            Rooms without users are automatically deleted after a while.
-        </label>
+            We got this! Unused rooms are automatically deleted after a while.
     </div><!-- end body -->
     <div class="modal-footer">
         <button id="modals-room-pref-current-password-info" class="btn">?</button>
