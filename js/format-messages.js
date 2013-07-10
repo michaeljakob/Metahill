@@ -2,8 +2,6 @@
 *   replaceSmilies(text)
 *   boldItalicsCode(text)
 *   styleMessage(text)
-*
-*
 */
 function __format_messages__(modals) {
 
@@ -98,7 +96,6 @@ function __format_messages__(modals) {
         `: code         <code>
         *: italics      <strong>
         _: italics      <em>
-        
     */
     this.boldItalicsCode = function(text) {
         if(!modals.preferences.enable_formatting) {
@@ -151,7 +148,7 @@ function __format_messages__(modals) {
      * @return {[type]}      [description]
      */
     this.makeLinksClickable = function(text) {
-        var regex = /(http:\/\/|https:\/\/|www.)([a-zA-Z0-9.-]{3,}\.[a-zA-Z0-9]{2,5}[^\s]*)/g;
+        var regex = /((http:\/\/|www)[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
 
         function replaceCallback(match) {
             match = match.replace(/_/g, "%5f");

@@ -81,12 +81,16 @@
     padding: 0 0 0 3px;
     display: table;
     float: left;
+
+    /* #add-new-room should have some distance to left if no rooms are open*/
+    min-width: 3px;
+    min-height: 1px;
 }
 
 #channels li {
     cursor: pointer;
     padding: 4px 30px;
-    margin: 2px 2px;
+    margin: 2px;
     float: left;
 }
 
@@ -207,7 +211,7 @@
 }
 
 #add-new-room {
-    padding: 4px 10px !important;    
+    padding: 4px 10px !important;
 }
 
 .room-close {

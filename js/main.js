@@ -426,7 +426,7 @@ $(function() {
             main._activeRoom = newRoom;
             main.updateChatBox();
             main.updateAttendeesList();
-            $('#chat-header-topic').html((newRoom.attr('data-topic')));
+            $('#chat-header-topic').html(main.formatMessages.makeLinksClickable(newRoom.attr('data-topic')));
 
             if(newRoom.attr('data-owner') === $('#user-id').html()) {
                 if($('#room-settings').length === 0) {
@@ -499,7 +499,9 @@ $(function() {
         main.helper.submitHttpRequest('add-favorite.php', { userId: $('#user-id').html(), roomId: roomId });
 
         main.chat.sendUserJoin(roomId, roomName);
-        main._activeRoom.removeClass('btn-primary');
+
+        if(main._activeRoom !== undefined)
+            main._activeRoom.removeClass('btn-primary');
         $('#chat-header-topic').html(main.formatMessages.makeLinksClickable(roomTopic));
         $('#chat-entries').empty();
 

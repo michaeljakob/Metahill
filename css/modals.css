@@ -26,6 +26,7 @@ p.pref-desc {
 
 #modals-pref-table tr > td:nth-child(2) > div ul {
     min-width: initial;
+    max-height: none !important;
 }
 
 #modals-pref-table div.bootstrap-select {
