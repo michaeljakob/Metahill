@@ -308,29 +308,36 @@ function __modals__(main) {
     });
 
     $('#modal-room-pref-submit').click(function() {
-        $('#modal-room-pref').modal('hide');
+        //$('#modal-room-pref').modal('hide');
 
+        var currentPasswordBox = $('#modals-room-pref-current-password');
+        var submitButton = $(this);
 
         var json = {};
         json.roomTopic = $('#modals-room-pref-topic').val().trim();
         json.roomId = main._activeRoom.data('roomid');
         json.userId = $('#user-id').html();
-        json.userPassword = $('#modals-room-pref-current-password').val();
+        json.userPassword = currentPasswordBox.val();
 
         if(json.roomTopic === modals.room_pref.currentTopic) {
+            $('#modal-room-pref').modal('hide');
+            currentPasswordBox.val('');
             return;
         }
 
         updateRoomPreferences(json, function(returnCode) {
-            $('#modals-room-pref-current-password').val('');
+            currentPasswordBox.val('');
             if(parseInt(returnCode, 10) >= 1) {
                 main._activeRoom.data('topic', json.roomTopic);
                 $('#chat-header-topic').html(main.formatMessages.makeLinksClickable(json.roomTopic));
-
+                $('#modal-room-pref').modal('hide');
             } else {
-                main.setCurrentStatus('Sorry man, I couldn\'t verify that password.', 'alert-warning');
+                currentPasswordBox.attr('placeholder', 'Wrong pass :(');
+                currentPasswordBox.focus();
+                submitButton.prop('disabled', true);
             }
         });
+
     });
 
     $('#modals-room-pref-current-password').bind('propertychange keyup input paste', function() {

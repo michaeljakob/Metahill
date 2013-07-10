@@ -135,7 +135,7 @@
     </div>
     <div class="modal-body">
         <h3>Change topic</h3>
-        <p>For the room owner it is possible to change the room topic.</p>
+        <p>Describe in easy and clear words what this room is about. You can add links to FAQs or other references.</p>
         <label class="checkbox">
             <span class="heading-desc-large">Use between 20 and 200 characters</span>
             <textarea id="modals-room-pref-topic" maxlength="200" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
