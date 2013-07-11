@@ -124,7 +124,7 @@
 
     </section>
 
-    <script src="js/vendor/jquery-2.0.2.min.js"></script>
+    <script src="js/vendor/jquery-2.0.3.min.js"></script>
     <script async src="js/base.js" ></script>
     <script async src="js/login.js" ></script>
     <script type="text/javascript">

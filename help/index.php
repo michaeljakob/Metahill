@@ -198,7 +198,7 @@
         </article>
     </section>
     
-    <script src="../js/vendor/jquery-2.0.2.min.js" ></script>
+    <script src="../js/vendor/jquery-2.0.3.min.js" ></script>
     <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
     <script src="../js/vendor/bootstrap.min.js" ></script>
     <script src="../js/helper.js" ></script>

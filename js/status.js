@@ -1,7 +1,9 @@
 /// jshint settings
 /*global */
 
-function __status__() {
+metahill.status = $(function() {
+    "use strict";
+
     this.favoriteRooms = []; // array of {roomId: roomId, roomName: roomName}
     this.logMessages = {};
     this.logUsers = {};
@@ -15,5 +17,4 @@ function __status__() {
         var e = $(element);
         sstatus.favoriteRooms.push({roomId: e.data('roomid'), roomName: helper.getSimpleText(e)});
     });
-
-}
+});

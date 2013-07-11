@@ -94,14 +94,13 @@
     </div>
 
     <?php require_once('feature/modals.php'); ?>
-    <script src="js/vendor/jquery-2.0.2.min.js" ></script>
-    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
+    <script src="js/vendor/jquery-2.0.3.min.js" ></script>
     <script src="js/vendor/bootstrap.min.js" ></script>
     <script src="js/vendor/bootstrap-select.min.js" ></script>
-    <script src="js/vendor/bootstrap-dropdown.js" ></script>
-    <script src="js/vendor/jquery-ui-1.10.2.custom.min.js" ></script>
-    <script src="js/vendor/jquery.filterList.1.0.js" ></script>
+    <script src="js/vendor/jquery-ui-1.10.3.custom.min.js" ></script>
+    <script src="js/vendor/jquery.filterList.js" ></script>
     <script src="js/vendor/jquery.titlealert.min.js" ></script>
+    <script src="js/base.js" ></script>
     <script src="js/helper.js" ></script>
     <script src="js/room-proposer.js" ></script>
     <script src="js/sound.js" ></script>
@@ -112,7 +111,6 @@
     <script src="js/main.js" ></script>
     <script src="js/modals.js" ></script>
     <script src="js/init.js" ></script>
-    <script src="js/base.js" ></script>
     <script src="js/google-web-fonts.js" ></script>
     <script src="js/chat.js"></script>
     <script>
