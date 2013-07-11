@@ -308,8 +308,6 @@ function __modals__(main) {
     });
 
     $('#modal-room-pref-submit').click(function() {
-        //$('#modal-room-pref').modal('hide');
-
         var currentPasswordBox = $('#modals-room-pref-current-password');
         var submitButton = $(this);
 
