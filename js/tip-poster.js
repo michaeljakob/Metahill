@@ -1,7 +1,7 @@
 /// jshint settings
 /*global window, document, $, */
 
-function __tip_poster__(main) {
+$(function() {
     var interval = 1000 * 60 * 10; // all ten minutes
 
     var tips = [];
@@ -19,15 +19,13 @@ function __tip_poster__(main) {
     //tips.push('');
     //tips.push('');
 
-    $(document).ready(function() {
-        setTimeout(function() {
-            setInterval(function() {
-                if(main.modals.preferences.enable_tips && main.chat.isOnline) {
-                    var tip = tips[Math.floor(Math.random()*tips.length)];
-                    main.setCurrentStatus(tip, 'alert-info', 10000);
-                }
+    setTimeout(function() {
+        setInterval(function() {
+            if(main.modals.preferences.enable_tips && metahill.main.chat.isOnline) {
+                var tip = tips[Math.floor(Math.random()*tips.length)];
+                main.setCurrentStatus(tip, 'alert-info', 10000);
+            }
 
-            }, interval);
         }, interval);
-    });
-}
+    }, interval);
+});

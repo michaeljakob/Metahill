@@ -1,9 +1,9 @@
 /// jshint settings
-/*global window, $, console, __helper__, setTimeout, WebSocket */
+/*global window, $, console, setTimeout, WebSocket */
 
 
 
-function __chat__(main) {
+function __chat() {
     // if user is running mozilla then use it's built-in WebSocket
     window.WebSocket = window.WebSocket || window.MozWebSocket;
 
@@ -22,24 +22,27 @@ function __chat__(main) {
     var connection;
     var connectionFailedFirstTime = true;
     var thatChat = this;
-    var helper = new __helper__();
     var roomProposer;
 
     var connection_onopen = function () {
         thatChat.isOnline = true;
         connectionFailedFirstTime = true;
 
-
-        // join favorite rooms    
-        main.sstatus.favoriteRooms.forEach(function(entry) {
+        // join favorite rooms 
+        var favoriteRooms = []; // array of {roomId: roomId, roomName: roomName}
+        $('#channels-list').children().each(function(index, element) {
+            var e = $(element);
+            favoriteRooms.push({roomId: e.attr('data-roomid'), roomName: metahill.helper.getSimpleText(e)});
+        });  
+        favoriteRooms.forEach(function(entry) {
             thatChat.sendUserJoin(entry.roomId, entry.roomName);
         });
 
-        roomProposer = new __room_proposer__(connection, main._userName, main.sstatus.favoriteRooms, main);
-        main.enableInput();
+        roomProposer = new __room_proposer__(connection, metahill.main.userName, favoriteRooms, metahill.main);
+        metahill.main.enableInput();
         setTimeout(function() {
-            main.isStatusPersistent = false;
-            main.setCurrentStatus('Welcome back!', 'alert-success');
+            metahill.main.isStatusPersistent = false;
+            metahill.main.setCurrentStatus('Welcome back!', 'alert-success');
         }, 1000);
     };
 
@@ -53,11 +56,11 @@ function __chat__(main) {
         thatChat.isOnline = false;
         if(connectionFailedFirstTime) {
             connectionFailedFirstTime = false;
-            main.disableInput();
+            metahill.main.disableInput();
             removeAllChannelAttendees();
             
-            main.isStatusPersistent = true;
-            main.setCurrentStatus("Awwr. It seems we got a server problem. We're working on it...", 'alert-error', -1);
+            metahill.main.isStatusPersistent = true;
+            metahill.main.setCurrentStatus("Awwr. It seems we got a server problem. We're working on it...", 'alert-error', -1);
         }
         setTimeout(function() {
             setupConnection();
@@ -72,10 +75,10 @@ function __chat__(main) {
         var intent = json.intent;
         switch(intent) {
             case 'tell':
-                main.addVisibleMessage(json.userName, json.roomName, json.content, json.time);
+                metahill.main.addVisibleMessage(json.userName, json.roomName, json.content, json.time);
                 break;
             case 'tell-image':
-                main.addVisibleImage(json.userName, json.roomName, json.content, json.time);
+                metahill.main.addVisibleImage(json.userName, json.roomName, json.content, json.time);
                 break;
             case 'attendees-list':
                 thatChat.updateAttendeesList(json.attendees, json.roomId, json.roomName);
@@ -105,14 +108,14 @@ function __chat__(main) {
     ************************************************************************/
     function onUserJoin(userId, userName, roomName) {
         console.log('userjoin:' + userId + '=' + userName + ' in ' + roomName);
-        if(main.sstatus.logChannelAttendees[roomName] === undefined) {
-            main.sstatus.logChannelAttendees[roomName] = [];    
+        if(metahill.log.roomAttendees[roomName] === undefined) {
+            metahill.log.roomAttendees[roomName] = [];    
         }
-        main.sstatus.logChannelAttendees[roomName].push({"userId": userId, "userName": userName});
+        metahill.log.roomAttendees[roomName].push({"userId": userId, "userName": userName});
         
-        var isActiveRoom = roomName === helper.getSimpleText(main._activeRoom);
+        var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
         if(isActiveRoom) {
-            $('#channel-attendees-entries').append(main.makeAttendeeEntry(userId, userName));
+            $('#channel-attendees-entries').append(metahill.main.makeAttendeeEntry(userId, userName));
         }
 
         writeSystemMessage(roomName, userName + ' joined the room.');
@@ -121,18 +124,18 @@ function __chat__(main) {
     function onUserQuit(userId, userName, roomName) {    
         console.log('userquit:' + userId + ' in ' + roomName);    
         // this should never be triggered
-        if(main.sstatus.logChannelAttendees[roomName] === undefined) {
+        if(metahill.log.roomAttendees[roomName] === undefined) {
             console.log('userquit with undefined roomName');
             return;
         }
         
-        for(var i=0; i<main.sstatus.logChannelAttendees[roomName].length; ++i) {
-            if(main.sstatus.logChannelAttendees[roomName][i].userId === userId) {
-                main.sstatus.logChannelAttendees[roomName].remove(i);
+        for(var i=0; i<metahill.log.roomAttendees[roomName].length; ++i) {
+            if(metahill.log.roomAttendees[roomName][i].userId === userId) {
+                metahill.log.roomAttendees[roomName].remove(i);
             }
         }        
         
-        var isActiveRoom = roomName === helper.getSimpleText(main._activeRoom);
+        var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
         if(isActiveRoom) {
             $('#channel-attendees-' + userId).remove();
         }
@@ -148,8 +151,8 @@ function __chat__(main) {
         var time = new Date();
         message = '_' + message + '_';
 
-        if(main.modals.preferences.chat_show_traffic) {
-            main.addVisibleMessage(userName, roomName, message, time);
+        if(metahill.main.modals.preferences.chat_show_traffic) {
+            metahill.main.addVisibleMessage(userName, roomName, message, time);
         }
     }
 
@@ -162,7 +165,7 @@ function __chat__(main) {
     }    
     
     function removeAllChannelAttendees() {
-        main.sstatus.logChannelAttendees = {};
+        metahill.log.roomAttendees = {};
         $('#channel-attendees-entries').empty();        
     }
     
@@ -171,33 +174,33 @@ function __chat__(main) {
     ************************************************************************/
     this.updateAttendeesList = function (list, roomId, roomName) {
         var channelAttendeesEntries = $('#channel-attendees-entries');           
-        if(roomName === helper.getSimpleText(main._activeRoom)) {
+        if(roomName === metahill.helper.getSimpleText(metahill.main.activeRoom)) {
             channelAttendeesEntries.empty();
         }
         
-        if(main.sstatus.logChannelAttendees[roomName] === undefined) {
-            main.sstatus.logChannelAttendees[roomName] = [];    
+        if(metahill.log.roomAttendees[roomName] === undefined) {
+            metahill.log.roomAttendees[roomName] = [];    
         }
 
-        var isActiveRoom = roomName === helper.getSimpleText(main._activeRoom);
+        var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
         var tmp = '';
         list.forEach(function(entry) {
-            main.sstatus.logChannelAttendees[roomName].push({'userId': entry.userId, 'userName': entry.userName});
+            metahill.log.roomAttendees[roomName].push({'userId': entry.userId, 'userName': entry.userName});
             if(isActiveRoom) {
-                tmp += main.makeAttendeeEntry(entry.userId, entry.userName);
+                tmp += metahill.main.makeAttendeeEntry(entry.userId, entry.userName);
             }
         });
         channelAttendeesEntries.append(tmp);
     };
     
     this.sendUserQuit = function(roomId, roomName) {    
-        var userId = $('#user-id').html();
+        var userId = metahill.main.userId;
         
         return function(roomId, roomName) {
             var entryMessage = { 
                 intent: 'quit-room',
                 userId: userId, 
-                userName: main._userName, 
+                userName: metahill.main.userName, 
                 roomId: roomId, 
                 roomName: roomName 
             };
@@ -206,13 +209,13 @@ function __chat__(main) {
     }();
     
     this.sendUserJoin = function(roomId, roomName) {    
-        var userId = $('#user-id').html();
+        var userId = metahill.main.userId;
         
         return function() {
             var entryMessage = { 
                 intent: 'join-room', 
                 userId: userId, 
-                userName: main._userName, 
+                userName: metahill.main.userName, 
                 roomId: roomId, 
                 roomName: roomName 
             };

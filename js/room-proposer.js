@@ -20,7 +20,7 @@ function __room_proposer__(connection, userName, favoriteRooms, main) {
 
         var names = [];
         entries.each(function(index) {
-            names.push(main.helper.getSimpleText($(this)));
+            names.push(metahill.helper.getSimpleText($(this)));
         });
         return names;
     };
@@ -92,7 +92,7 @@ function __room_proposer__(connection, userName, favoriteRooms, main) {
      * @param  {array} exclusionList An integer array holding all roomIds that should not be proposed.
      */
     this.requestRoomProposals = function(exclusionList) {
-        var userId = $('#user-id').html();
+        var userId = metahill.main.userId;
         
         var message = { 
             intent: 'room-proposals',

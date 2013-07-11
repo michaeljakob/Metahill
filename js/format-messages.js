@@ -3,8 +3,9 @@
 *   boldItalicsCode(text)
 *   styleMessage(text)
 */
-function __format_messages__(modals) {
-
+$(function() {
+    metahill.formatMessages = this;
+    
     /*
         Replaces standard smilies by images
     */
@@ -68,7 +69,7 @@ function __format_messages__(modals) {
         }
 
         return function(text) {
-            if(!modals.preferences.enable_smilies) {
+            if(!metahill.modals.preferences.enable_smilies) {
                 return text;
             }
             Object.keys(smiliesWordy).forEach(function(entry) {
@@ -98,7 +99,7 @@ function __format_messages__(modals) {
         _: italics      <em>
     */
     this.boldItalicsCode = function(text) {
-        if(!modals.preferences.enable_formatting) {
+        if(!metahill.modals.preferences.enable_formatting) {
             return text;
         }
         
@@ -167,4 +168,6 @@ function __format_messages__(modals) {
         };
     }();
 
-}
+});
+
+

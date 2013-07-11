@@ -4,8 +4,10 @@
 
 
 
-function __modals__(main) {
+$(function() {
     var modals = this;
+    metahill.modals = this;
+
     this.preferences = {};
     this.preferences.enable_smilies = $('#modals-pref-enable-smilies').prop('checked');
     this.preferences.enable_formatting = $('#modals-pref-enable-formatting').prop('checked');
@@ -14,9 +16,9 @@ function __modals__(main) {
     this.preferences.chat_text_size = $('#modals-pref-textsize').val();
     this.preferences.chat_text_font = $('#modals-pref-font').val();
     this.preferences.enable_tips = $('#modals-pref-enable-tips').val();
-    this.preferences.user_id = $('#user-id').html();
+    this.preferences.user_id = metahill.main.userId;
 
-    this.updateChatBoxCallback = main.updateCheckBox;
+    this.updateChatBoxCallback = metahill.main.updateCheckBox;
 
 
     $(document).ready(function() {
@@ -39,7 +41,7 @@ function __modals__(main) {
     ********************************************************************
     *******************************************************************/
     function updatePreferences(json) {
-        main.helper.submitHttpRequest('update-preferences.php', json);
+        metahill.helper.submitHttpRequest('update-preferences.php', json);
     }
 
     // preferences
@@ -115,7 +117,7 @@ function __modals__(main) {
     ********************************************************************
     *******************************************************************/
     function updateProfile(json, successCallback) {
-        main.helper.submitHttpRequest('update-profile.php', json, successCallback);
+        metahill.helper.submitHttpRequest('update-profile.php', json, successCallback);
     }
 
     $('#modal-profile').on('shown', function() {
@@ -140,7 +142,7 @@ function __modals__(main) {
 
                 var json = {};
                 json.intent = 'delete-account';
-                json.userId = $('#user-id').html();
+                json.userId = metahill.main.userId;
                 json.currentPassword = $('#modals-profile-current-password');
                 updateProfile(json);
                 document.location.href = 'why-account-deletion.php';
@@ -155,7 +157,7 @@ function __modals__(main) {
 
             var json = {};
             json.intent = 'change-password';
-            json.userId = $('#user-id').html();
+            json.userId = metahill.main.userId;
             json.currentPassword = currentPassInput.val();
             json.newPassword = newPassInput.val();
 
@@ -189,7 +191,7 @@ function __modals__(main) {
     ********************************************************************
     *******************************************************************/
     function updateNewRoom(json, successCallback) {
-        main.helper.submitHttpRequest('update-new-room.php', json, successCallback);
+        metahill.helper.submitHttpRequest('update-new-room.php', json, successCallback);
     }
 
     $('#modal-new-room').on('show', function() {
@@ -221,7 +223,7 @@ function __modals__(main) {
         if(modals.new_room.isNameLengthOk) {
             var json = {};
             json.roomname = roomName;
-            main.helper.submitHttpRequest('does-roomname-exist.php', json, function(resultCode) {
+            metahill.helper.submitHttpRequest('does-roomname-exist.php', json, function(resultCode) {
                 if(parseInt(resultCode, 10) === 1) {
                     // already exists
                     modals.new_room.isNameAvailable = false;
@@ -264,7 +266,7 @@ function __modals__(main) {
                 var message = {};
                 message.userId = userId;
                 message.roomId = roomId;
-                main.helper.submitHttpRequest('add-favorite.php', message);
+                metahill.helper.submitHttpRequest('add-favorite.php', message);
             })(json.owner, roomId);
         });
 
@@ -277,7 +279,7 @@ function __modals__(main) {
     ********************************************************************
     *******************************************************************/
     function updateRoomPreferences(json, successCallback) {
-        main.helper.submitHttpRequest('update-room-pref.php', json, successCallback);
+        metahill.helper.submitHttpRequest('update-room-pref.php', json, successCallback);
     }
 
     this.room_pref = {};
@@ -290,10 +292,10 @@ function __modals__(main) {
         if(!modals.room_pref.isRoomNameToTitleAdded) {
             modals.room_pref.isRoomNameToTitleAdded = true;
             var title =$('#modal-room-pref h3:first');
-            title.html('<u>' + main.helper.getSimpleText(main._activeRoom) + '</u>' + title.html());
+            title.html('<u>' + metahill.helper.getSimpleText(main.activeRoom) + '</u>' + title.html());
         }
 
-        modals.room_pref.currentTopic = main._activeRoom.data('topic');
+        modals.room_pref.currentTopic = main.activeRoom.attr('data-topic');
         $('#modals-room-pref-topic')
         .val(modals.room_pref.currentTopic)
         .keyup();
@@ -304,7 +306,7 @@ function __modals__(main) {
         textarea
         .focus()
         .val('')
-        .val(main._activeRoom.data('topic'));
+        .val(main.activeRoom.attr('data-topic'));
     });
 
     $('#modal-room-pref-submit').click(function() {
@@ -313,8 +315,8 @@ function __modals__(main) {
 
         var json = {};
         json.roomTopic = $('#modals-room-pref-topic').val().trim();
-        json.roomId = main._activeRoom.data('roomid');
-        json.userId = $('#user-id').html();
+        json.roomId = main.activeRoom.attr('data-roomid');
+        json.userId = metahill.main.userId;
         json.userPassword = currentPasswordBox.val();
 
         if(json.roomTopic === modals.room_pref.currentTopic) {
@@ -326,8 +328,8 @@ function __modals__(main) {
         updateRoomPreferences(json, function(returnCode) {
             currentPasswordBox.val('');
             if(parseInt(returnCode, 10) >= 1) {
-                main._activeRoom.data('topic', json.roomTopic);
-                $('#chat-header-topic').html(main.formatMessages.makeLinksClickable(json.roomTopic));
+                main.activeRoom.attr('data-topic', json.roomTopic);
+                $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(json.roomTopic));
                 $('#modal-room-pref').modal('hide');
             } else {
                 currentPasswordBox.attr('placeholder', 'Wrong pass :(');
@@ -362,4 +364,9 @@ function __modals__(main) {
             $('#modal-room-pref-submit').prop('disabled', true);
         }
     }
-}
+});
+
+
+
+
+
