@@ -2,9 +2,6 @@
 /*global window, document, $, */
 
 $(function() {
-    var helper = new __helper__();
-
-
     $(document).ready(function() {
         var isMac = navigator.platform.toLowerCase().indexOf('mac') >= 0;
         var isWindows = navigator.appVersion.indexOf('Win') >= 0;

@@ -18,8 +18,8 @@
 
 <?php
     if(isset($_GET['theme']) && trim($_GET['theme']) != '') {
-        $theme = $_GET['theme'];
-        if(file_exists("themes/".basename($theme)."/css/chat.css")) {
+        $theme = basename($_GET['theme']);
+        if(file_exists("themes/".$theme."/css/chat.css")) {
             echo "<link rel='stylesheet' type='text/css' href='themes/$theme/css/chat.css'/>";
         }
     }
@@ -104,7 +104,6 @@
     <script src="js/helper.js" ></script>
     <script src="js/room-proposer.js" ></script>
     <script src="js/sound.js" ></script>
-    <script src="js/status.js" ></script>
     <script src="js/format-messages.js" ></script>
     <script src="js/image-upload.js"></script>
     <script src="js/tip-poster.js"></script>
