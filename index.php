@@ -50,27 +50,24 @@
             </ul>
             <li id="add-new-room" class="btn btn-inverse" data-toggle="popover" data-placement="bottom">+</li>
         </div>
-        <article id="chat">
-            <div id="chat-header">
-                <span class='label'>Topic</span>
-                <span id="chat-header-topic"></span>
-
-                
-                <button class="btn" id="view-log-button">
-                    <img src="img/icon/view_log.png" />
-                    View history
-                </button>
-            </div>
-            <div id="chat-entries">
-            </div>
-        </article>
-        <aside id="channel-attendees">
-            <form>
-                <input type="text" id="filter-search-user" autocomplete="off" placeholder="Search user">
-                <ul id="channel-attendees-entries">
-                </ul>
-            </form>
-        </aside>
+        <div id="chat-and-attendees">
+            <aside id="channel-attendees">
+                <form>
+                    <input type="text" id="filter-search-user" autocomplete="off" placeholder="Search user">
+                    <ul id="channel-attendees-entries"></ul>
+                </form>
+            </aside>
+            <article id="chat">
+                <div id="chat-header">
+                    <span class='label'>Topic</span>
+                    <span id="chat-header-topic"></span>
+                    <button class="btn" id="view-log-button">
+                        <img src="img/icon/view_log.png" />View history
+                    </button>
+                </div>
+                <div id="chat-entries"></div>
+            </article>
+        </div>
     </section>
     
     <article id="submit-area">
@@ -94,24 +91,11 @@
     </div>
 
     <?php require_once('feature/modals.php'); ?>
-    <script src="js/vendor/jquery-2.0.3.min.js" ></script>
-    <script src="js/vendor/bootstrap.min.js" ></script>
-    <script src="js/vendor/bootstrap-select.min.js" ></script>
-    <script src="js/vendor/jquery-ui-1.10.3.custom.min.js" ></script>
-    <script src="js/vendor/jquery.filterList.js" ></script>
-    <script src="js/vendor/jquery.titlealert.min.js" ></script>
-    <script src="js/base.js" ></script>
-    <script src="js/helper.js" ></script>
-    <script src="js/room-proposer.js" ></script>
-    <script src="js/sound.js" ></script>
-    <script src="js/format-messages.js" ></script>
-    <script src="js/image-upload.js"></script>
-    <script src="js/tip-poster.js"></script>
-    <script src="js/main.js" ></script>
-    <script src="js/modals.js" ></script>
-    <script src="js/init.js" ></script>
-    <script src="js/google-web-fonts.js" ></script>
-    <script src="js/chat.js"></script>
+
+    <script src="js/vendor/vendor.js" ></script>
+    <script src="js/combined.js" ></script>
+    
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

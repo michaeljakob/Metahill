@@ -1,22 +1,40 @@
-.modal-body {
+.modal-header > h3, .modal-body > h3 {
+    font-size: 1.2em;
+    line-height: inherit;
 }
-
-.modal-footer {
-}
-
-.modal.fade.in {
-}
-
 
 .modal-body > h3 {
-    padding:0;
-    margin:0;
-    line-height: inherit;
+    margin: 0;
 }
 
 p.pref-desc {
     margin: 5px 0 10px 0;
     padding: 0;
+}
+
+span.heading-desc {
+    padding-left: 5px;
+    font-size: 80%;
+    color: #265f97;
+}
+
+span.heading-desc-large {
+    color: #265f97;
+}
+
+.bootstrap-select .btn:focus {
+    outline: none !important;
+}
+
+/*
+    bootstrap overloads
+ */
+.modal-header h3 {
+    text-align: center;
+}
+
+.modals-current-password {
+    margin: 0 !important;
 }
 
 #modals-pref-table tr > td:nth-child(2) > div > button, #modals-pref-table tr > td:nth-child(2) > div > ul {
@@ -41,31 +59,9 @@ p.pref-desc {
     max-height: 100px;
 }
 
-
 #modals-new-room-name-status {
     position: relative;
     bottom: 5px;
-}
-
-span.heading-desc {
-    padding-left: 5px;
-    font-size: 80%;
-    color: #265f97;
-}
-
-span.heading-desc-large {
-    color: #265f97;
-}
-
-/*
-    bootstrap overloads
- */
-.modal-header h3 {
-    text-align: center;
-}
-
-.modals-current-password {
-    margin: 0 !important;
 }
 
 #modals-profile-new-password, .modals-current-password {

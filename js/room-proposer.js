@@ -1,124 +1,85 @@
-function __room_proposer__(connection, userName, favoriteRooms, main) {
-    var roomProposer = this;
+metahill.roomProposer = {};
 
-
-    this.getOpenRoomNames = function(inputSource) {
-        if(inputSource === undefined) {
-            return [];
-        }
-
-        var entries;
-
-        switch(inputSource) {
-            case 'main':
-                entries = $('#channels-list > li');
-                break;
-            case 'pref':
-                entries = $('#modal-pref-favorite-rooms > li');
-                break;
-        }
-
-        var names = [];
-        entries.each(function(index) {
-            names.push(metahill.helper.getSimpleText($(this)));
-        });
-        return names;
-    };
-
-
-    this.createHtmlChildren = function(rooms, inputSource) {
-        var alreadyListedRoomNames = roomProposer.getOpenRoomNames(inputSource);
-
-        console.log(JSON.stringify(alreadyListedRoomNames));
-
-        var children = '';
-        for(var i=0; i<rooms.length; i++) {
-            var room = rooms[i];
-            if($.inArray(room.name, alreadyListedRoomNames) === -1) {
-                children += "<li class='ui-bootstrap-list-item btn' data-owner='"+room.owner+"'sn data-roomid='"+room.id+
-                                              "' data-topic='"+room.topic+"'>"+room.name+"</li>";
-            }
-        }
-
-        // add "No rooms found" message if neccessary
-        if(children === '') {
-            children += '<p class="btn" disabled>No rooms found :(</p>';
-        }
-
-
-        return children;
-    };
-
-    this.addRoomSearcher = function(inputBox, inputSourceName) {
-       inputBox.bind('propertychange keyup input paste', function() {
-            var search = inputBox.val();
-            roomProposer.requestRoomsFromSearchTerm(search, inputSourceName);
-        });
-    };
-
-    this.requestRoomsFromSearchTerm = function(search, inputSourceName) {
-        var message = {
-            intent: 'search-rooms',
-            searchTerm: search,
-            inputSource: inputSourceName
-        };
-
-        connection.send(JSON.stringify(message));
-    };
-
-    this.handleIncomingSearchResults = function(rooms, inputSource) {
-        var children = roomProposer.createHtmlChildren(rooms, inputSource);
-
-        switch(inputSource) {
-            case 'main':
-                $('#add-new-room-rooms').empty();
-                $('#add-new-room-rooms').append($(children));
-
-                $('#add-new-room-rooms > li').each(function(_, entry) {
-                    $(entry).click(function() { main.onNewRoomClicked(entry); });
-                });
-                break;
-            case 'pref':
-                $('#modal-pref-nonfavorite-rooms').empty();
-                $('#modal-pref-nonfavorite-rooms').append($(children));
-                break;
-            default:
-                console.log('handleIncomingSearchResults: unknown inputSource');
-        }
-    };
-
-    /**
-     * Request rooms that could be interesting for the current user
-     * @param  {array} exclusionList An integer array holding all roomIds that should not be proposed.
-     */
-    this.requestRoomProposals = function(exclusionList) {
-        var userId = metahill.main.userId;
-        
-        var message = { 
-            intent: 'room-proposals',
-            userId: userId, 
-            userName: userName, 
-            list: exclusionList
-        };
-        connection.send(JSON.stringify(message));
-    };
-
-    this.handleIncomingRoomProposals = function(rooms) {
-        var children = roomProposer.createHtmlChildren(rooms);
-        $('#add-new-room-rooms').append($(children));
-        $('#modal-pref-nonfavorite-rooms').append($(children));
-    };
-
-
-    exclusionList = [];
-    favoriteRooms.forEach(function(entry) {
-        exclusionList.push(entry.roomId);
-    });
-    this.requestRoomProposals(exclusionList);
-
+$(document).ready(function() {
     $('#add-new-room').click(function() {
-        roomProposer.addRoomSearcher($('#main-container #add-new-room-search'), 'main');
+        metahill.roomProposer.addRoomSearcher($('#add-new-room-search'));
     });
-    this.addRoomSearcher($('#pref-select-favorite-channels-search'), 'pref');
+});
 
-}
+metahill.roomProposer.getOpenRoomNames = function() {
+    var entries  = $('#channels-list').children();
+
+    var names = [];
+    entries.each(function(index) {
+        names.push(metahill.helper.getSimpleText($(this)));
+    });
+    return names;
+};
+
+
+metahill.roomProposer.createHtmlChildren = function(rooms) {
+    var alreadyListedRoomNames = metahill.roomProposer.getOpenRoomNames();
+
+    console.log(JSON.stringify(alreadyListedRoomNames));
+
+    var children = '';
+    for(var i=0; i<rooms.length; i++) {
+        var room = rooms[i];
+        if($.inArray(room.name, alreadyListedRoomNames) === -1) {
+            children += "<li class='ui-bootstrap-list-item btn' data-owner='"+room.owner+"'sn data-roomid='"+room.id+
+                                          "' data-topic='"+room.topic+"'>"+room.name+"</li>";
+        }
+    }
+
+    // add "No rooms found" message if neccessary
+    if(children === '') {
+        children = '<p class="btn" disabled>No rooms found :(</p>';
+    }
+
+
+    return children;
+};
+
+metahill.roomProposer.addRoomSearcher = function(inputBox) {
+   inputBox.bind('propertychange keyup input paste', function() {
+        var search = inputBox.val();
+        metahill.roomProposer.requestRoomsFromSearchTerm(search);
+    });
+};
+
+metahill.roomProposer.requestRoomsFromSearchTerm = function(search) {
+    var message = {
+        intent: 'search-rooms',
+        searchTerm: search
+    };
+
+    metahill.chat.connection.send(JSON.stringify(message));
+};
+
+metahill.roomProposer.handleIncomingSearchResults = function(rooms) {
+    var children = metahill.roomProposer.createHtmlChildren(rooms);
+    var addNewRooms = $('#add-new-room-rooms');
+    addNewRooms.empty().append(children);
+
+    addNewRooms.children().each(function(_, entry) {
+        $(entry).click(function() { metahill.main.onNewRoomClicked(entry); });
+    });
+};
+
+/**
+ * Request rooms that could be interesting for the current user
+ */
+metahill.roomProposer.requestRoomProposals = function() {
+    var message = { 
+        intent: 'room-proposals',
+        userId: metahill.main.userId, 
+        userName: metahill.main.userName
+    };
+    metahill.chat.connection.send(JSON.stringify(message));
+};
+
+metahill.roomProposer.handleIncomingRoomProposals = function(rooms) {
+    var children = metahill.roomProposer.createHtmlChildren(rooms);
+    $('#add-new-room-rooms').append(children);
+};
+

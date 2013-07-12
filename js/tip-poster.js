@@ -21,9 +21,9 @@ $(function() {
 
     setTimeout(function() {
         setInterval(function() {
-            if(main.modals.preferences.enable_tips && metahill.main.chat.isOnline) {
+            if(metahill.modals.preferences.enable_tips && metahill.chat.isOnline) {
                 var tip = tips[Math.floor(Math.random()*tips.length)];
-                main.setCurrentStatus(tip, 'alert-info', 10000);
+                metahill.main.setCurrentStatus(tip, 'alert-info', 10000);
             }
 
         }, interval);

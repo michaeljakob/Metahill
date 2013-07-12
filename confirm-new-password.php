@@ -77,8 +77,8 @@
     <script async src="js/base.js" ></script>
     <script>
         $(function() {
-            var storage = this;
-            this.pass1 = this.pass2 = '';
+            var storage = {};
+            storage.pass1 = storage.pass2 = '';
 
             function updateUi() {
                 var len = storage.pass1.length;

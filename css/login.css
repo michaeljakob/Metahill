@@ -36,6 +36,10 @@
     margin-bottom: 5px;
 }
 
+#action-chooser > h2 {
+    font-size: 25px;
+}
+
 input {
     padding: 0;
     margin: 5px 0 0 0;
@@ -61,6 +65,9 @@ form .label {
     text-align: center;
     font-size: 24px;
     font-weight: 300;
+    margin: 0;
+    padding: 0;
+    line-height: initial;
 }
 
 

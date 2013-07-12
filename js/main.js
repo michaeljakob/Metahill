@@ -1,5 +1,5 @@
 /// jshint settings
-/*global window, document, $, setTimeout, __format_messages__, __helper__, __sound__, __status__, __chat__, __image_upload__ */
+/*global window, document, $, setTimeout */
 
 metahill.log = {};
 metahill.log.messages = {};
@@ -8,20 +8,12 @@ metahill.log.times = {};
 metahill.log.roomAttendees = {};
 
 
+metahill.main = {};
 $(function() {
-    var main = this;
-    metahill.main = this;
 
-    // this.activeRoom;
-    this.userName = $('#user-name > button').text().trim();
-    this.userId = $('#user-id').html();
-    this.chat = new __chat();
+    metahill.main.userName = $('#user-name > button').text().trim();
+    metahill.main.userId = $('#user-id').html();
 
-    this.support = {};
-    var lowerUserAgent = navigator.userAgent.toLowerCase();
-    this.support.isChrome = lowerUserAgent.indexOf('chrome') > -1;
-    this.support.isOpera = lowerUserAgent.indexOf('opera') > -1;
-    this.support.isFirefox = lowerUserAgent.indexOf('firefox') > -1;
 
     $(document).ready(function() {
         openFavoriteRooms();
@@ -72,28 +64,28 @@ $(function() {
 
         $('#add-new-room').click(function() {
             $('#add-new-room-rooms').children().each(function(_, entry) {
-                $(entry).click(function() { main.onNewRoomClicked(entry); });
+                $(entry).click(function() { metahill.main.onNewRoomClicked(entry); });
             });
         });
     }
 
-    this.isStatusPersistent = false;
+    metahill.main.isStatusPersistent = false;
     /*
         Make a new status message that vanishes after a certain amount of time.
-        To let it be persistent, set the main.isStatusPersistent boolean to true. 
+        To let it be persistent, set the metahill.main.isStatusPersistent boolean to true. 
         Don't forget to afterwards set it to {@code false} again for future status messages.
         @param message Your status message
         @param alertClass The color scheme of the alert, e.g. alert-success, alert-info, alert-warning, ...
         @param duration [optional] The duration of your message. Default is 5000 ms.
     */
-    this.setCurrentStatus = function(message, alertClass) {
+    metahill.main.setCurrentStatus = function(message, alertClass) {
         var duration = arguments[2] === undefined ? 5000 : arguments[2];
 
         var siteStatus= $('#site-status');
         // scroll old message up if necessary
         if(siteStatus.css('margin-top') !== '-50px') {
             siteStatus.animate({'margin-top': '-50px'}, 1000, function() {
-                main.setCurrentStatus(message, alertClass, arguments[2]);
+                metahill.main.setCurrentStatus(message, alertClass, arguments[2]);
             });
             return;
         }
@@ -104,7 +96,7 @@ $(function() {
 
         siteStatus.animate({'margin-top': '20px'}, 1000);
         setTimeout(function() {
-            if(main.isStatusPersistent) {
+            if(metahill.main.isStatusPersistent) {
                 return;
             }
             siteStatus.animate({'margin-top': '-50px'}, 1000);
@@ -112,7 +104,7 @@ $(function() {
     };
 
 
-    this.makeAttendeeEntry = function(userId, userName) {
+    metahill.main.makeAttendeeEntry = function(userId, userName) {
         var content =    '<li id="channel-attendees-'+ userId +'">'+
                             '<button disabled class="btn">'+ userName +'</button>'+
                         '</li>';
@@ -129,7 +121,7 @@ $(function() {
      * @return {string} 
      */
     function tryToCompleteUsername(message) {
-        var roomName = metahill.helper.getSimpleText(main.activeRoom);
+        var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
         var userNames = metahill.log.roomAttendees[roomName];
 
         var lastWord = message.split(' ').pop();
@@ -180,7 +172,7 @@ $(function() {
                             if(message.length > INPUT_CHARACTER_LIMIT) {
                                 message = message.substr(0, INPUT_CHARACTER_LIMIT);
                             }
-                            main.chat.sendMessage(message, $('#user-id').text(), main.userName, main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(main.activeRoom));
+                            metahill.chat.sendMessage(message, $('#user-id').text(), metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
                             submitMessage.val('');
                             lastMessages.unshift(message);
                             lastMessagesIndex = -1;
@@ -230,7 +222,7 @@ $(function() {
      * @return {bool} isAddressed
      */
     var isThisUserAddressed = (function() {
-        var regex = new RegExp('.*[\\s:;.,|<>]?'+main.userName+'[\\s:;.,!|<>]?.*', 'g');
+        var regex = new RegExp('.*[\\s:;.,|<>]?'+metahill.main.userName+'[\\s:;.,!|<>]?.*', 'g');
 
         return function(message) {
             return regex.test(message);
@@ -238,7 +230,7 @@ $(function() {
     })();
 
 
-    this.logChatMessage = function(roomName, userName, message, time) {
+    metahill.main.logChatMessage = function(roomName, userName, message, time) {
         if(metahill.log.messages[roomName] === undefined)
             metahill.log.messages[roomName] = [];
         if(metahill.log.users[roomName] === undefined)
@@ -259,15 +251,15 @@ $(function() {
      * @param  {string} message
      * @param  {string} time
      */
-    this.addVisibleMessage = function(userName, roomName, message, time) {
-        main.logChatMessage(roomName, userName, message, time);
-        if(roomName !== metahill.helper.getSimpleText(main.activeRoom)) {
+    metahill.main.addVisibleMessage = function(userName, roomName, message, time) {
+        metahill.main.logChatMessage(roomName, userName, message, time);
+        if(roomName !== metahill.helper.getSimpleText(metahill.main.activeRoom)) {
             var room = $('#channels-list').find('li:contains("'+roomName+'")');
             // we check for userName, because it might be our joins/quits bot
             if(userName !== '') {
                 if(isThisUserAddressed(message)) {
                     metahill.sound.playUserAddressed();
-                    $.titleAlert("Someone talked to you!");
+                    $.titleAlert('Someone talked to you!');
                     room.removeClass('room-favorite');
                     room.addClass('btn-danger');
                 } else {
@@ -282,9 +274,9 @@ $(function() {
         } else {
             var entry;
             if(arguments[4] === true) {
-                entry = main.makeEntryImage(userName, message, time);
+                entry = $(metahill.main.makeEntryImageText(userName, message, time));
             } else {
-                entry = main.makeEntryMessage(userName, message, time);
+                entry = $(metahill.main.makeEntryMessageText(userName, message, time));
             }
             var chatEntries = $('#chat-entries');
             chatEntries.append(entry);
@@ -302,7 +294,7 @@ $(function() {
         }
     };
 
-    this.makeImageTagFromUrl = function(url) {
+    metahill.main.makeImageTagFromUrl = function(url) {
         var tag =   '<span class="image-tooltip">' +
                     '<img src="' + url + '"></img>' +
                     '<span><img src="' + url + '"></img></span>' +
@@ -310,9 +302,9 @@ $(function() {
         return tag;
     };
 
-    this.addVisibleImage = function(userName, roomName, url, time) {
-        var tag = main.makeImageTagFromUrl(url);
-        main.addVisibleMessage(userName, roomName, tag, time, true);
+    metahill.main.addVisibleImage = function(userName, roomName, url, time) {
+        var tag = metahill.main.makeImageTagFromUrl(url);
+        metahill.main.addVisibleMessage(userName, roomName, tag, time, true);
     };
 
     /**
@@ -321,23 +313,25 @@ $(function() {
      * therefore you should avoid calling it too often.
      * @return {string}
      */
-    this.updateChatBox = function() {
+    metahill.main.updateChatBox = function() {
         var chatEntries = $('#chat-entries');
         chatEntries.empty();
 
-        var roomName = metahill.helper.getSimpleText(main.activeRoom);
+        var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
         if(metahill.log.messages[roomName] === undefined) {
             return;
         }
 
         var len = metahill.log.messages[roomName].length;
+        var cache = '';
         for(var i=0; i<len; ++i) {
             var userName = metahill.log.users[roomName][i];
-            if(userName == main.userName) {
+            if(userName == metahill.main.userName) {
                 userName = '<b>' + userName + '</b>';
             }
-            chatEntries.append(main.makeEntryMessage(userName, metahill.log.messages[roomName][i], metahill.log.times[roomName][i]));
+            cache += metahill.main.makeEntryMessageText(userName, metahill.log.messages[roomName][i], metahill.log.times[roomName][i]);
         }
+        chatEntries.append(cache);
         metahill.modals.liveUpdateChatTextSize();
         $(window).resize();
         chatEntries.scrollTop(chatEntries.height());
@@ -347,7 +341,7 @@ $(function() {
      * Defines what happens when someone clicks the "Vie Chat Log"-button.
      */
     function onViewChatLogClicked() {
-        document.location = 'log/' + encodeURIComponent(metahill.helper.getSimpleText(main.activeRoom));
+        document.location = 'log/' + encodeURIComponent(metahill.helper.getSimpleText(metahill.main.activeRoom));
     }
 
     /**
@@ -356,8 +350,8 @@ $(function() {
      * therefore you should avoid calling it too often.
      * @return {string}
      */
-    this.updateAttendeesList = function() {
-        var roomName = metahill.helper.getSimpleText(main.activeRoom);
+    metahill.main.updateAttendeesList = function() {
+        var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
         if(metahill.log.roomAttendees[roomName] === undefined) {
             return;
         }
@@ -369,7 +363,7 @@ $(function() {
         var cache = "";
         for(var i=0; i<currentAttendees.length; ++i) {
             var entry = currentAttendees[i];
-            cache += main.makeAttendeeEntry(entry.userId, entry.userName);
+            cache += metahill.main.makeAttendeeEntry(entry.userId, entry.userName);
         }
         attendeesList.append(cache);
     };
@@ -381,8 +375,8 @@ $(function() {
             return;
         }
 
-        if(main.activeRoom === undefined) {
-            main.activeRoom = $(document.createElement('span'));
+        if(metahill.main.activeRoom === undefined) {
+            metahill.main.activeRoom = $(document.createElement('span'));
         }
 
         newRoom = $(newRoom);
@@ -390,33 +384,33 @@ $(function() {
             return;
         }
 
-        main.enableInput();
+        metahill.main.enableInput();
 
-        var oldRoomName = metahill.helper.getSimpleText(main.activeRoom);
+        var oldRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
         var newRoomName = metahill.helper.getSimpleText(newRoom);
         if(metahill.log.roomAttendees[newRoomName] === undefined) {
             metahill.log.roomAttendees[newRoomName] = [];
         }
 
         if(newRoomName !== oldRoomName) {
-            removeButtonClasses(main.activeRoom);
+            removeButtonClasses(metahill.main.activeRoom);
             removeButtonClasses(newRoom);
             newRoom.addClass('btn-primary');
-            main.activeRoom.addClass('room-favorite');
+            metahill.main.activeRoom.addClass('room-favorite');
             
 
-            main.activeRoom = newRoom;
-            main.updateChatBox();
-            main.updateAttendeesList();
-            $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(newRoom.attr('data-topic')));
+            metahill.main.activeRoom = newRoom;
+            metahill.main.updateChatBox();
+            metahill.main.updateAttendeesList();
+            $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(metahill.helper.htmlEncode(newRoom.attr('data-topic'))));
 
             if(newRoom.attr('data-owner') === metahill.main.userId) {
                 if($('#room-settings').length === 0) {
-                    var code = '<button class="btn" id="room-settings" href="#modal-room-pref" data-toggle="modal">'+
+                    var code = '<button class="btn" id="room-settings" style="font-family: inherit;" href="#modal-room-pref" data-toggle="modal">'+
                                     '<img src="img/icon/room_settings.png" />'+
                                     'Room settings'+
                                 '</button>';
-                    $('#chat-header-topic').after(code);
+                    $('#view-log-button').after(code);
                 }
             } else {
                 $('#room-settings').remove();
@@ -448,28 +442,28 @@ $(function() {
 
         metahill.helper.submitHttpRequest('remove-favorite.php', { userId: metahill.main.userId, roomId: roomId });
 
-        if(main.support.isChrome || main.support.isFirefox || main.support.isOpera) {
+        if(metahill.base.support.isChrome || metahill.base.support.isFirefox || metahill.base.support.isOpera) {
             room.css('maxHeight', room.height());
             room.animate({'width': '0', 'padding-left': '0', 'padding-right':'0'}, 200, 'swing', function() {room.remove();});
         } else {
             room.remove();
         }
 
-        var wasActiveRoomClosed = metahill.helper.getSimpleText(room) === metahill.helper.getSimpleText(main.activeRoom);
+        var wasActiveRoomClosed = metahill.helper.getSimpleText(room) === metahill.helper.getSimpleText(metahill.main.activeRoom);
         if(room.parent().children().length <= 1 || wasActiveRoomClosed) {
-            main.disableInput();
+            metahill.main.disableInput();
         }
 
         // make it available to be added
         addAvailableRoom(roomId, roomName, roomTopic, roomOwner);
 
         // announce
-        main.chat.sendUserQuit(roomId, roomName);
+        metahill.chat.sendUserQuit(roomId, roomName);
         delete metahill.log.roomAttendees[roomName];
     }
 
-    this.onNewRoomClicked = function(obj) {
-        main.enableInput();
+    metahill.main.onNewRoomClicked = function(obj) {
+        metahill.main.enableInput();
 
         // get basic info
         var roomInList = $(obj);
@@ -480,14 +474,16 @@ $(function() {
 
         metahill.helper.submitHttpRequest('add-favorite.php', { userId: metahill.main.userId, roomId: roomId });
 
-        main.chat.sendUserJoin(roomId, roomName);
+        metahill.chat.sendUserJoin(roomId, roomName);
 
-        if(main.activeRoom !== undefined)
-            main.activeRoom.removeClass('btn-primary');
+        if(metahill.main.activeRoom !== undefined) {
+            metahill.main.activeRoom.removeClass('btn-primary');
+        }
+
         $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(roomTopic));
         $('#chat-entries').empty();
 
-        var entry = main.openRoom(roomId, roomName, roomTopic, roomOwner);
+        var entry = metahill.main.openRoom(roomId, roomName, roomTopic, roomOwner);
         
         // animate popover
         var popover = $('#add-new-room').next();
@@ -498,7 +494,7 @@ $(function() {
         var newLeft = popoverLeft + newRoomWidth;
         popover.animate({'left': newLeft}, 200);
 
-        if(main.support.isChrome || main.support.isFirefox || main.support.isOpera) {
+        if(metahill.base.support.isChrome || metahill.base.support.isFirefox || metahill.base.support.isOpera) {
             animateRoomAppearance(entry);
         }
 
@@ -509,7 +505,7 @@ $(function() {
             $('#add-new-room-popover > div:nth-child(2) ul > li:contains("' + roomName + '")').remove();
         });
 
-        main.activeRoom = entry;
+        metahill.main.activeRoom = entry;
     };
 
     function animateRoomAppearance(entry) {
@@ -531,7 +527,7 @@ $(function() {
         Open a new room within a new tab.
         @return The <li> entry created for this room
     */
-    this.openRoom = function(id, name, topic, owner) {
+    metahill.main.openRoom = function(id, name, topic, owner) {
         var entry = $('<li class="btn btn-primary room-favorite"/>');
         entry.attr('data-roomid', id);
         entry.attr('data-topic', topic);
@@ -564,14 +560,14 @@ $(function() {
         .attr('data-owner', roomOwner)
         .text(roomName);
 
-        entry.click(function() { main.onNewRoomClicked(entry[0]); });
+        entry.click(function() { metahill.main.onNewRoomClicked(entry[0]); });
         root.prepend(entry);
     }
 
     /* 
         Enable input boxe(s) for chatting.
     */
-    this.enableInput = function () {
+    metahill.main.enableInput = function () {
         var submitMessage = $('#submit-message');
         var chatEntries = $('#chat-entries');
 
@@ -583,7 +579,7 @@ $(function() {
         $('#room-settings').show();
     };
 
-    this.disableInput = function() {
+    metahill.main.disableInput = function() {
         var submitMessage = $('#submit-message');
         var chatEntries = $('#chat-entries');
 
@@ -639,23 +635,24 @@ $(function() {
     /************************************************************************
         Entry makers
     ************************************************************************/
-    this.makeEntryMessage = function(userName, message, time) {
+    metahill.main.makeEntryMessageText = function(userName, message, time) {
         message = metahill.formatMessages.styleMessage(message);
-        return makeEntry(userName, message, time);
+        return makeEntryText(userName, message, time);
     };
 
-    this.makeEntryImage = function(userName, message, time) {
+    metahill.main.makeEntryImageText = function(userName, message, time) {
         // message isn't styled up
-        return makeEntry(userName, message, time);
+        return makeEntryText(userName, message, time);
     };
 
 
-    function makeEntry(userName, message, time) {
+    function makeEntryText(userName, message, time) {
         var optionClass = '';
-        if(userName === 'server') {
+        var adminNames = ['server'];
+        if(adminNames.indexOf(userName) !== -1) {
             optionClass = 'server-message';
         }
-        if(userName === main.userName) {
+        if(userName === metahill.main.userName) {
             userName = '<b>' + userName + '&nbsp;</b>';
         }
 
@@ -667,7 +664,7 @@ $(function() {
                 '</div>';
 
 
-        return $(entryText);
+        return entryText;
     }
 
 });
