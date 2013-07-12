@@ -69,7 +69,7 @@ $(function() {
                     var fileName = xhr.getResponseHeader('Content-Description');
                     console.log('all done: ' + xhr.status + ':' + fileName);
                     entry.remove();
-                    metahill.main.chat.sendImage(fileName, metahill.main.userId, main.userName, main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
+                    metahill.chat.sendImage(fileName, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
                 } else {
                     console.log('Something went terribly wrong...' + xhr.status  + ':' + xhr.statusText);
                 }

@@ -1,10 +1,4 @@
 
-#chat {
-    float: left;
-    position: absolute;
-    left: 0;
-}
-
 #chat p {
     padding: 0;
     margin: 0;
@@ -43,7 +37,6 @@
 #chat-header {
     min-height: 40px;
     padding: 5px;
-    padding-right: 280px;
 }
 
 #chat-header img {
@@ -56,15 +49,14 @@
 }
 
 #view-log-button {
-    position: absolute;
-    right: 5px;
-    top: 10px;
+    margin-top: 3px;
+    float: right;
 }
 
 #room-settings {
-    position: absolute;
-    top: 10px;
-    right: 140px;
+    margin-top: 3px;
+    float: right;
+    margin-right: 9px;
 }
 
 
@@ -178,27 +170,31 @@
     width: 185px;
     margin-left: 2px;
     border: none;
-}
-
-.btn.disabled, .btn[disabled] {
     background: #f0f0f0;
 }
 
-
+.btn.disabled, .btn[disabled] {
+    background-color: #e6e6e6;
+    color: #666;
+    text-shadow: none;
+}
 
 #submit-area {
     background: #f7f7f7;
-
-    clear: both;
     height: 100px;
     padding: 10px;
+    
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 #submit-message {
-    height: 20px;
-    width: 600px;
     position: absolute;
-    left: 218px;
+    left: 220px;
+    right: 200px;
+    width: auto;
 }
 
 
@@ -285,6 +281,11 @@
     content: ')';
 }
 
+.btn:not(.btn-inverse):not(.btn-info):not(.btn-primary):not(.btn-danger) {
+    border-color: #f7f7f7;
+    border-bottom-color: #3990E5;
+}
+
 .btn-primary {
     background: #3990E5 !important;
 }
@@ -293,10 +294,13 @@
     background: #317cc5 !important;
 }
 
-.btn-info, .dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-submenu:hover>a, .dropdown-submenu:focus>a {
-    background: #265f97 !important;
+.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus, .dropdown-submenu:hover>a, .dropdown-submenu:focus>a {
+    background: #3990E5 !important;
 }
 
+.btn-info {
+    background: #265f97;
+}
 .btn-info:not([disabled]):hover {
     background: #1c4670 !important;
 }

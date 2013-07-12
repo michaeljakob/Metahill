@@ -26,11 +26,6 @@ header img {
     height: 70px;
 }
 
-
-#company-icon {
-    content: url("../img/metahill.png");
-}
-
 header > a > img {
     height: 50px;
     width: 50px;

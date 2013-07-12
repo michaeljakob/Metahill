@@ -3,21 +3,19 @@
 require_once('db-interface.php');
 $dbh = getDBH();
 
+
 /////////////////////////////////////////////////////////////
 // incoming values
 /////////////////////////////////////////////////////////////
 $enableSmilies = $_POST['enable_smilies'] === 'true';
 $enableFormatting = $_POST['enable_formatting'] === 'true';
 $enableNotificationSounds = $_POST['enable_notification_sounds'] === 'true';
-$enableTips = $_POST['enable_tips'] === 'true';
 $chatShowTraffic = $_POST['chat_show_traffic'] === 'true';
 $chatTextSize = $_POST['chat_text_size'];
-$userId = $_POST['user_id'];
 $chatTextFont = $_POST['chat_text_font'];
+$enableTips = $_POST['enable_tips'] === 'true';
+$userId = $_POST['user_id'];
 
-
-$success = true;
-$dbh->beginTransaction();
 /////////////////////////////////////////////////////////////
 // update preferences 
 /////////////////////////////////////////////////////////////
@@ -40,8 +38,8 @@ $param = array( ':chat_text_size' => $chatTextSize,
                 ':chat_text_font' => $chatTextFont,
                 ':user_id' => $userId);
 
-// var_dump($param);
-$success &= $statement->execute($param);
+//var_dump($param);
+$success = $statement->execute($param);
 
 /////////////////////////////////////////////////////////////
 // return some sign of life

@@ -2,8 +2,6 @@
 /*global $ */
 
 $(function() {
-    var signup = this;
-    this.helper = new __helper__();
     var totalStatus = [false, false, false];
     
     var reg_name = $('#reg_name');
@@ -154,15 +152,15 @@ $(function() {
     */
     function doesUsernameExist(name, inputText, status) {
         function callback(exists) {
-            if(exists && name === inputText.val()) {
+            if(parseInt(exists,10)===1 && name === inputText.val()) {
                 status.removeClass('label-success');
                 status.addClass('label-alert');
-                status.text("This username already exists :[");
+                status.text('This username already exists :[');
                 totalStatus[1] = false;
             }
         }
         var json = { 'username': name };
-        var result = signup.helper.submitHttpRequest('does-username-exist.php', json, callback);
+        var result = metahill.helper.submitHttpRequest('does-username-exist.php', json, callback);
     }
     
     $(window).resize(function() {

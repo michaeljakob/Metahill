@@ -9,13 +9,7 @@ Array.prototype.remove = function(from, to) {
 };
 
 
-/*
-*    escapeMessage(text)
-*    toHHMMSS(time)
-*    getSimpleText(room)
-*    openUrlInNewTab(url)
-*    getGetParameters()
-*/
+var metahill = metahill || {};
 metahill.helper = { };
 
 metahill.helper.submitHttpRequest = function(phpFile, json, successCallback) {
