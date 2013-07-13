@@ -11,6 +11,7 @@
 COMMENT
 
 compiler=/Users/michaeljakob/Documents/Development/Web-Release/google\ closure\ compiler/compiler.jar
+echo "Generating vendor.js"
 
 java -jar "$compiler" \
     --warning_level QUIET \
@@ -20,5 +21,5 @@ java -jar "$compiler" \
             jquery-ui-1.10.3.custom.min.js \
             jquery.filterList.js \
             jquery.titlealert.min.js \
-    > vendor.js
+    > ../vendor.js
 

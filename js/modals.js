@@ -17,7 +17,6 @@ $(document).ready(function() {
     metahill.modals.preferences.user_id = metahill.main.userId;
 
     metahill.modals.liveUpdateChatTextSize();
-    metahill.modals.liveUpdateFont();
 
     $('#modals-profile-current-password-info, #modals-room-pref-current-password-info').popover({
         trigger: 'hover',
@@ -247,7 +246,7 @@ $(function() {
 
         var json = {};
         json.name  = $('#modals-new-room-name').val().trim();
-        json.owner = $('#user-id').text();
+        json.owner = metahill.main.userId;
         json.topic = $('#modals-new-room-topic').val().trim();
 
 
@@ -291,7 +290,7 @@ $(function() {
         if(!verificaton.isRoomNameToTitleAdded) {
             verificaton.isRoomNameToTitleAdded = true;
             var title =$('#modal-room-pref h3:first');
-            title.html('<u>' + metahill.helper.getSimpleText(metahill.main.activeRoom) + '</u>' + title.html());
+            title.html('"' + metahill.helper.getSimpleText(metahill.main.activeRoom) +'"' + title.html());
         }
 
         verificaton.currentTopic = metahill.main.activeRoom.attr('data-topic');

@@ -16,6 +16,15 @@
 <link rel="stylesheet" type="text/css" href="css/chat.css"/>
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css">
 
+<style>
+<?php
+    require_once('php/db-interface.php');
+    $user = dbGetUserObject($_SESSION['name']);
+    $font = $user->chat_text_font;
+    echo "body, body * { font-family: '$font';}";
+?>
+
+</style>
 <?php
     if(isset($_GET['theme']) && trim($_GET['theme']) != '') {
         $theme = basename($_GET['theme']);
@@ -33,8 +42,6 @@
         <div id="channels">
             <ul id="channels-list">
                 <?php
-                    require_once('php/db-interface.php');
-
                     $rooms = dbGetFavoriteRooms($_SESSION['name']);
                     foreach($rooms as $room) {
                         $topic = $room->topic;
@@ -47,8 +54,8 @@
                               "</li>";
                     }
                 ?>
+                <span id="add-new-room" class="btn btn-inverse" data-toggle="popover" data-placement="bottom">+</span>
             </ul>
-            <li id="add-new-room" class="btn btn-inverse" data-toggle="popover" data-placement="bottom">+</li>
         </div>
         <div id="chat-and-attendees">
             <aside id="channel-attendees">
@@ -60,10 +67,10 @@
             <article id="chat">
                 <div id="chat-header">
                     <span class='label'>Topic</span>
-                    <span id="chat-header-topic"></span>
-                    <button class="btn" id="view-log-button">
-                        <img src="img/icon/view_log.png" />View history
+                    <button class="btn" id="view-log-button" alt="View Log" title="View Log" >
+                        <img src="img/icon/view_log.png" />View Log
                     </button>
+                    <span id="chat-header-topic"></span>
                 </div>
                 <div id="chat-entries"></div>
             </article>
@@ -90,10 +97,11 @@
         </div>
     </div>
 
-    <?php require_once('feature/modals.php'); ?>
+    <?php 
+        require_once('feature/modals.php');
+        require_once('js/index.php.jsinclude');
+    ?>
 
-    <script src="js/vendor/vendor.js" ></script>
-    <script src="js/combined.js" ></script>
     
 
     <script>

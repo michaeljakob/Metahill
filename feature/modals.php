@@ -38,7 +38,7 @@
                 <td>
                     <select id="modals-pref-font" class="selectpicker">
                         <?php
-                            $fonts = array('Helvetica', 'Noto Sans', 'Noto Serif', 'Courier New');
+                            $fonts = array('Helvetica', 'Verdana', 'Times New Roman', 'Lucida Console', 'Courier New');
                             for($i=0; $i<count($fonts); ++$i) {
                                 $font = $fonts[$i];
                                 $attr = '';

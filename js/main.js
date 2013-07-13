@@ -31,7 +31,7 @@ $(function() {
             var closeButton = entry.find('button > .room-close');
             closeButton.click(function() { onRoomClosed(closeButton); });
 
-            //animateRoomAppearance(entry);
+            animateRoomAppearance(entry);
             if(index === favorites.length-1) {
                 onRoomSelected(entry);
             }
@@ -172,7 +172,7 @@ $(function() {
                             if(message.length > INPUT_CHARACTER_LIMIT) {
                                 message = message.substr(0, INPUT_CHARACTER_LIMIT);
                             }
-                            metahill.chat.sendMessage(message, $('#user-id').text(), metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
+                            metahill.chat.sendMessage(message, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
                             submitMessage.val('');
                             lastMessages.unshift(message);
                             lastMessagesIndex = -1;
@@ -406,9 +406,8 @@ $(function() {
 
             if(newRoom.attr('data-owner') === metahill.main.userId) {
                 if($('#room-settings').length === 0) {
-                    var code = '<button class="btn" id="room-settings" style="font-family: inherit;" href="#modal-room-pref" data-toggle="modal">'+
-                                    '<img src="img/icon/room_settings.png" />'+
-                                    'Room settings'+
+                    var code = '<button class="btn" id="room-settings" alt="Room Settings" title="Room Settings"  style="font-family: inherit;" href="#modal-room-pref" data-toggle="modal">'+
+                                    '<img src="img/icon/room_settings.png" />Room Settings'+
                                 '</button>';
                     $('#view-log-button').after(code);
                 }
@@ -536,12 +535,12 @@ $(function() {
 
         onRoomSelected(entry);
         entry.click(function() { onRoomSelected(entry); });
-        var closeButton = $('<button class="close room-close" style="margin-top:-2px;">&times;</button>');
+        var closeButton = $('<button class="close room-close">&times;</button>');
         var unseenMessages = $('<span class="unseen-messages"></span>');
         closeButton.click(function () { onRoomClosed(closeButton[0]); });
         entry.append(closeButton);
         entry.append(unseenMessages);
-        $('#channels-list').append(entry);
+        $('#add-new-room').before(entry);
 
         return entry;
     };
