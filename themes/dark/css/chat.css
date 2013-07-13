@@ -58,3 +58,13 @@ input {
     background: #999;
     text-shadow: none;
 }
+
+#channel-attendees-entries > li > button:first-child {
+    color: #f0f0f0;
+    background: rgb(50,50,50);
+}
+
+
+
+
+

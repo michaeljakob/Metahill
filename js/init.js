@@ -12,7 +12,7 @@ $(function() {
         } else if(metahill.base.support.isWindows) {
             // include some windows specific fixes
             css = '<link rel="stylesheet" type="text/css" href="css/windows-fixes.css"/>';
-            $(css).appendTo('head');
+            //$(css).appendTo('head');
         }
 
 

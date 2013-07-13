@@ -10,7 +10,7 @@ $(function(){
 
     // if browser doesn't support WebSocket, just show some notification and exit
     if (!window.WebSocket) {
-        console.log($('<p>', { text: 'Sorry, but your browser doesn\'t support WebSockets.'}));
+        console.log('Sorry, but your browser doesn\'t support WebSockets.');
     }
 
     // open connection

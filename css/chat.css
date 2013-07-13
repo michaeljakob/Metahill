@@ -49,7 +49,7 @@
 }
 
 #view-log-button {
-    margin-top: 3px;
+    margin-top: 5px;
     float: right;
 }
 
@@ -195,6 +195,7 @@
     left: 220px;
     right: 200px;
     width: auto;
+    min-width: 367px;
 }
 
 
@@ -208,6 +209,8 @@
 
 #add-new-room {
     padding: 4px 10px !important;
+    float: left;
+    margin-top: 2px;
 }
 
 .room-close {
@@ -315,4 +318,8 @@
 
 .server-message {
     color: green;
+}
+
+.alert {
+    border-color: transparent;
 }
