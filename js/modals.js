@@ -30,6 +30,7 @@ $(document).ready(function() {
 metahill.modals.liveUpdateFont = function() {
     var font = $('#modals-pref-font option:selected').val();
     $('body *').css('font-family', font);
+    $('#phpcss').remove();
 };
 
 metahill.modals.liveUpdateChatTextSize = function() {
@@ -46,7 +47,7 @@ metahill.modals.liveUpdateChatTextSize = function() {
     $('.chat-entry-user').css('width', userWidth);
 
     var padding = (fontSizeInt - 10);
-    $('#chat .chat-entry > *').css('padding-top', padding + 'px').css('padding-bottom', padding + 'px');
+    $('#chat .chat-entry').children().css('padding-top', padding + 'px').css('padding-bottom', padding + 'px');
 
     $(window).resize();
 };
@@ -62,9 +63,13 @@ $(function() {
     }
 
     // preferences
-    $('#modal-pref-submit').click(function(_) {
+    $('#modal-pref-submit').click(function() {
         $('#modal-pref').modal('hide');
         updatePreferences(metahill.modals.preferences);
+    });
+
+    $('#modal-pref').on('hidden', function() {
+        $('#submit-message').focus();
     });
 
 
@@ -118,6 +123,10 @@ $(function() {
         $('#modals-profile-current-password').focus(); 
     });
 
+    $('#modal-profile').on('hidden', function() {
+        $('#submit-message').focus();
+    });
+
     $('#modals-profile-current-password').bind('propertychange keyup input paste', function() {
         var len = $(this).val().length;
         if(len >= 8 && len <= 20) {
@@ -134,6 +143,7 @@ $(function() {
             var isDeletionConfirmed = confirm('If you confirm now, your account will be permanently removed and you will not be able to log in with this user again. Do you still want to confirm the account deletion?');
             if(isDeletionConfirmed) {
                 $('#modal-profile').modal('hide');
+                
 
                 json.intent = 'delete-account';
                 json.userId = metahill.main.userId;
@@ -145,6 +155,7 @@ $(function() {
             }
         } else {
             $('#modal-profile').modal('hide');
+            
 
             var currentPassInput = $('#modals-profile-current-password');
             var newPassInput = $('#modals-profile-new-password');
@@ -188,15 +199,16 @@ $(function() {
     function updateNewRoom(json, successCallback) {
         metahill.helper.submitHttpRequest('update-new-room.php', json, successCallback);
     }
-
-    $('#modal-new-room').on('show', function() {
+    $('#modal-new-room')
+    .on('show', function() {
         $('#add-new-room').popover('hide');
-    });
-
-    $('#modal-new-room').on('shown', function() {
+    })
+    .on('shown', function() {
         $('#modals-new-room-name').focus();
+    })
+    .on('hidden', function() {
+        $('#submit-message').focus();
     });
-
 
     var verificaton = {};
     verificaton.isNameAvailable = false;
@@ -243,6 +255,7 @@ $(function() {
 
     $('#modal-new-room-submit').click(function(_) {
         $('#modal-new-room').modal('hide');
+        
 
         var json = {};
         json.name  = $('#modals-new-room-name').val().trim();
@@ -262,6 +275,7 @@ $(function() {
                 var message = {};
                 message.userId = userId;
                 message.roomId = roomId;
+                message.position = $('#channels-list').children().length + 1;
                 metahill.helper.submitHttpRequest('add-favorite.php', message);
             })(json.owner, roomId);
         });
@@ -286,7 +300,8 @@ $(function() {
     verificaton.isTopicLengthOk = false;
     verificaton.currentTopic = '';
 
-    $('#modal-room-pref').on('show', function() {
+    $('#modal-room-pref')
+    .on('show', function() {
         if(!verificaton.isRoomNameToTitleAdded) {
             verificaton.isRoomNameToTitleAdded = true;
             var title =$('#modal-room-pref h3:first');
@@ -297,6 +312,9 @@ $(function() {
         $('#modals-room-pref-topic')
         .val(verificaton.currentTopic)
         .keyup();
+    })
+    .on('hidden', function() {
+        $('#submit-message').focus();
     });
 
     $('#modal-room-pref').on('shown', function() {
@@ -319,6 +337,7 @@ $(function() {
 
         if(json.roomTopic === verificaton.currentTopic) {
             $('#modal-room-pref').modal('hide');
+            
             currentPasswordBox.val('');
             return;
         }
@@ -329,6 +348,7 @@ $(function() {
                 metahill.main.activeRoom.attr('data-topic', json.roomTopic);
                 $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(json.roomTopic));
                 $('#modal-room-pref').modal('hide');
+                
             } else {
                 currentPasswordBox.attr('placeholder', 'Wrong pass :(');
                 currentPasswordBox.focus();

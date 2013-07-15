@@ -52,8 +52,8 @@ $(function() {
             });
         });
 
-        $('#view-log-button').click(function() {
-            onViewChatLogClicked($(this));
+        $('#view-log-button').click(function(e) {
+            onViewChatLogClicked(e);
         });
 
         $('#help-button').click(function() {
@@ -84,7 +84,7 @@ $(function() {
         var siteStatus= $('#site-status');
         // scroll old message up if necessary
         if(siteStatus.css('margin-top') !== '-50px') {
-            siteStatus.animate({'margin-top': '-50px'}, 1000, function() {
+            siteStatus.animate({'margin-top': '-50px'}, 500, function() {
                 metahill.main.setCurrentStatus(message, alertClass, arguments[2]);
             });
             return;
@@ -94,12 +94,12 @@ $(function() {
         siteStatus.addClass(alertClass);
         siteStatus.html(message);
 
-        siteStatus.animate({'margin-top': '20px'}, 1000);
+        siteStatus.animate({'margin-top': '20px'}, 500);
         setTimeout(function() {
             if(metahill.main.isStatusPersistent) {
                 return;
             }
-            siteStatus.animate({'margin-top': '-50px'}, 1000);
+            siteStatus.animate({'margin-top': '-50px'}, 500);
         }, duration);
     };
 
@@ -279,10 +279,14 @@ $(function() {
                 entry = $(metahill.main.makeEntryMessageText(userName, message, time));
             }
             var chatEntries = $('#chat-entries');
+            var isScrolledToBottom = chatEntries[0].scrollHeight - chatEntries.scrollTop() === chatEntries.outerHeight();
+            
             chatEntries.append(entry);
-
-            // we assume that a message is max "500px" heigh (image or small browser window)
-            chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 500}, 100);
+            // We only scroll down if it's already scrolled to bottom
+            if(isScrolledToBottom) {
+                // we assume that a message is max "500px" high (image or small browser window)
+                chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 500}, 500);
+            }
 
             var children = entry.children();
             var maxHeight = $(children[2]).height();
@@ -295,10 +299,10 @@ $(function() {
     };
 
     metahill.main.makeImageTagFromUrl = function(url) {
-        var tag =   '<span class="image-tooltip">' +
+        var tag = '<span class="image-tooltip">' +
                     '<img src="' + url + '"></img>' +
                     '<span><img src="' + url + '"></img></span>' +
-                '</span>';
+                  '</span>';
         return tag;
     };
 
@@ -340,8 +344,13 @@ $(function() {
     /**
      * Defines what happens when someone clicks the "Vie Chat Log"-button.
      */
-    function onViewChatLogClicked() {
-        document.location = 'log/' + encodeURIComponent(metahill.helper.getSimpleText(metahill.main.activeRoom));
+    function onViewChatLogClicked(e) {
+        var url =  'log/' + encodeURIComponent(metahill.helper.getSimpleText(metahill.main.activeRoom));
+        if(e.shiftKey) {
+            metahill.helper.openUrlInNewTab(url);
+        } else {
+            document.location = url;
+        }
     }
 
     /**
@@ -439,7 +448,12 @@ $(function() {
         var roomTopic = room.attr('data-topic');
         var roomOwner = room.attr('data-owner');
 
-        metahill.helper.submitHttpRequest('remove-favorite.php', { userId: metahill.main.userId, roomId: roomId });
+        metahill.helper.submitHttpRequest('remove-favorite.php', 
+            {   
+                position:  room.index()+1, 
+                userId: metahill.main.userId, 
+                roomId: roomId 
+            });
 
         if(metahill.base.support.isChrome || metahill.base.support.isFirefox || metahill.base.support.isOpera) {
             room.css('maxHeight', room.height());
@@ -471,7 +485,12 @@ $(function() {
         var roomTopic = roomInList.attr('data-topic');
         var roomOwner = roomInList.attr('data-owner');
 
-        metahill.helper.submitHttpRequest('add-favorite.php', { userId: metahill.main.userId, roomId: roomId });
+        metahill.helper.submitHttpRequest('add-favorite.php', 
+            { 
+                userId: metahill.main.userId, 
+                roomId: roomId,
+                position: $('#channels-list').children().length + 1
+            });
 
         metahill.chat.sendUserJoin(roomId, roomName);
 
@@ -540,7 +559,7 @@ $(function() {
         closeButton.click(function () { onRoomClosed(closeButton[0]); });
         entry.append(closeButton);
         entry.append(unseenMessages);
-        $('#add-new-room').before(entry);
+        $('#channels-list').append(entry);
 
         return entry;
     };
@@ -610,17 +629,19 @@ $(function() {
                     return true;
                 } else {
                     var submitStatus = $('#submit-status');
-                    if(!submitStatus.is(':visible')) {
+                    if(parseInt(submitStatus.css('marginTop'), 10) === 120) {
                         submitStatus.removeClass();
                         submitStatus.empty();
                         submitStatus.addClass('alert alert-error');
 
 
-                        submitStatus.append('<h4>Man, calm down!</h4>');
-                        submitStatus.append('Your mission is not to spam the room. :P').hide().show('slow');
+                        submitStatus.append('<h1>Man, calm down!</h1>');
+                        submitStatus.append('Your mission is not to spam the room. :P');
+
+                        submitStatus.animate({'margin-top': '40px'}, 500);
 
                         setTimeout(function(){
-                            submitStatus.hide('quick');
+                            submitStatus.animate({'margin-top': '120px'}, 500);
                         }, 5000);
                     }
 

@@ -68,7 +68,7 @@ $(function(){
     
     // handle incoming messages
     var connection_onmessage = function (message) {
-        console.log('message received: ' + JSON.stringify(message.data));
+        //console.log('message received: ' + JSON.stringify(message.data));
         var json = JSON.parse(message.data);
         var intent = json.intent;
         switch(intent) {
@@ -105,7 +105,7 @@ $(function(){
         Events & Callbacks
     ************************************************************************/
     function onUserJoin(userId, userName, roomName) {
-        console.log('userjoin:' + userId + '=' + userName + ' in ' + roomName);
+        //console.log('userjoin:' + userId + '=' + userName + ' in ' + roomName);
         if(metahill.log.roomAttendees[roomName] === undefined) {
             metahill.log.roomAttendees[roomName] = [];    
         }

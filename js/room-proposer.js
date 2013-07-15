@@ -20,8 +20,6 @@ metahill.roomProposer.getOpenRoomNames = function() {
 metahill.roomProposer.createHtmlChildren = function(rooms) {
     var alreadyListedRoomNames = metahill.roomProposer.getOpenRoomNames();
 
-    console.log(JSON.stringify(alreadyListedRoomNames));
-
     var children = '';
     for(var i=0; i<rooms.length; i++) {
         var room = rooms[i];
