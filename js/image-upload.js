@@ -40,7 +40,7 @@ $(function() {
         doDrag();
 
         var files = event.dataTransfer.files;
-        var file = files[0];
+        var file = files[0];  // we only want one file, no more
 
         if (file === undefined) {
             return;
@@ -55,10 +55,10 @@ $(function() {
         
         if (acceptedTypes[file.type] === true) {
             var formData = new FormData();
-            formData.append('file', file); // we only want one file, no more
+            formData.append('file', file);
             
             var imageText = metahill.main.makeImageTagFromUrl('http://metahill.com/img/loading.gif');
-            var entry = metahill.main.makeEntryImage(metahill.main.userName, imageText, new Date().getTime());
+            var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, imageText, new Date().getTime()));
             $('#chat-entries').append(entry);
 
 

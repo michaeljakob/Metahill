@@ -11,7 +11,7 @@ $(function() {
     tips.push('Put your message within ** to make it <b>bold</b>.');
     tips.push('Put your message within ` to make it <code>code</code>.');
     tips.push('<b>metahill</b> is a non-for-profit service.');
-    tips.push('Join <b>@metahill</b> for metahill-questions &amp; feedback.');
+    tips.push('Join <b>metahill</b> for metahill-questions &amp; feedback.');
     tips.push('We visualize over 25 smilies. View the <a href="help/index.php?tab=messages&anchor=smilies" target="_blank">list</a>.');
     tips.push('Hold and drag rooms to change their order.');
     tips.push('Be nice to your mates and keep the overall atmosphere nice. :)');
