@@ -5,6 +5,7 @@ header > .menu {
 
 #userbar {
     float: right;
+    margin-top: 20px;
 }
 
 #help-button {

@@ -36,3 +36,7 @@ header > a > img {
 header > a {    
     float: left;
 }
+
+h1 {
+    font-size: 30px;
+}

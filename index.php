@@ -1,15 +1,16 @@
 <?php
     session_start();
-    if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && $_SESSION['verified']) {
+    if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['verified']) && $_SESSION['verified']) {
         session_regenerate_id(true);
     } else {
-        header('Location: login.php');
+        header('Location: http://www.metahill.com/login.php');
         exit();
     }
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<base href="http://127.0.0.1/Documents/Development/Web/metahill.com/"/>
 <title>Metahill | Where enthusiasts talk</title>
 <link rel="stylesheet" type="text/css" href="css/base.css"/>
 <link rel="stylesheet" type="text/css" href="css/index.css"/>
@@ -23,12 +24,11 @@
     $font = $user->chat_text_font;
     echo "body, body *{font-family:'$font';}";
 ?>
-
 </style>
 <?php
     if(isset($_GET['theme']) && trim($_GET['theme']) != '') {
         $theme = basename($_GET['theme']);
-        if(file_exists("themes/".$theme."/css/chat.css")) {
+        if(file_exists("themes/$theme/css/chat.css")) {
             echo "<link rel='stylesheet' type='text/css' href='themes/$theme/css/chat.css'/>";
         }
     }
@@ -44,7 +44,7 @@
                 <?php
                     $rooms = dbGetFavoriteRooms($_SESSION['name']);
                     foreach($rooms as $room) {
-                        $topic = $room->topic;
+                        $topic = str_replace("'", "&#39;", $room->topic);
                         $roomName = $room->name;
                         $roomId = $room->id;
                         $roomOwner = $room->owner;
@@ -95,10 +95,37 @@
             </form>
         </div>
     </div>
+    <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom;  ?></div>
 
     <?php 
         require_once('feature/modals.php');
         require_once('js/index.php.jsinclude');
+        
+        if(isset($_GET['join']) && strlen(trim($_GET['join'])) > 0) {
+            $roomName = $_GET['join'];
+            // is it already a favorite?
+            foreach($rooms as $room) {
+                if($room->name === $roomName) {
+                    return;
+                }
+            }
+            if(dbRoomExists($roomName)) {
+                $room = dbGetRoomObjectFromName($roomName);
+                $roomId = $room->id;
+                $roomTopic = str_replace("\"", "&#34;", $room->topic);
+                $roomOwner = $room->owner;
+
+
+                $out = "<script>$(document).ready(function(){setTimeout(function() {";
+                $out .= "var newRoom = '<li data-roomid=\"$roomId\" data-topic=\"$roomTopic\" data-owner=\"$roomOwner\">$roomName</li>';";
+                $out .= "metahill.main.onNewRoomClicked($(newRoom));";
+                $out .= "}, 800)});</script>";
+
+
+                echo $out;
+            }
+        }
+
     ?>
 
     

@@ -64,9 +64,17 @@ function dbGetRoomObjectFromId($id) {
                 
     $statement = $dbh->prepare('SELECT * FROM rooms WHERE id=:id' );
     $statement->execute(array(':id' => $id));
-    $room = $statement->fetch(PDO::FETCH_OBJ);
     
-    return $room;
+    return $statement->fetch(PDO::FETCH_OBJ);
+}
+
+function dbGetRoomObjectFromName($name) {
+    $dbh = getDBH();
+                
+    $statement = $dbh->prepare('SELECT * FROM rooms WHERE name=:name');
+    $statement->execute(array(':name' => $name));
+    
+    return $statement->fetch(PDO::FETCH_OBJ);
 }
 
 /*

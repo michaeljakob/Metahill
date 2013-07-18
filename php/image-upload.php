@@ -7,9 +7,14 @@
         die();
     }
 
+    $userName = '_';
+    if(isset($_POST['userName'])) {
+        $userName = $_POST['userName'];
+    }
+
+
     $ext = $info['extension']; 
-    $fileNameWithoutExtension = $info['filename'];
-    $newName = $fileNameWithoutExtension . round(microtime(true)) . '.' . $ext;
+    $newName = $userName . '.' . round(microtime(true)) . '.' . $ext;
     $target = "image-upload/$newName";
     
     move_uploaded_file($_FILES['file']['tmp_name'], '../' . $target);

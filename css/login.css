@@ -89,7 +89,7 @@ footer {
 
 #share {
     position: absolute;
-    top: 130px;
+    top: 180px;
     left: 30px;
     text-align: left;
 }
@@ -107,3 +107,6 @@ footer {
     width: 150px;
 }
 
+.invis {
+    display: none;
+}

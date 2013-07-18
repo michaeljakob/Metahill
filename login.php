@@ -2,7 +2,7 @@
     session_start();
     session_regenerate_id(true);
     
-    if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true && $_SESSION['verified']) {
+    if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['verified']) && $_SESSION['verified']) {
         header('Location: index.php');
         exit();
     }
@@ -66,10 +66,13 @@
 
 <meta name="description" content="Metahill is the easiest way to chat, text, message and share images in real time with other enthusiasts all across the web. The ability to exchange a lot of information including diagrams and links real-time makes it a first class business solution.">
 <meta name="author" content="">
-<meta name="keywords" content="realtime, real-time, chat, share-images, share images, image upload, community based, community driven, adfree, free, better irc, enthusiasts, community-based, online meetings, troubi, social network, better facebook, better twitter, better google plus, facebook alternative, twitter alternative, metahill, troubi, fun, enthusiasts, experts, connection, network, community, forum, internet relay chat, usenet newsgroups, knowledge, science, learning, homework, self-helping, users help users">
+<meta name="keywords" content="free chat rooms, free chat, chat, chatrooms, chat-room, realtime, real-time, chat, share-images, share images, image upload, community based, community driven, adfree, free, better irc, enthusiasts, community-based, online meetings, troubi, social network, better facebook, better twitter, better google plus, facebook alternative, twitter alternative, metahill, troubi, fun, enthusiasts, experts, connection, network, community, forum, internet relay chat, usenet newsgroups, knowledge, science, learning, homework, self-helping, users help users">
 <link rel="canonical" href="https://www.facebook.com/metahillcommunity"/>
+<link rel="icon" href="http://www.metahill.com/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="http://www.metahill.com/favicon.ico" type="image/x-icon" />
 
-<title>Metahill | Where enthusiasts talk. Chat and share images within chatrooms in realtime with other enthusiasts.</title>
+
+<title>Metahill | Chatrooms for enthusiasts</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 
@@ -99,6 +102,11 @@
             <h1 class="desc">At metahill, you can meet other enthusiasts and chat with them in real-time.</h1>
             <h1 class="desc">It is entirely free, ad-free and community-driven.</h1>
             <h1 class="desc">Simple.</h1>
+            <h2 class="invis">free chat rooms</h2>
+            <h2 class="invis">meet enthusiasts</h2>
+            <h2 class="invis">super easy</h2>
+            <h2 class="invis">business meetings chat</h2>
+            <h2 class="invis">share images</h2>
             <form method="post" id="action-chooser">
                 <h2>Sign in</h2>
                 <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
@@ -126,8 +134,8 @@
 
     <script src="js/vendor/jquery-2.0.3.min.js"></script>
     <script async src="js/base.js" ></script>
-    <script async src="js/login.js" ></script>
-    <script type="text/javascript">
+    <script async src="js/login.js" async="async"></script>
+    <script type="text/javascript" async="async">
         // Google+
         (function() {
             var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
@@ -138,7 +146,7 @@
         // Twitter
         !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
     </script>
-    <script>
+    <script async="async">
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

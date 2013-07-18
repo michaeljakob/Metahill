@@ -224,7 +224,7 @@ $(function() {
     }
 
     $('#modals-new-room-name').bind('propertychange keyup input paste', function() {
-        var roomName = $(this).val().trim();
+        var roomName = metahill.helper.htmlEncode($(this).val().trim());
         var len = roomName.length;
         verificaton.isNameLengthOk = len >= 3 && len <= 20;
 
@@ -260,7 +260,7 @@ $(function() {
         var json = {};
         json.name  = $('#modals-new-room-name').val().trim();
         json.owner = metahill.main.userId;
-        json.topic = $('#modals-new-room-topic').val().trim();
+        json.topic = metahill.helper.htmlEncode($('#modals-new-room-topic').val().trim());
 
 
         updateNewRoom(json, function(roomId) {
@@ -308,21 +308,18 @@ $(function() {
             title.html('"' + metahill.helper.getSimpleText(metahill.main.activeRoom) +'"' + title.html());
         }
 
-        verificaton.currentTopic = metahill.main.activeRoom.attr('data-topic');
-        $('#modals-room-pref-topic')
-        .val(verificaton.currentTopic)
-        .keyup();
+        verificaton.currentTopic = metahill.helper.htmlDecode(metahill.main.activeRoom.attr('data-topic'));
+        $('#modals-room-pref-topic').val(metahill.main.activeRoom.attr('data-topic'));
     })
     .on('hidden', function() {
         $('#submit-message').focus();
     });
 
     $('#modal-room-pref').on('shown', function() {
-        var textarea = $('#modals-room-pref-topic');
-        textarea
-        .focus()
-        .val('')
-        .val(metahill.main.activeRoom.attr('data-topic'));
+        // set cursor to the end
+        var topicBox = $('#modals-room-pref-topic');
+        var topic = topicBox.val();
+        topicBox.val('').focus().val(topic);
     });
 
     $('#modal-room-pref-submit').click(function() {
@@ -330,7 +327,7 @@ $(function() {
         var submitButton = $(this);
 
         var json = {};
-        json.roomTopic = $('#modals-room-pref-topic').val().trim();
+        json.roomTopic = metahill.helper.htmlEncode($('#modals-room-pref-topic').val().trim());
         json.roomId = metahill.main.activeRoom.attr('data-roomid');
         json.userId = metahill.main.userId;
         json.userPassword = currentPasswordBox.val();

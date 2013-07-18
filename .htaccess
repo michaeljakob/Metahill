@@ -1,6 +1,7 @@
 ErrorDocument 404 /404.php
 RewriteEngine On
 RewriteRule ^log/(.+)$ log.php?room=$1
+RewriteRule ^join/(.+)$ index.php?join=$1
 
 
 

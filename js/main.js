@@ -26,16 +26,24 @@ $(function() {
      */
      function openFavoriteRooms() {
         var favorites = $('#channels-list').children();
+        var activeRoomIndex = parseInt($('#data-activeroomid').html(),10);
+        var isAnyRoomSelected = false;
         favorites.each(function(index, entry) {
             entry = $(entry);
             var closeButton = entry.find('button > .room-close');
             closeButton.click(function() { onRoomClosed(closeButton); });
 
             animateRoomAppearance(entry);
-            if(index === favorites.length-1) {
+            if(index === activeRoomIndex) {
                 onRoomSelected(entry);
+                isAnyRoomSelected = true;
             }
         });
+
+
+        if(!isAnyRoomSelected) {
+            onRoomSelected(favorites[0]);
+        }
     }
 
     /**
@@ -55,15 +63,11 @@ $(function() {
         $('#view-log-button').click(function(e) {
             onViewChatLogClicked(e);
         });
-
-        $('#help-button').click(function() {
-            document.location = 'help';
-        });
-
+        
         $('#submit-message').keydown(messageProcessor);
 
         $('#add-new-room').click(function() {
-            $('#add-new-room-rooms').children().each(function(_, entry) {
+            $('#add-new-room-rooms').children('li').each(function(_, entry) {
                 $(entry).click(function() { metahill.main.onNewRoomClicked(entry); });
             });
         });
@@ -260,8 +264,7 @@ $(function() {
                 if(isThisUserAddressed(message)) {
                     metahill.sound.playUserAddressed();
                     $.titleAlert('Someone talked to you!');
-                    room.removeClass('room-favorite');
-                    room.addClass('btn-danger');
+                    room.removeClass('room-favorite').addClass('btn-danger');
                 } else {
                     var unseenMessages = room.children('.unseen-messages');
                     var msgCount = parseInt(unseenMessages.text(), 10);
@@ -330,9 +333,6 @@ $(function() {
         var cache = '';
         for(var i=0; i<len; ++i) {
             var userName = metahill.log.users[roomName][i];
-            if(userName == metahill.main.userName) {
-                userName = '<b>' + userName + '</b>';
-            }
             cache += metahill.main.makeEntryMessageText(userName, metahill.log.messages[roomName][i], metahill.log.times[roomName][i]);
         }
         chatEntries.append(cache);
@@ -402,6 +402,7 @@ $(function() {
         }
 
         if(newRoomName !== oldRoomName) {
+            metahill.helper.submitHttpRequest('update-activeroom.php', { userId: metahill.main.userId, activeRoom: newRoom.index()});
             removeButtonClasses(metahill.main.activeRoom);
             removeButtonClasses(newRoom);
             newRoom.addClass('btn-primary');
@@ -411,6 +412,7 @@ $(function() {
             metahill.main.activeRoom = newRoom;
             metahill.main.updateChatBox();
             metahill.main.updateAttendeesList();
+            $('#chat-entries').scrollTop(100000000);
             $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(metahill.helper.htmlEncode(newRoom.attr('data-topic'))));
 
             if(newRoom.attr('data-owner') === metahill.main.userId) {
@@ -423,6 +425,7 @@ $(function() {
             } else {
                 $('#room-settings').remove();
             }
+            
 
             // reset "unseen message" counter
             var unseenMessages = newRoom.children('.unseen-messages');
@@ -552,14 +555,15 @@ $(function() {
         entry.attr('data-owner', owner);
         entry.text(name);
 
-        onRoomSelected(entry);
         entry.click(function() { onRoomSelected(entry); });
         var closeButton = $('<button class="close room-close">&times;</button>');
         var unseenMessages = $('<span class="unseen-messages"></span>');
         closeButton.click(function () { onRoomClosed(closeButton[0]); });
-        entry.append(closeButton);
-        entry.append(unseenMessages);
+        entry
+        .append(closeButton)
+        .append(unseenMessages);
         $('#channels-list').append(entry);
+        onRoomSelected(entry);
 
         return entry;
     };
@@ -569,7 +573,8 @@ $(function() {
         If you add a room, it will be displayed within the list after you click the '+' to add a room. 
     */
     function addAvailableRoom(roomId, roomName, roomTopic, roomOwner) {
-        var root = $('#add-new-room-popover > div:nth-child(2) ul');
+        var root = $('#add-new-room-rooms');
+        root.find('p').remove();
 
         var entry = $(document.createElement('li'))
         .addClass('ui-bootstrap-list-item btn room-favorite')
@@ -630,15 +635,13 @@ $(function() {
                 } else {
                     var submitStatus = $('#submit-status');
                     if(parseInt(submitStatus.css('marginTop'), 10) === 120) {
-                        submitStatus.removeClass();
-                        submitStatus.empty();
-                        submitStatus.addClass('alert alert-error');
-
-
-                        submitStatus.append('<h1>Man, calm down!</h1>');
-                        submitStatus.append('Your mission is not to spam the room. :P');
-
-                        submitStatus.animate({'margin-top': '40px'}, 500);
+                        submitStatus
+                        .removeClass()
+                        .empty()
+                        .addClass('alert alert-error')
+                        .append('<h1>Man, calm down!</h1>')
+                        .append('Your mission is not to spam the room. :P')
+                        .animate({'margin-top': '40px'}, 500);
 
                         setTimeout(function(){
                             submitStatus.animate({'margin-top': '120px'}, 500);

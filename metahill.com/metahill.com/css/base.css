@@ -1,1 +1,0 @@
-@import url("normalize.min.css");@import url("bootstrap.min.css");@import url("ui.css");html{height:100%}body{min-height:100%;margin:0;padding:0;overflow:hidden;min-width:800px}header{height:70px;padding:10px 20px 20px 20px;background:#f7f7f7}header img{height:70px}header > a > img{height:50px;width:50px;margin-top:14px;margin-left:5px}header > a{float:left}
