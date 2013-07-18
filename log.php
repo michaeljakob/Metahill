@@ -5,7 +5,7 @@
     $roomExists = false;
     
     if(isset($_GET['room']) && strlen(trim($_GET['room'])) > 0) {
-        $room = urldecode(str_replace('+', '%2B', urlencode($_GET['room'])));
+        $room = $_GET['room'];
         $roomExists = dbRoomExists($room);
     }
 
@@ -58,7 +58,7 @@
                     $viewingSpan = "the last 24 hours";
                 }
 
-                echo    "<h1>Log of <span id='roomname-title'><code>$room</code></span><span class='viewspan'>Viewing $viewingSpan</span></h1>
+                echo    "<h1>Log of <span id='roomname-title'>\"$room\"</span><span class='viewspan'>Viewing $viewingSpan</span></h1>
                         <article id='chat'>
                         <div id='chat-entries'>";
                 

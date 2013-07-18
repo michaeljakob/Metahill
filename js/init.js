@@ -14,7 +14,7 @@ $(function() {
         } else if(metahill.base.support.isWindows) {
             // include some windows specific fixes
             css = '<link rel="stylesheet" type="text/css" href="css/windows-fixes.css"/>';
-            //$(css).appendTo('head');
+            $(css).appendTo('head');
         }
 
 
@@ -73,22 +73,29 @@ $(function() {
         content: function() {
             return $('#add-new-room-content').html();
         }
-    });
+    }).click((function() {
+        var addNewRoomSearch = $('#add-new-room-search');
+        return function() {
+            addNewRoomSearch.focus();
+        };
+    })());
+
 
     // remove "add-new-room"-popover if you click anywhere
     $('body').on('click', function (e) {
+        var submitMessage = $('#submit-message');
         $('#add-new-room').each(function () {
             if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
                 $(this).popover('hide');
             }
         });
     });
-    
-    
+        
     // filter
     $('#filter-search-user').filterList();
 });
 
+// channels-list Sortable (dragging room positions)
 $(function() {
     var startIndex = -1;
     $('#channels-list').sortable({
@@ -104,9 +111,8 @@ $(function() {
             json.roomId = ui.item.attr('data-roomid');
             json.userId = metahill.main.userId;
 
-            metahill.helper.submitHttpRequest('update-room-positions.php', json, function(e) {
-                console.log(e);
-            });
+            metahill.helper.submitHttpRequest('update-room-positions.php', json);
+            metahill.helper.submitHttpRequest('update-activeroom.php', { userId: metahill.main.userId, activeRoom: metahill.main.activeRoom.index()});
         }
 
     });

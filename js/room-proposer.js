@@ -25,7 +25,7 @@ metahill.roomProposer.createHtmlChildren = function(rooms) {
         var room = rooms[i];
         if($.inArray(room.name, alreadyListedRoomNames) === -1) {
             children += "<li class='ui-bootstrap-list-item btn' data-owner='"+room.owner+"'sn data-roomid='"+room.id+
-                                          "' data-topic='"+room.topic+"'>"+room.name+"</li>";
+                                          "' data-topic='"+metahill.helper.htmlEncode(room.topic)+"'>"+metahill.helper.htmlEncode(room.name)+"</li>";
         }
     }
 

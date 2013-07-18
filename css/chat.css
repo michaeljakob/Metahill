@@ -157,6 +157,7 @@
 #channel-attendees-entries {
     padding: 5px;
     padding-bottom: 0px;
+    list-style: none;
     height: 440px;
     margin: 0 -5px -5px 0;
 }
@@ -216,10 +217,6 @@
     padding: 0;
 }
 
-
-
-
-
 #add-new-room {
     padding: 4px 10px !important;
     float: left;
@@ -230,7 +227,6 @@
     position: relative;
     left: 20px;
 }
-
 
 /* tooltip */
 .image-tooltip {
@@ -245,6 +241,7 @@
 
 .image-tooltip img {
     height: 100px;
+    width: auto;
     padding-bottom: 2px;
 }
 
@@ -266,17 +263,19 @@
     display: none;
 }
 
-.image-tooltip:hover span {
-    display: block;    
-    position:absolute;
-    top:0;
-    right:0;
-    z-index:10;
-    width:auto;
-    margin-top:12px;
-    margin-left:32px;
-    overflow:hidden;
-    padding:8px;
+@media all and (min-width: 1000px) {
+    .image-tooltip:hover span {
+        display: block;    
+        position:absolute;
+        top:0;
+        right:0;
+        z-index:10;
+        width:auto;
+        margin-top:12px;
+        margin-left:32px;
+        overflow:hidden;
+        padding:8px;
+    }
 }
 
 .unseen-messages {

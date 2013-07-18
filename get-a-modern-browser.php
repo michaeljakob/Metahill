@@ -20,25 +20,25 @@
                 <br>We have picked out four, which we think are very sensible.</span>
             <ul id="browser-list">
                 <li>
-                    <a href="https://www.google.com/intl/en/chrome/">
+                    <a target="_blank" href="https://www.google.com/intl/en/chrome/">
                         <img src="img/browser/chrome.png" alt="Google Chrome">
                         <span>Chrome</span>
                     </a>
                 </li>
                 <li>
-                    <a href="http://www.mozilla.org/en-US/firefox/new/">
+                    <a target="_blank" href="http://www.mozilla.org/en-US/firefox/new/">
                         <img src="img/browser/firefox.png" alt="Mozilla Firefox">
                         <span>Firefox</span>
                     </a>
                 </li>
                 <li>
-                    <a href="http://support.apple.com/downloads/#safari">
+                    <a target="_blank" href="http://support.apple.com/downloads/#safari">
                         <img src="img/browser/safari.png" alt="Safari">
                         <span>Safari</span>
                     </a>
                 </li>
                 <li>
-                    <a href="http://www.opera.com/computer">
+                    <a target="_blank" href="http://www.opera.com/computer">
                         <img src="img/browser/opera.png" alt="opera">
                         <span>Opera</span>
                     </a>
@@ -54,25 +54,24 @@
     </section>
     
     <script src="js/vendor/jquery-2.0.3.min.js" ></script>
-    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
-    <script src="js/vendor/jquery-ui-1.10.2.custom.min.js" ></script>
     <script src="js/base.js" ></script>
     <script>
-        if(!metahill.base.isInternetExplorer) {
-            $('#browser-list').css('display', 'none');
-            $('#welcome > h1').html('You\'re using a modern browser! :)');
-            var welcome = $('#welcome > span');
-            welcome.html('Forwarding you');
+        $(function() {
+            if(!metahill.base.support.isInternetExplorer) {
+                $('#browser-list').css('display', 'none');
+                $('#welcome > h1').html('You\'re using a modern browser! :)');
+                var welcome = $('#welcome > span');
+                welcome.html('Forwarding you');
 
-            function addDot() { welcome.html('&nbsp;' + welcome.html() + '.'); }
-            for(var i=0; i<4; ++i) {
-                setTimeout(addDot, i * 1000);
+                function addDot() { welcome.html('&nbsp;' + welcome.html() + '.'); }
+                for(var i=0; i<4; ++i) {
+                    setTimeout(addDot, i * 1000);
+                }
+                setTimeout(function() { 
+                    window.location = 'login.php';
+                 }, 3000);
             }
-            setTimeout(function() { 
-                window.location = 'login.php';
-             }, 3000);
-        }
-        
+        });
     </script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

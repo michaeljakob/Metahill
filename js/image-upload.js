@@ -56,6 +56,7 @@ $(function() {
         if (acceptedTypes[file.type] === true) {
             var formData = new FormData();
             formData.append('file', file);
+            formData.append('userName', metahill.main.userName);
             
             var imageText = metahill.main.makeImageTagFromUrl('http://metahill.com/img/loading.gif');
             var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, imageText, new Date().getTime()));

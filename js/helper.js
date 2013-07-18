@@ -10,20 +10,20 @@ Array.prototype.remove = function(from, to) {
 
 
 var metahill = metahill || {};
-metahill.helper = { };
+metahill.helper = {};
 
 metahill.helper.submitHttpRequest = function(phpFile, json, successCallback) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'php/' + phpFile);
     xhr.onload = function () {
         if (xhr.status === 200) {
-            console.log('http request: ok. '+ xhr.responseText);
+            //console.log('http request: ok. '+ xhr.responseText);
             if(successCallback !== undefined) {
                 successCallback(xhr.getResponseHeader('Content-Description'));
             }
         } else {
             var error = xhr.getResponseHeader('Content-Description');
-            console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
+            //console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
         }
     };
 
@@ -57,8 +57,7 @@ metahill.helper.getSimpleText = function(room) {
 };
 
 metahill.helper.openUrlInNewTab = function(url) {
-    var win=window.open(url, '_blank');
-    win.focus();
+    window.open(url, '_blank').focus();
 };
 
 /*
@@ -78,9 +77,9 @@ metahill.helper.getGetParameters = function() {
 };
 
 metahill.helper.htmlEncode = function(value){
-    return $(document.createElement('div')).text(value).html();
+    return $(document.createElement('div')).text(value).html().replace('\'', '&#39;').replace('"', '&#34;');
 };
 
 metahill.helper.htmlDecode = function(value){
-    return $(document.createElement('div')).html(value).text();
+    return $(document.createElement('div')).html(value).text().replace('&#39;', '\'').replace('&#34;', '"');
 };

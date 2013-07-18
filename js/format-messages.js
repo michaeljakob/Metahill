@@ -146,11 +146,11 @@ metahill.formatMessages.styleMessage = function(text, config) {
 
 /**
  * Convert all links to clickable links. Technically, they are just wrapped in <a> tags.
- * @param  {[type]} text [description]
- * @return {[type]}      [description]
+ * @param  {string} text 
+ * @return {string} text The parsed text     
  */
 metahill.formatMessages.makeLinksClickable = function(text) {
-    var regex = /((http:\/\/|www)[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+    var regex = /((http:\/\/|www\.)[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
 
     function replaceCallback(match) {
         match = match.replace(/_/g, "%5f");
@@ -165,6 +165,12 @@ metahill.formatMessages.makeLinksClickable = function(text) {
         if(text === null || text === undefined){
             return '';
         }
+
+        // a valid url contains at least 2 dots
+        if(text.split('.').length <= 2) {
+            return text;
+        }
+
         return text.replace(regex, replaceCallback);
     };
 }();

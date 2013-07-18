@@ -162,7 +162,7 @@
                                 Everything you see here has been created by engaged professionals in their spare time. All members -no matter for how long- can participate in <a href="#">forum</a>
                                 discussions where <i>we all</i> decide what's going to happen next. New features and the modification of existing ones - everything from design to functionality is decided by you.
                                 Additionally, we maintain a <a href="../forum">forum</a> to keep interested users posted, ask for feedback and make polls.
-                                At IRC disputes are very commonly only about <i>hating</i>, <i>egocentricity</i> and <i>power</i>. We try to be different. If you encounter any issues, get in touch with the support.
+                                At IRC disputes are very commonly only about <i>hating</i>, <i>egocentricity</i> and <i>power</i> (altough irc was awesome at its time). We try to be different. If you encounter any issues, get in touch with the support.
                             </p>
                         </li>
                         <li>
