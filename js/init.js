@@ -22,7 +22,6 @@ $(function() {
         $(window).resize((function() {
             var submitArea = $('#submit-area');
             var channelAttendeesEntries = $('#channel-attendees-entries');
-            var channelAttendees = $('#channel-attendees');
             var chatEntries = $('#chat-entries');
             var header = $('header');
 
@@ -41,8 +40,7 @@ $(function() {
                 if(h !== nh) {
                     var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
                     channelAttendeesEntries.height(attendeesBarHeight - 53); // top margin + inputbox size substracted
-                    channelAttendees.height(attendeesBarHeight);
-                    chatEntries.height(attendeesBarHeight - 50);
+                    chatEntries.height(attendeesBarHeight - 40);
                     h = nh;
                 }
             };

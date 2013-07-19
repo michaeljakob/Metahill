@@ -41,16 +41,14 @@
                                 $directory = "../img/smilies/";
                                 $texts = glob($directory . "*.png");
 
-                                $out = '';
                                 foreach($texts as $text) {
                                     $name = substr($text, strrpos($text, '/')+1, -4);
-                                    $out .= "<tr>";
-                                    $out .= "    <td><img src='$text' alt='$name'/></td>";
-                                    $out .= "    <td>:". $name ."</td>";
-                                    $out .= "    <td>". getSpecial($name) ."</td>";
-                                    $out .= "</tr>";
+                                    echo "<tr>";
+                                    echo    "<td><img src='$text' alt='$name'/></td>";
+                                    echo    "<td>:". $name ."</td>";
+                                    echo    "<td>". getSpecial($name) ."</td>";
+                                    echo "</tr>";
                                 }
-                                echo $out;
 
                                 function getSpecial($name) {
                                     // must be inverse array to the one in format-messages.js
@@ -136,7 +134,7 @@
                         <li>
                             <h2>We're organized</h2>
                             <p>
-                                Messaging happens within rooms that have (more or less) a specific topic. These might be <i>@english</i>, <i>@math</i>, <i>@linux</i>, <i>@java</i>, <i>@design</i>, <i>@apple</i>, <i>...</i> 
+                                Messaging happens within rooms that have (more or less) a specific topic. These might be <i>english</i>, <i>math</i>, <i>linux</i>, <i>java</i>, <i>design</i>, <i>apple</i>, <i>...</i> 
                                 The list is endless because literally <i>everyone</i> is allowed to create new rooms. Organization &amp; and categorization are two of the most important things when exchanging information.
                                 And facebook and twitter are lacking both of them.
                             </p>
@@ -168,13 +166,13 @@
                         <li>
                             <h2>It is easy to use</h2>
                             <p>
-                                metahill entails a beautiful design that follows function. We offer free community-driven support for everyone. Join the staff room <code>@metahill</code> or write us an <a href="mailto:support@troubi.com">email</a>. 
+                                metahill entails a beautiful design that follows function. We offer free community-driven support for everyone. Join the staff room <code>metahill</code> or write us an <a href="mailto:support@metahill.com">email</a>. 
                                 And the best: you don't have to get familiar with a whole new bunch of terminal-like commands to even log in (we're referring to IRC here).
                             </p>
                         </li>
                     </ol>
                     <p>
-                        Tell us what your favorite feature of metahill is: <a href="#">What do you like most about metahill?</a>.
+                        Tell us what <em>your</em> favorite feature of metahill is. <a href="forum/index.php?action=post;board=3.0">What do you like most about it?</a>
                     </p>
 
                 </div>
@@ -185,12 +183,13 @@
                         you can take next.
                     </p>
                     <ol>
-                        <li>Ask in the room named <code>@metahill</code> to get live-support&nbsp;<span class="label ">recommended</span></li>
-                        <li>Write us an email at <a href="mailto:support@troubi.com">support@troubi.com</a></li>
+                        <li>Ask in the room named <code>metahill</code> to get live-support.</li>
+                        <li>Let us hear from you in our <a href="forum">forum</a>.</li>
+                        <li>Write us an email. Our address is <a href="mailto:support@metahill.com">support@metahill.com</a>.</li>
                     </ol>
                     <p>
                         Although we're trying to answer all emails within 12 hours, in special cases it might take a bit longer.
-                        You surely are better off if you try asking in <code>@metahill</code>, since you're
+                        You surely are better off if you try asking in <code>metahill</code>, since you're
                         likely to get a reliable answer within a few minutes.
                     </p>
                 </div>
