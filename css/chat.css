@@ -132,7 +132,7 @@
 #channel-attendees {
     float: right;
     width: 200px;
-    height: 486px;
+    background: #f7f7f7;
 }
 
 #add-new-room-create-new-room {
@@ -145,7 +145,7 @@
     padding: 5px 5px 5px 0;
 }
 
-#channel-attendees > form, #chat-header {
+#chat-header {
     background: #f7f7f7;
 }
 
@@ -170,7 +170,6 @@
     width: 185px;
     margin-left: 2px;
     border: none;
-    background: #f0f0f0;
 }
 
 .btn.disabled, .btn[disabled] {
