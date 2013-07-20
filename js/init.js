@@ -34,13 +34,21 @@ $(function() {
                 if(w !== nw) {
                     bringRowHeightInOrder();
 
+                    // keep scrolled to bottom
+                    chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+
                     w = nw;
                 }
 
                 if(h !== nh) {
                     var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
                     channelAttendeesEntries.height(attendeesBarHeight - 53); // top margin + inputbox size substracted
-                    chatEntries.height(attendeesBarHeight - 40);
+                    chatEntries.height(attendeesBarHeight - 50);
+
+
+                    // keep scrolled to bottom
+                    chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+
                     h = nh;
                 }
             };

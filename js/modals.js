@@ -29,8 +29,7 @@ $(document).ready(function() {
 
 metahill.modals.liveUpdateFont = function() {
     var font = $('#modals-pref-font option:selected').val();
-    $('body *').css('font-family', font);
-    $('#phpcss').remove();
+    $('#phpcss').empty().append('body,body *{font-family: ' + font + ';}');
 };
 
 metahill.modals.liveUpdateChatTextSize = function() {
@@ -247,7 +246,7 @@ $(function() {
     });
     $('#modals-new-room-topic').bind('propertychange keyup input paste', function() {
         var len = $(this).val().trim().length;
-        verificaton.isTopicLengthOk = len >= 20 && len <= 200;        
+        verificaton.isTopicLengthOk = len >= 20 && len <= 400;        
 
         verifyNewRoomInput();
     });
@@ -260,14 +259,15 @@ $(function() {
         var json = {};
         json.name  = $('#modals-new-room-name').val().trim();
         json.owner = metahill.main.userId;
-        json.topic = metahill.helper.htmlEncode($('#modals-new-room-topic').val().trim());
+        json.topic = ($('#modals-new-room-topic').val().trim());
+        // not wrapped in htmlEncode. For the db, we do it below. For the UI, openRoom will do it for us
 
 
         updateNewRoom(json, function(roomId) {
             $('#modals-new-room-name').val('');
             $('#modals-new-room-topic').val('');
 
-            metahill.main.openRoom(roomId, json.name, json.topic);
+            metahill.main.openRoom(roomId, json.name, metahill.helper.htmlEncode(json.topic), metahill.main.userId);
             metahill.chat.sendUserJoin(roomId, json.name);
             metahill.chat.sendMessage('You just created the room <b>'+json.name+'</b>, congratulations!', -1, 'server', roomId, json.name);
             
@@ -363,7 +363,7 @@ $(function() {
 
     $('#modals-room-pref-topic').bind('propertychange keyup input paste', function() {
         var len = $(this).val().trim().length;
-        verificaton.isTopicLengthOk = len >= 20 && len <= 200;        
+        verificaton.isTopicLengthOk = len >= 20 && len <= 400;        
         verifyRoomPreferencesInput();
     });
 

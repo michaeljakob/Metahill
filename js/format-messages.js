@@ -150,7 +150,7 @@ metahill.formatMessages.styleMessage = function(text, config) {
  * @return {string} text The parsed text     
  */
 metahill.formatMessages.makeLinksClickable = function(text) {
-    var regex = /((http:\/\/|www\.)[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
+    var regex = /((http:\/\/|https:\/\/|www\.)[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi;
 
     function replaceCallback(match) {
         match = match.replace(/_/g, "%5f");

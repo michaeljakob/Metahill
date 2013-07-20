@@ -12,6 +12,7 @@
 #chat .chat-entry > .chat-entry-options {
     float: left;
     padding: 3px;
+    width: 60px;
 }
 
 #chat .chat-entry > .chat-entry-user {

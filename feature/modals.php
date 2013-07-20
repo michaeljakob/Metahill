@@ -38,7 +38,7 @@
                 <td>
                     <select id="modals-pref-font" class="selectpicker">
                         <?php
-                            $fonts = array('Helvetica', 'Verdana', 'Times New Roman', 'Lucida Console', 'Courier New');
+                            $fonts = array('Helvetica', 'Verdana', 'Times New Roman', 'Georgia', 'Courier New');
                             for($i=0; $i<count($fonts); ++$i) {
                                 $font = $fonts[$i];
                                 $attr = '';
@@ -109,16 +109,14 @@
           <h3>Create new room</h3>
     </div>
     <div class="modal-body">
-        <p>You can create rooms at any time you wish and it is very uncomplicated.</p>
-        <br>
         <label class="checkbox">
             <p>Roomname<span class="heading-desc">Use between 3 and 20 characters</span></p>
             <input id="modals-new-room-name" type="text" required pattern="[a-zA-Z0-9\-_+]{3,20}" placeholder="A short and meaningful name" />
             <span id="modals-new-room-name-status" class="label label-warning" style="display:none;">This room already exists.</span>
         </label>
         <label class="checkbox">
-            <p>Roomtopic<span class="heading-desc">Use between 20 and 200 characters</span></p>
-            <textarea id="modals-new-room-topic" maxlength="200" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
+            <p>Roomtopic<span class="heading-desc">Use between 20 and 400 characters</span></p>
+            <textarea id="modals-new-room-topic" maxlength="400" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
         </label>
         
     </div><!-- end body -->
@@ -137,8 +135,8 @@
         <h3>Change topic</h3>
         <p>Describe in easy and clear words what this room is about. You can add links to FAQs or other references.</p>
         <label class="checkbox">
-            <span class="heading-desc-large">Use between 20 and 200 characters</span>
-            <textarea id="modals-room-pref-topic" maxlength="200" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
+            <span class="heading-desc-large">Use between 20 and 400 characters</span>
+            <textarea id="modals-room-pref-topic" maxlength="400" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
         </label>
         
         <h3>Delete room</h3>
