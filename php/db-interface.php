@@ -177,13 +177,10 @@ function dbAddAccount($name, $password, $email) {
     $ret = $statement->execute(array(':name' => $name, ':password' => $password, ':email' => $email));
                 
     if($ret === TRUE) {
-        // success
-        // add default favorite rooms (entry)
+        // add default favorite rooms (metahill)
         $userId = $dbh->lastInsertId();
         $statement = $dbh->prepare('INSERT INTO `favorite_rooms`(`account_id`, `room_id`) VALUES ('.$userId.',5)');
         $statement->execute();
-    } else {
-        print_r($dbh->errorInfo());
     }
     
     return $ret;
@@ -278,7 +275,7 @@ function dbConfirmPasswordChangeRequest($userId, $newPassword) {
 
         $host     = "ssl://smtp.gmail.com";
         $port     = "465";
-        $username = "metahill_mail@jakob.tv";
+        $username = "welcome@jakob.tv";
         $password = '7!+/*f}<^Hjy+Ff[}}@>?.Dz8';
 
         $headers = array(

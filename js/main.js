@@ -226,7 +226,7 @@ $(function() {
      * @return {bool} isAddressed
      */
     var isThisUserAddressed = (function() {
-        var regex = new RegExp('.*[\\s:;.,|<>]?'+metahill.main.userName+'[\\s:;.,!|<>]?.*', 'g');
+        var regex = new RegExp('.*[\\s:;.,|<>]?'+metahill.main.userName+'[\\s:;.,!|<>]?.*', '');
 
         return function(message) {
             return regex.test(message);
@@ -256,24 +256,31 @@ $(function() {
      * @param  {string} time
      */
     metahill.main.addVisibleMessage = function(userName, roomName, message, time) {
+        var room;
+        function highlightUser() {
+            metahill.sound.playUserAddressed();
+            $.titleAlert('Someone talked to you!');
+
+            room = room || $('#channels-list').find('li:contains("'+roomName+'")');
+            room.removeClass('room-favorite').addClass('btn-danger');
+        }
         metahill.main.logChatMessage(roomName, userName, message, time);
-        if(roomName !== metahill.helper.getSimpleText(metahill.main.activeRoom)) {
-            var room = $('#channels-list').find('li:contains("'+roomName+'")');
-            // we check for userName, because it might be our joins/quits bot
-            if(userName !== '') {
-                if(isThisUserAddressed(message)) {
-                    metahill.sound.playUserAddressed();
-                    $.titleAlert('Someone talked to you!');
-                    room.removeClass('room-favorite').addClass('btn-danger');
-                } else {
-                    var unseenMessages = room.children('.unseen-messages');
-                    var msgCount = parseInt(unseenMessages.text(), 10);
-                    if(msgCount === 0) {
-                        unseenMessages.show('slow');
-                    }
-                    unseenMessages.text(msgCount + 1);
-                }
+
+
+        if(isThisUserAddressed(message)) {
+            if(!metahill.base.isWindowFocused) {
+                highlightUser();
             }
+        }
+
+        if(roomName !== metahill.helper.getSimpleText(metahill.main.activeRoom) && userName !== '') {
+            room = room || $('#channels-list').find('li:contains("'+roomName+'")');
+            var unseenMessages = room.children('.unseen-messages');
+            var msgCount = parseInt(unseenMessages.text(), 10);
+            if(msgCount === 0) {
+                unseenMessages.show('slow');
+            }
+            unseenMessages.text(msgCount + 1);
         } else {
             var entry;
             if(arguments[4] === true) {
@@ -283,12 +290,12 @@ $(function() {
             }
             var chatEntries = $('#chat-entries');
             var isScrolledToBottom = chatEntries[0].scrollHeight - chatEntries.scrollTop() === chatEntries.outerHeight();
-            
             chatEntries.append(entry);
+
             // We only scroll down if it's already scrolled to bottom
             if(isScrolledToBottom) {
-                // we assume that a message is max "500px" high (image or small browser window)
-                chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 500}, 500);
+                // we assume that a message is max "700px" high (image or small browser window)
+                chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
             }
 
             var children = entry.children();
@@ -417,8 +424,8 @@ $(function() {
 
             if(newRoom.attr('data-owner') === metahill.main.userId) {
                 if($('#room-settings').length === 0) {
-                    var code = '<button class="btn" id="room-settings" alt="Room Settings" title="Room Settings"  style="font-family: inherit;" href="#modal-room-pref" data-toggle="modal">'+
-                                    '<img src="img/icon/room_settings.png" />Room Settings'+
+                    var code = '<button class="btn" id="room-settings" alt="Room Settings" title="Room Settings" style="font-family: inherit;" href="#modal-room-pref" data-toggle="modal">'+
+                                    '<img src="img/icon/room_settings.png"/>Room Settings'+
                                 '</button>';
                     $('#view-log-button').after(code);
                 }
@@ -429,7 +436,7 @@ $(function() {
 
             // reset "unseen message" counter
             var unseenMessages = newRoom.children('.unseen-messages');
-            unseenMessages.hide('slow');
+            unseenMessages.hide(metahill.base.support.isAnimated && 'slow');
             unseenMessages.text('0');
         }
     }
@@ -453,12 +460,12 @@ $(function() {
 
         metahill.helper.submitHttpRequest('remove-favorite.php', 
             {   
-                position:  room.index()+1, 
+                position: room.index()+1, 
                 userId: metahill.main.userId, 
                 roomId: roomId 
             });
 
-        if(metahill.base.support.isChrome || metahill.base.support.isFirefox || metahill.base.support.isOpera) {
+        if(metahill.base.support.isAnimated) {
             room.css('maxHeight', room.height());
             room.animate({'width': '0', 'padding-left': '0', 'padding-right':'0'}, 200, 'swing', function() {room.remove();});
         } else {
@@ -468,6 +475,8 @@ $(function() {
         var wasActiveRoomClosed = metahill.helper.getSimpleText(room) === metahill.helper.getSimpleText(metahill.main.activeRoom);
         if(room.parent().children().length <= 1 || wasActiveRoomClosed) {
             metahill.main.disableInput();
+        } else {
+            metahill.main.enableInput();
         }
 
         // make it available to be added
@@ -515,7 +524,7 @@ $(function() {
         var newLeft = popoverLeft + newRoomWidth;
         popover.animate({'left': newLeft}, 200);
 
-        if(metahill.base.support.isChrome || metahill.base.support.isFirefox || metahill.base.support.isOpera) {
+        if(metahill.base.support.isAnimated) {
             animateRoomAppearance(entry);
         }
 
@@ -676,13 +685,13 @@ $(function() {
             optionClass = 'server-message';
         }
         if(userName === metahill.main.userName) {
-            userName = '<b>' + userName + '&nbsp;</b>';
+            userName = '<b>' + userName + '</b>';
         }
 
         var entryText =
                 '<div class="chat-entry '+ optionClass +'">' +
                     '<span class="chat-entry-options">'+metahill.helper.toHHMMSS(time)+'</span>' +
-                    '<span class="chat-entry-user ">&nbsp;'+userName+'</span>' +
+                    '<span class="chat-entry-user ">'+userName+'</span>' +
                     '<span class="chat-entry-message">'+message+
                 '</div>';
 

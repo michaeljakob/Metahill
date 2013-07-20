@@ -6,6 +6,24 @@ var metahill = metahill || {};
 metahill.base = {};
 metahill.base.support = {};
 
+/**
+ * metahill.base
+ */
+$(function() {
+    metahill.base.isWindowFocused = true;
+
+    $(window).focus(function() {
+        metahill.base.isWindowFocused = true;
+    });
+
+    $(window).blur(function() {
+        metahill.base.isWindowFocused = false;
+    });
+});
+
+/**
+ * metahill.base.support
+ */
 $(function() {
     var toLowerUserAgent = navigator.userAgent.toLowerCase();
 
@@ -18,6 +36,9 @@ $(function() {
     // operating systems
     metahill.base.support.isMac = navigator.platform.toLowerCase().indexOf('mac') > -1;
     metahill.base.support.isWindows = navigator.appVersion.indexOf('Win') > -1;
+
+    // functionality
+    metahill.base.support.isAnimated = metahill.base.support.isChrome || metahill.base.support.isFirefox || metahill.base.support.isOpera;
 
     if(metahill.base.support.isInternetExplorer && window.location.toString().indexOf('get-a-modern-browser') === -1) {
         window.location = 'http://www.metahill.com/get-a-modern-browser.php';

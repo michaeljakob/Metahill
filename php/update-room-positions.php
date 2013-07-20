@@ -10,10 +10,19 @@ $endPosition = $_POST['endPosition'];
 
 $query =   'UPDATE `favorite_rooms`
             SET position=:end_position
-            WHERE account_id=:user_id AND position=:start_position;
-            UPDATE `favorite_rooms`
-            SET position=position+1
-            WHERE account_id=:user_id AND position >= :end_position AND position < :start_position AND room_id != :room_id;';
+            WHERE account_id=:user_id AND position=:start_position;';
+
+if($startPosition > $endPosition) {
+    $query .=  'UPDATE `favorite_rooms`
+                SET position=position+1
+                WHERE account_id=:user_id AND position >= :end_position AND position < :start_position AND room_id != :room_id;';
+
+} else {
+    // $endPosition > $startPosition
+    $query .=  'UPDATE `favorite_rooms`
+                SET position=position-1
+                WHERE account_id=:user_id AND position > :start_position AND position <= :end_position AND room_id != :room_id;';
+}
 
 
 
