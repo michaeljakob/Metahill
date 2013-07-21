@@ -96,7 +96,7 @@
                     <h1>Share images<a href="#top"><img class="anchor" title="go to top" src="img/up.png"/></a></h1>
                     <p>
                         You want to share images? A business-plan, a table or a funny cat. Whatever it might be, it is super easy. 
-                        Just drag the image to metahill.com, then drop it. Yeah, that's it.
+                        Just drag the image to <a href="http://www.metahill.com/">metahill.com</a>, then drop it. Yeah, that's it.
                     </p>
                     <div id="example-share-images">
                         <p>In the following example, I try to share a cute squirrel with my friends. All I do is drag-and-dropping the desired image into the metahill tab. </p>
@@ -109,7 +109,7 @@
                 <div class="tab-pane active" id="why-metahill">
                     <h1>Why metahill?</h1>
                     <p>
-                        We think that metahill is unique in the way that it combines several established and amazing technologies and takes out the best of each, for your benefit.
+                        We think that <a href="http://www.metahill.com/">metahill</a> is unique in the way that it combines several established and amazing technologies and takes out the best of each, for your benefit.
                         For a variety of reasons -which are listed below- we think metahill surpasses email, forums, facebook, twitter, <a href="http://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> and <a href="http://en.wikipedia.org/wiki/Usenet_newsgroup">Usenet newsgroups</a>.
                         Therefore we invite you to read through our points and <u>fell your own decision</u> afterwards.
                     </p>
@@ -130,7 +130,7 @@
                             <h2>It is lightning fast</h2>
                             <p>
                                 No flash, no silverlight and no java applets. With open-standard techniques HTML5, CSS3 and JavaScript
-                                metahill.com works everywhere and is incredibly fast among all devices. And you don't get annoyed by
+                                <a href="http://www.metahill.com/">metahill.com</a> works everywhere identically and is yet incredibly fast among all devices. And you don't get annoyed by
                                 installing arbitrary plugins.
                             </p>
                         </li>
@@ -175,7 +175,7 @@
                         <li>
                             <h2>It is easy to use</h2>
                             <p>
-                                metahill entails a beautiful design that follows function. We offer free community-driven support for everyone. Join the staff room <code>metahill</code> or write us an <a href="mailto:support@metahill.com">email</a>. 
+                                <a href="http://www.metahill.com/">metahill</a> entails a beautiful design that follows function. We offer free community-driven support for everyone. Join the staff room <code>metahill</code> or write us an <a href="mailto:support@metahill.com">email</a>. 
                                 And the best: you don't have to get familiar with a whole new bunch of terminal-like commands to even log in (we're referring to IRC here).
                             </p>
                         </li>
@@ -192,13 +192,13 @@
                         you can take next.
                     </p>
                     <ol>
-                        <li>Ask in the room named <code>metahill</code> to get live-support.</li>
+                        <li>Ask in the room named <i>metahill</i> to get live-support. <a href="http://www.metahill.com/join/metahill">Join the metahill room now</a>.</li>
                         <li>Let us hear from you in our <a href="forum">forum</a>.</li>
                         <li>Write us an email. Our address is <a href="mailto:support@metahill.com">support@metahill.com</a>.</li>
                     </ol>
                     <p>
                         Although we're trying to answer all emails within 12 hours, in special cases it might take a bit longer.
-                        You surely are better off if you try asking in <code>metahill</code>, since you're
+                        You surely are better off if you try asking in <i>metahill</i>, since you're
                         likely to get a reliable answer within a few minutes.
                     </p>
                 </div>
@@ -216,6 +216,17 @@
             e.preventDefault();
             $(this).tab('show');
         });
+
+    </script>
+    
+    <script async="async">
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-42248349-1', 'metahill.com');
+      ga('send', 'pageview');
 
     </script>
 </body>

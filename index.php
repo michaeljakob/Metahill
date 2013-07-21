@@ -96,7 +96,6 @@
         </div>
     </div>
     <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom;  ?></div>
-    <div id="sound-container"/>
     <?php 
         require_once('feature/modals.php');
         require_once('js/index.php.jsinclude');

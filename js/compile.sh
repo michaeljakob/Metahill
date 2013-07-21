@@ -36,3 +36,10 @@ java -jar "$compiler" \
             chat.js \
     > combined.js
 
+
+echo "Compile files individually"
+for js_file in *.js
+do
+    java -jar "$compiler" --warning_level QUIET --js "$js_file" > "$js_file.tmp"
+    mv "$js_file.tmp" "$js_file"
+done
