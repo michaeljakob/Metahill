@@ -233,7 +233,6 @@ $(function() {
         };
     })();
 
-
     metahill.main.logChatMessage = function(roomName, userName, message, time) {
         if(metahill.log.messages[roomName] === undefined)
             metahill.log.messages[roomName] = [];
@@ -267,7 +266,7 @@ $(function() {
         metahill.main.logChatMessage(roomName, userName, message, time);
 
 
-        if(isThisUserAddressed(message)) {
+        if(userName !== '' && isThisUserAddressed(message)) {
             if(!metahill.base.isWindowFocused) {
                 highlightUser();
             }
@@ -424,7 +423,7 @@ $(function() {
 
             if(newRoom.attr('data-owner') === metahill.main.userId) {
                 if($('#room-settings').length === 0) {
-                    var code = '<button class="btn" id="room-settings" alt="Room Settings" title="Room Settings" style="font-family: inherit;" href="#modal-room-pref" data-toggle="modal">'+
+                    var code = '<button class="btn" id="room-settings" alt="Room Settings" title="Room Settings" href="#modal-room-pref" data-toggle="modal">'+
                                     '<img src="img/icon/room_settings.png"/>Room Settings'+
                                 '</button>';
                     $('#view-log-button').after(code);
