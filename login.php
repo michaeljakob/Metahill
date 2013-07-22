@@ -46,7 +46,7 @@
                 switch($verifyLoginResult) {
                     case -1:
                         echo '<div class="alert alert-error">
-                                This username/password combination is invalid. Request a new password <a href="request-new-password.php">here</a>.
+                                This username/password combination is invalid.<br><a href="request-new-password.php">Did you forget your password?</a>
                              </div>';
                         break;
                     case -2:

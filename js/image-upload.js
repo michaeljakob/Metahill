@@ -60,7 +60,10 @@ $(function() {
             
             var imageText = metahill.main.makeImageTagFromUrl('http://metahill.com/img/loading.gif');
             var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, imageText, new Date().getTime()));
-            $('#chat-entries').append(entry);
+            var chatEntries = $('#chat-entries');
+            chatEntries
+            .append(entry)
+            .animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
 
 
             var xhr = new XMLHttpRequest();
