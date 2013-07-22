@@ -190,6 +190,11 @@
     right: 0;
 }
 
+.height-limiter {
+    top:370px;
+    height:auto;
+}
+
 #submit-message {
     width: 100%;
 }

@@ -265,9 +265,9 @@ $(function() {
         }
         metahill.main.logChatMessage(roomName, userName, message, time);
 
-
-        if(userName !== '' && isThisUserAddressed(message)) {
-            if(!metahill.base.isWindowFocused) {
+        var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+        if(userName !== metahill.main.userName && userName !== '' && isThisUserAddressed(message)) {
+            if(!metahill.base.isWindowFocused || roomName !== activeRoomName) {
                 highlightUser();
             }
         }

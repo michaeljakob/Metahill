@@ -33,3 +33,7 @@
 #roomname-title > code {
     font-size: 20px;
 }
+
+#chat .chat-entry > .chat-entry-options {
+    width: 160px;
+}

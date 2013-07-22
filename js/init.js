@@ -3,9 +3,6 @@
 
 $(function() {
     $(document).ready(function() {
-
-
-
         var css;
         if(metahill.base.support.isMac) {
             // close buttons 'x' on the left side :)
@@ -16,8 +13,6 @@ $(function() {
             css = '<link rel="stylesheet" type="text/css" href="css/windows-fixes.css"/>';
             $(css).appendTo('head');
         }
-
-
 
         $(window).resize((function() {
             var submitArea = $('#submit-area');
@@ -33,7 +28,6 @@ $(function() {
 
                 if(w !== nw) {
                     bringRowHeightInOrder();
-
                     // keep scrolled to bottom
                     chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
 
@@ -41,10 +35,18 @@ $(function() {
                 }
 
                 if(h !== nh) {
+
+                    // min-height
+                    if(nh < 500) {
+                        submitArea.addClass('height-limiter');
+                        return;
+                    } else {
+                        submitArea.removeClass('height-limiter');
+                    }
+
                     var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
                     channelAttendeesEntries.height(attendeesBarHeight - 53); // top margin + inputbox size substracted
                     chatEntries.height(attendeesBarHeight - 50);
-
 
                     // keep scrolled to bottom
                     chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
@@ -53,7 +55,8 @@ $(function() {
                 }
             };
         })());
-
+        
+        $(window).resize();
     });
 
     /*
