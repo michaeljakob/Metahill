@@ -337,9 +337,13 @@ $(function() {
 
         var len = metahill.log.messages[roomName].length;
         var cache = '';
+        var classes = 'logged-message';
         for(var i=0; i<len; ++i) {
+            if(classes !== null && i >= 10) {
+                classes = null;
+            }
             var userName = metahill.log.users[roomName][i];
-            cache += metahill.main.makeEntryMessageText(userName, metahill.log.messages[roomName][i], metahill.log.times[roomName][i]);
+            cache += metahill.main.makeEntryMessageText(userName, metahill.log.messages[roomName][i], metahill.log.times[roomName][i], classes);
         }
         chatEntries.append(cache);
         metahill.modals.liveUpdateChatTextSize();
@@ -666,29 +670,32 @@ $(function() {
     /************************************************************************
         Entry makers
     ************************************************************************/
-    metahill.main.makeEntryMessageText = function(userName, message, time) {
+    metahill.main.makeEntryMessageText = function(userName, message, time, optionalClasses) {
         message = metahill.formatMessages.styleMessage(message);
-        return makeEntryText(userName, message, time);
+        return makeEntryText(userName, message, time, optionalClasses);
     };
 
-    metahill.main.makeEntryImageText = function(userName, message, time) {
+    metahill.main.makeEntryImageText = function(userName, message, time, optionalClasses) {
         // message isn't styled up
-        return makeEntryText(userName, message, time);
+        return makeEntryText(userName, message, time, optionalClasses);
     };
 
 
-    function makeEntryText(userName, message, time) {
-        var optionClass = '';
+    function makeEntryText(userName, message, time, optionalClasses) {
+        var classes = '';
+        if((typeof optionalClasses) === 'string') {
+            classes += optionalClasses + ' ';
+        }
         var adminNames = ['server'];
         if(adminNames.indexOf(userName) !== -1) {
-            optionClass = 'server-message';
+            classes += 'server-message ';
         }
         if(userName === metahill.main.userName) {
             userName = '<b>' + userName + '</b>';
         }
 
         var entryText =
-                '<div class="chat-entry '+ optionClass +'">' +
+                '<div class="chat-entry '+ classes +'">' +
                     '<span class="chat-entry-options">'+metahill.helper.toHHMMSS(time)+'</span>' +
                     '<span class="chat-entry-user ">'+userName+'</span>' +
                     '<span class="chat-entry-message">'+message+

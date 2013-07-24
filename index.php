@@ -9,13 +9,13 @@
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <base href="http://127.0.0.1/Documents/Development/Web/metahill.com/"/>
 <title>Metahill | Chatrooms for enthusiasts</title>
 <link rel="stylesheet" type="text/css" href="css/base.css"/>
 <link rel="stylesheet" type="text/css" href="css/index.css"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css"/>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css"/>
 
 <style id="phpcss">
 <?php

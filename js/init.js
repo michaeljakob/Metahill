@@ -35,8 +35,7 @@ $(function() {
                 }
 
                 if(h !== nh) {
-
-                    // min-height
+                    // min-aheight
                     if(nh < 500) {
                         submitArea.addClass('height-limiter');
                         return;
