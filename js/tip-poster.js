@@ -14,7 +14,15 @@ $(function() {
     tips.push('Join <b>metahill</b> for metahill-questions &amp; feedback.');
     tips.push('We visualize over 25 smilies. View the <a href="help/index.php?tab=messages&anchor=smilies" target="_blank">list</a>.');
     tips.push('Hold and drag rooms to change their order.');
-    tips.push('Be nice to your mates and keep the overall atmosphere nice. :)');
+    tips.push('Be nice to your mates. :)');
+    tips.push('An apple a day keeps the doctor away. :)');
+    tips.push('Why is six scared of seven? Because seven eight nine');
+    tips.push('If you can’t convince them, confuse them.');
+    tips.push('If the world didn\'t suck, we\'d all fall off.');
+    tips.push('Why is abbreviation such a long word?');
+    tips.push('What do you call a deer with no eyes? I have no I-Deer');
+    tips.push('We know that 69 % of people find something dirty in everything.');
+    //tips.push('');
     //tips.push('');
     //tips.push('');
     //tips.push('');

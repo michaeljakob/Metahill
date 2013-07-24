@@ -35,6 +35,10 @@
     white-space: pre-line;
 }
 
+#chat .logged-message {
+    color: #999;
+}
+
 #chat-header {
     min-height: 40px;
     padding: 5px;
@@ -161,6 +165,7 @@
     list-style: none;
     height: 440px;
     margin: 0 -5px -5px 0;
+    overflow-y: scroll;
 }
 
 #channel-attendees-entries > li {

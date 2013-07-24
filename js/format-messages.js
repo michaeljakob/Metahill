@@ -166,8 +166,8 @@ metahill.formatMessages.makeLinksClickable = function(text) {
             return '';
         }
 
-        // a valid url contains at least 2 dots
-        if(text.split('.').length <= 2) {
+        // a valid url contains at least 1 dot
+        if(text.split('.').length <= 1) {
             return text;
         }
 

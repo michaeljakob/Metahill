@@ -32,8 +32,8 @@
 <base href="../" >
 <title>Metahill | Log <?php if($room != NULL && $roomExists) { echo "of $room"; } ?></title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
-<link rel="stylesheet" type="text/css" href="css/log.css">
 <link rel="stylesheet" type="text/css" href="css/chat.css">
+<link rel="stylesheet" type="text/css" href="css/log.css">
 
 
 </head>
@@ -44,6 +44,10 @@
     <section id="main-container" class="log-main-container">
     
         <?php
+            function makeLinksClickable($text){
+                return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>', $text);
+            }
+
             if($room == NULL || !$roomExists) {
                 echo    "<div class='alert alert-error'>
                             <h4>#?$1%(*&^%$#@</h4>
@@ -83,7 +87,7 @@
                     if($msg->is_image) {
                         $entries .= sprintf($imageEntryTemplate, $msg->submitted_time, $msg->account_name, $msg->content, $msg->content);
                     } else {
-                        $entries .= sprintf($textEntryTemplate, $msg->submitted_time, $msg->account_name, $msg->content);
+                        $entries .= sprintf($textEntryTemplate, $msg->submitted_time, $msg->account_name, makeLinksClickable($msg->content));
                     }
                 }
                 echo $entries;
