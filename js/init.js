@@ -1,6 +1,7 @@
 /// jshint settings
 /*global window, document, $, */
 
+
 $(function() {
     $(document).ready(function() {
         var css;
@@ -13,6 +14,13 @@ $(function() {
             css = '<link rel="stylesheet" type="text/css" href="css/windows-fixes.css"/>';
             $(css).appendTo('head');
         }
+
+
+
+        $(window).on('resize', $.debounce(250, function() {
+            // keep scrolled to bottom
+            chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+        }));
 
         $(window).resize((function() {
             var submitArea = $('#submit-area');
@@ -38,6 +46,7 @@ $(function() {
                     // min-aheight
                     if(nh < 500) {
                         submitArea.addClass('height-limiter');
+                        chatEntries.height(190);
                         return;
                     } else {
                         submitArea.removeClass('height-limiter');
@@ -46,9 +55,6 @@ $(function() {
                     var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
                     channelAttendeesEntries.height(attendeesBarHeight - 53); // top margin + inputbox size substracted
                     chatEntries.height(attendeesBarHeight - 50);
-
-                    // keep scrolled to bottom
-                    chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
 
                     h = nh;
                 }

@@ -170,8 +170,8 @@ $(function() {
             switch(keyCode) {
                 // ENTER
                 case 13:
-                    if(isSubmitAllowed()) {
-                        var message = metahill.helper.htmlEncode(submitMessage.val()).trim();
+                    var message = metahill.helper.htmlEncode(submitMessage.val()).trim();
+                    if(isSubmitAllowed(message)) {
                         if(message.length > 0) {
                             if(message.length > INPUT_CHARACTER_LIMIT) {
                                 message = message.substr(0, INPUT_CHARACTER_LIMIT);
@@ -637,11 +637,15 @@ $(function() {
         var TIME_SPAN = 3000;
         var submissionTimes = [];
 
-        return function() {
+        return function(message) {
+            if(message.trim().length === 0) {
+                return;
+            }
+
             submissionTimes.push(new Date().getTime());
             if(submissionTimes.length > MESSAGE_LIMIT) {
                 submissionTimes.shift();
-
+                
                 if(submissionTimes[MESSAGE_LIMIT-1] - submissionTimes[0] > TIME_SPAN) {
                     return true;
                 } else {

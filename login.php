@@ -70,7 +70,7 @@
 <link rel="canonical" href="https://www.facebook.com/metahillcommunity"/>
 <link rel="icon" href="http://www.metahill.com/favicon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="http://www.metahill.com/favicon.ico" type="image/x-icon" />
-
+<link type="text/plain" rel="author" href="http://www.metahill.com/humans.txt" />
 
 <title>Metahill | Chatrooms for enthusiasts</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">

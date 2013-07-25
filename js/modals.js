@@ -308,7 +308,7 @@ $(function() {
             title.html('"' + metahill.helper.getSimpleText(metahill.main.activeRoom) +'"' + title.html());
         }
 
-        verificaton.currentTopic = metahill.helper.htmlDecode(metahill.main.activeRoom.attr('data-topic'));
+        verificaton.currentTopic = metahill.helper.htmlEncode(metahill.main.activeRoom.attr('data-topic'));
         $('#modals-room-pref-topic').val(metahill.main.activeRoom.attr('data-topic'));
     })
     .on('hidden', function() {
@@ -332,9 +332,12 @@ $(function() {
         json.userId = metahill.main.userId;
         json.userPassword = currentPasswordBox.val();
 
+        console.log(json.roomTopic);
+        console.log(verificaton.currentTopic);
+
         if(json.roomTopic === verificaton.currentTopic) {
             $('#modal-room-pref').modal('hide');
-            
+            currentPasswordBox.attr('placeholder', 'Your current password');
             currentPasswordBox.val('');
             return;
         }
@@ -345,7 +348,7 @@ $(function() {
                 metahill.main.activeRoom.attr('data-topic', json.roomTopic);
                 $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(json.roomTopic));
                 $('#modal-room-pref').modal('hide');
-                
+                currentPasswordBox.attr('placeholder', 'Your current password');
             } else {
                 currentPasswordBox.attr('placeholder', 'Wrong pass :(');
                 currentPasswordBox.focus();
@@ -367,7 +370,7 @@ $(function() {
         verifyRoomPreferencesInput();
     });
 
-    function verifyRoomPreferencesInput() { 
+    function verifyRoomPreferencesInput() {
         var topicOkay = verificaton.isTopicLengthOk;
         if($('#modals-room-pref-delete').is(':checked')) {
             topicOkay = true;

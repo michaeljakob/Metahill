@@ -1,1 +1,18 @@
-:)
+/* TEAM */
+Head developer      : Michael Jakob
+Site                : michael [at] metahill.com
+Twitter             : @metahill_com
+Location            : Karlsruhe, Germany
+                        
+/* THANKS */
+Robert Jakob, Maximilian Seitz, Josef Drasch
+
+
+                        
+/* SITE */
+Last update         : 2013/24/07
+Standards           : HTML5, CSS3, ECMAScript
+Components          : Modernizr, jQuery, Bootstrap
+Software            : Mac OS X, Sublime Text 2, a plethora of terminal commands
+   
+                        

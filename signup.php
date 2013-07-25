@@ -4,9 +4,9 @@
     
     require_once("php/db-interface.php");
 
+    $isEmailAddressInUse = false;
+
     //submitAccountActivationEmailPear('Michael', 'michael@jakob.tv');
-   
-    
     function verifyInput($name, $password, $email) {
         $lenName = strlen($name);
         $lenPassword = strlen($password);
@@ -25,11 +25,11 @@
             return false;
         }
         if($lenEmail < 6) {
-            echo "An email address with less than 8 characters? <i>REALLY?!</i> Not with us.";
+            echo "An email address with less than 8 characters? <i>REALLY?!</i>.";
             return false;    
         }
         if($lenEmail > 100) {
-            echo "An email address with over 100 characters? <i>REALLY?!</i> Not with us."; 
+            echo "An email address with over 100 characters? <i>REALLY?!</i>."; 
             return false;    
         }
         if($lenPassword <= 7) {
@@ -53,18 +53,17 @@
             $email = $_POST["email"];
 
             if(!verifyInput($name, $password, $email)) {
-                return;
+                return false;
             }
             
             if(dbUserNameExists($name)) {
                 echo "<div class=\"alert alert-error\">";
                 echo "The username <b>$user</b> already exists!";
                 echo "</div>";
-                return;
+                return false;
             }
             
             $ret = dbAddAccount($name, $password, $email);
-            
             
             if($ret) {
                 $_SESSION["logged_in"] = true;
@@ -74,10 +73,12 @@
                 if(submitAccountActivationEmailPear($name, $email)) {
                     header("Location: signup-succeeded.php");
                 }
+                return true;
             } else {
                 echo "<div class=\"alert alert-error\">";
                 echo "This email address is in use.<br><a href='request-new-password.php'>Did you forget your password?</a>";
                 echo "</div>";
+                return false;
             }
             
         }
@@ -121,7 +122,9 @@
                 
 
                 <input type="submit" value="Sign up" class="btn btn-success" />
-                <?php createUser(); ?>
+                <?php 
+                    $isEmailAddressInUse = !createUser();
+                ?>
             </form>
             <p>I have an account. <a href="login.php">Sign in</a>.</p>
             <footer>
@@ -145,5 +148,19 @@
       ga('send', 'pageview');
 
     </script>
+
+    <?php
+        // if email address was in use, verify username anyway
+        var_dump($isEmailAddressInUse);
+        if($isEmailAddressInUse) {
+            echo "<script>";
+
+            // verify username
+            echo "$('#reg_name').keyup();";
+            echo "$('#reg_email').val('').focus();";
+
+            echo "</script>";
+        }
+    ?>
 </body>
 </html>
