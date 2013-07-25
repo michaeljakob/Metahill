@@ -3,7 +3,7 @@
     if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['verified']) && $_SESSION['verified']) {
         session_regenerate_id(true);
     } else {
-        header('Location: http://www.metahill.com/login.php');
+        header('Location: login.php');
         exit();
     }
 ?><!DOCTYPE html>

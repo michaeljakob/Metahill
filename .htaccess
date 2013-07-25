@@ -4,8 +4,8 @@ RewriteRule ^log/(.+)$ log.php?room=$1
 RewriteRule ^join/(.+)$ index.php?join=$1
 
 
-
-
-
+# maintenance
+# RewriteCond %{REQUEST_URI} !=/maintenance.php
+# RewriteRule ([\.php|\.html])$ /maintenance.php [R=301]
 
 

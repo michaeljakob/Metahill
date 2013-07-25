@@ -1,5 +1,5 @@
 <header>
-    <a href="../../../../../../../../"><img id="company-icon" alt="metahill icon" src="http://www.metahill.com/img/metahill.png" /></a>
+    <a href="http://www.metahill.com"><img id="company-icon" alt="metahill icon" src="http://www.metahill.com/img/metahill.png" /></a>
 
         
     <?php

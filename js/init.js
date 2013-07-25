@@ -19,6 +19,7 @@ $(function() {
 
         $(window).on('resize', $.debounce(250, function() {
             // keep scrolled to bottom
+            var chatEntries = $('#chat-entries');
             chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
         }));
 

@@ -356,11 +356,7 @@ $(function() {
      */
     function onViewChatLogClicked(e) {
         var url =  'log/' + encodeURIComponent(metahill.helper.getSimpleText(metahill.main.activeRoom));
-        if(e.shiftKey) {
-            metahill.helper.openUrlInNewTab(url);
-        } else {
-            document.location = url;
-        }
+        metahill.helper.openUrlInNewTab(url);
     }
 
     /**
@@ -603,6 +599,10 @@ $(function() {
         Enable input boxe(s) for chatting.
     */
     metahill.main.enableInput = function () {
+        if(!metahill.chat.isOnline) {
+            return;
+        }
+        
         var submitMessage = $('#submit-message');
         var chatEntries = $('#chat-entries');
 
