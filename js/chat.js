@@ -68,7 +68,7 @@ $(function(){
     
     // handle incoming messages
     var connection_onmessage = function (message) {
-        console.log('message received: ' + JSON.stringify(message.data));
+        //console.log('message received: ' + JSON.stringify(message.data));
         var json = JSON.parse(message.data);
         var intent = json.intent;
         switch(intent) {
@@ -196,24 +196,19 @@ $(function(){
     Methods for the outer world following
 ************************************************************************/
 metahill.chat.updateAttendeesList = function(list, roomId, roomName) {
-    var channelAttendeesEntries = $('#channel-attendees-entries');           
-    if(roomName === metahill.helper.getSimpleText(metahill.main.activeRoom)) {
-        channelAttendeesEntries.empty();
-    }
-    
-    if(metahill.log.roomAttendees[roomName] === undefined) {
-        metahill.log.roomAttendees[roomName] = [];    
-    }
+    //console.log(JSON.stringify(list));
+    metahill.log.roomAttendees[roomName] = list;
 
     var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
-    var tmp = '';
-    list.forEach(function(entry) {
-        metahill.log.roomAttendees[roomName].push({'userId': entry.userId, 'userName': entry.userName});
-        if(isActiveRoom) {
-            tmp += metahill.main.makeAttendeeEntry(entry.userId, entry.userName);
-        }
-    });
-    channelAttendeesEntries.append(tmp);
+    if(isActiveRoom) {
+        var channelAttendeesEntries = $('#channel-attendees-entries');           
+        channelAttendeesEntries.empty();
+        var cache = '';
+        list.forEach(function(entry) {
+            cache += metahill.main.makeAttendeeEntry(entry.userId, entry.userName);
+        });
+        channelAttendeesEntries.append(cache);
+    }
 };
 
 metahill.chat.sendUserQuit = function(roomId, roomName) { 
