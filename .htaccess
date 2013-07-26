@@ -1,8 +1,12 @@
 ErrorDocument 404 /404.php
+
 RewriteEngine On
 RewriteRule ^log/(.+)$ log.php?room=$1
 RewriteRule ^join/(.+)$ index.php?join=$1
 
+# http://metahill.com -> http://www.metahill.com
+#RewriteCond %{HTTP_HOST} !^www\.metahill\.com
+#RewriteRule (.*) http://www.metahill.com/$1 [R=301,L]
 
 # maintenance
 # RewriteCond %{REQUEST_URI} !=/maintenance.php

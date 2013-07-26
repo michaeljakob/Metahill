@@ -23,8 +23,8 @@
                         <ul class="dropdown-menu pull-right">
                           <li><a href="#modal-pref" data-toggle="modal">Preferences</a></li>
                           <li><a href="#modal-profile" data-toggle="modal">Profile</a></li>
-                          <li><a href="help">Help</a></li>
-                          <li><a href="forum">Forum</a></li>
+                          <li><a href="help" target="_blank">Help</a></li>
+                          <li><a href="forum" target="_blank">Forum</a></li>
                           <li class="divider"></li>
                           <li><a href="logout.php">Sign out</a></li>
                         </ul>

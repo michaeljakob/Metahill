@@ -17,6 +17,7 @@
 <link rel="stylesheet" type="text/css" href="css/chat.css"/>
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css"/>
 
+
 <style id="phpcss">
 <?php
     require_once('php/db-interface.php');
