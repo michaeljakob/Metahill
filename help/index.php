@@ -93,6 +93,11 @@
                             <li><code>`code`</code></li>
                         </ul>
                     </p>
+                    <h1>Colored user names and messages</h1>
+                    <p>
+                        You may have came across users who write in a catchy color. If so, you then
+                        stumbled upon either an administrator, a moderator or the room owner of the currently active room.
+                    </p>
                     <h1>Share images<a href="#top"><img class="anchor" title="go to top" src="img/up.png"/></a></h1>
                     <p>
                         You want to share images? A business-plan, a table or a funny cat. Whatever it might be, it is super easy. 
@@ -166,7 +171,7 @@
                         <li>
                             <h2>Behind all this is an open community</h2>
                             <p>
-                                Everything you see here has been created by engaged professionals in their spare time. All members -no matter for how long- can participate in <a href="#">forum</a>
+                                Everything you see here has been created by engaged professionals in their spare time. All members -no matter for how long- can participate in <a href="../forum">forum</a>
                                 discussions where <i>we all</i> decide what's going to happen next. New features and the modification of existing ones - everything from design to functionality is decided by you.
                                 Additionally, we maintain a <a href="../forum">forum</a> to keep interested users posted, ask for feedback and make polls.
                                 At IRC disputes are very commonly only about <i>hating</i>, <i>egocentricity</i> and <i>power</i> (altough irc was awesome at its time). We try to be different. If you encounter any issues, get in touch with the support.
@@ -181,7 +186,7 @@
                         </li>
                     </ol>
                     <p>
-                        Tell us what <em>your</em> favorite feature of metahill is. <a href="forum/index.php?action=post;board=3.0">What do you like most about it?</a>
+                        Tell us what <em>your</em> favorite feature of metahill is. <a href="../forum/index.php?action=post;board=3.0">What do you like most about it?</a>
                     </p>
 
                 </div>
@@ -193,7 +198,7 @@
                     </p>
                     <ol>
                         <li>Ask in the room named <i>metahill</i> to get live-support. <a href="http://www.metahill.com/join/metahill">Join the metahill room now</a>.</li>
-                        <li>Let us hear from you in our <a href="forum">forum</a>.</li>
+                        <li>Let us hear from you in our <a href="../forum">forum</a>.</li>
                         <li>Write us an email. Our address is <a href="mailto:support@metahill.com">support@metahill.com</a>.</li>
                     </ol>
                     <p>

@@ -340,7 +340,18 @@
     background-image: none;
 }
 
-.server-message {
+.admin-message {
+    /* red */
+    color: #B21F00;
+}
+
+.mod-message {
+    /* blue */
+    color: steelblue;
+}
+
+.room-owner-message {
+    /* green */
     color: green;
 }
 
