@@ -415,12 +415,6 @@ $(function() {
             metahill.main.activeRoom.addClass('room-favorite');
             
 
-            metahill.main.activeRoom = newRoom;
-            metahill.main.updateChatBox();
-            metahill.main.updateAttendeesList();
-            $('#chat-entries').scrollTop(100000000);
-            $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(metahill.helper.htmlEncode(newRoom.attr('data-topic'))));
-
             if(newRoom.attr('data-owner') === metahill.main.userId) {
                 if($('#room-settings').length === 0) {
                     var code = '<button class="btn" id="room-settings" alt="Room Settings" title="Room Settings" href="#modal-room-pref" data-toggle="modal">'+
@@ -432,6 +426,12 @@ $(function() {
                 $('#room-settings').remove();
             }
             
+            metahill.main.activeRoom = newRoom;
+            metahill.main.updateChatBox();
+            metahill.main.updateAttendeesList();
+            $('#chat-entries').scrollTop(100000000);
+            $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(metahill.helper.htmlEncode(newRoom.attr('data-topic'))));
+
 
             // reset "unseen message" counter
             var unseenMessages = newRoom.children('.unseen-messages');
@@ -690,10 +690,18 @@ $(function() {
         if((typeof optionalClasses) === 'string') {
             classes += optionalClasses + ' ';
         }
-        var adminNames = ['server'];
-        if(adminNames.indexOf(userName) !== -1) {
-            classes += 'server-message ';
+        var adminNames = ['Michael'];
+        var modNames = ['Robert'];
+
+        var isOwner = userName === $('#channel-attendees-' + metahill.main.activeRoom.attr('data-owner')).text();
+        if(isOwner) {
+            classes += 'room-owner-message';
+        } else if(adminNames.indexOf(userName) !== -1) {
+            classes += 'admin-message ';
+        } else if(modNames.indexOf(userName) !== -1) {
+            classes += 'mod-message';
         }
+
         if(userName === metahill.main.userName) {
             userName = '<b>' + userName + '</b>';
         }
@@ -701,10 +709,9 @@ $(function() {
         var entryText =
                 '<div class="chat-entry '+ classes +'">' +
                     '<span class="chat-entry-options">'+metahill.helper.toHHMMSS(time)+'</span>' +
-                    '<span class="chat-entry-user ">'+userName+'</span>' +
-                    '<span class="chat-entry-message">'+message+
+                    '<span class="chat-entry-user">'+userName+'</span>' +
+                    '<span class="chat-entry-message">'+message+'</span>' +
                 '</div>';
-
 
         return entryText;
     }
