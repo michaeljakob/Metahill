@@ -79,11 +79,7 @@ table.smilies th, table.smilies td {
     padding: 0 30px;
 }
 
-#example-share-images span {
-    display: block;
-}
-
-#example-share-images img {
+img.example {
     width: 500px;
     margin-left: 50px;
     margin-top: 10px;

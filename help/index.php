@@ -97,18 +97,20 @@
                     <p>
                         You may have came across users who write in a catchy color. If so, you then
                         stumbled upon either an administrator, a moderator or the room owner of the currently active room.
+                        In the example image below, we're all within the room <code>java</code>.
+                        <img class="example" src="img/colored-usernames-and-messages.png" />
                     </p>
                     <h1>Share images<a href="#top"><img class="anchor" title="go to top" src="img/up.png"/></a></h1>
                     <p>
                         You want to share images? A business-plan, a table or a funny cat. Whatever it might be, it is super easy. 
                         Just drag the image to <a href="http://www.metahill.com/">metahill.com</a>, then drop it. Yeah, that's it.
                     </p>
-                    <div id="example-share-images">
+                    <div>
                         <p>In the following example, I try to share a cute squirrel with my friends. All I do is drag-and-dropping the desired image into the metahill tab. </p>
-                        <img src="img/share-images-drag-and-drop.jpg" alt="Share images via drag and drop on metahill" />
-                        <img src="img/share-images-dropped.jpg" alt="Share images via drag and drop on metahill" />
+                        <img class="example" src="img/share-images-drag-and-drop.jpg" alt="Share images via drag and drop on metahill" />
+                        <img class="example" src="img/share-images-dropped.jpg" alt="Share images via drag and drop on metahill" />
                         <p>If I want to take a closer look at the image I just move my mouse over it, and it will magnify on the right hand side. This is especially useful for images with diagrams or text.</p>
-                        <img src="img/share-images-magnify.jpg" alt="Magnify images that were shared via metahill" />
+                        <img class="example" src="img/share-images-magnify.jpg" alt="Magnify images that were shared via metahill" />
                     </div>
                 </div>
                 <div class="tab-pane active" id="why-metahill">
