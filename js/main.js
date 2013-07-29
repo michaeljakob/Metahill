@@ -466,14 +466,15 @@ $(function() {
 
         if(metahill.base.support.isAnimated) {
             room.css('maxHeight', room.height());
-            room.animate({'width': '0', 'padding-left': '0', 'padding-right':'0'}, 200, 'swing', function() {room.remove();});
+            room.animate({'width': '0', 'padding-left': '0', 'padding-right':'0'}, 200, 'swing', function() { room.remove(); });
         } else {
             room.remove();
         }
 
         var wasActiveRoomClosed = metahill.helper.getSimpleText(room) === metahill.helper.getSimpleText(metahill.main.activeRoom);
-        if(room.parent().children().length <= 1 || wasActiveRoomClosed) {
+        if(wasActiveRoomClosed || room.parent().children().length <= 1) {
             metahill.main.disableInput();
+            $('#chat-entries').empty();
         } else {
             metahill.main.enableInput();
         }
