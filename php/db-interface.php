@@ -176,13 +176,32 @@ function dbAddAccount($name, $password, $email) {
                 
     $ret = $statement->execute(array(':name' => $name, ':password' => $password, ':email' => $email));
                 
-    if($ret === TRUE) {
+    if($ret) {
         // add default favorite rooms (metahill)
         $userId = $dbh->lastInsertId();
         $statement = $dbh->prepare('INSERT INTO `favorite_rooms`(`account_id`, `room_id`) VALUES ('.$userId.',5)');
         $statement->execute();
     }
     
+    return $ret;
+}
+
+function dbAddFacebookAccount($name, $email, $facebookId) {
+    $dbh = getDBH();
+                
+    $statement = $dbh->prepare(    
+                    'INSERT INTO `accounts`(`name`, `email`, `facebook_id`)'.
+                    'VALUES (:name, :email, :facebook_id)' );
+                
+    $ret = $statement->execute(array(':name' => $name, ':email' => $email, ':facebook_id' => $facebookId));
+                
+    if($ret) {
+        // add default favorite rooms: metahill(5)
+        $userId = $dbh->lastInsertId();
+        $statement = $dbh->prepare('INSERT INTO `favorite_rooms`(`account_id`, `room_id`) VALUES ('.$userId.',5)');
+        $statement->execute();
+    }
+        
     return $ret;
 }
 
@@ -208,6 +227,17 @@ function dbGetUserObject($name) {
     
     $GLOBALS['user_object'] = $user;
     return $user;
+}
+
+function dbGetUserObjectByFacebookId($facebookId) {
+    $dbh = getDBH();
+    $statement = $dbh->prepare('SELECT * FROM accounts WHERE facebook_id=:facebook_id');
+    $statement->execute(array(':facebook_id' => $facebookId));
+    if($statement->rowCount() === 0) {
+        return null;
+    }
+
+    return $statement->fetch(PDO::FETCH_OBJ);
 }
 
 function hlpCreateAccoutActivationCode($name, $email) {
@@ -261,47 +291,48 @@ function dbConfirmPasswordChangeRequest($userId, $newPassword) {
 }
 
 
- function submitAccountActivationEmailPear($name, $to) {
-        require_once "Mail.php";
 
-        $verificationLink = "http://www.metahill.com/activate-account.php?name=" . $name . "&email=" . $to . "&code=" . hlpCreateAccoutActivationCode($name, $to);
-        $body = file_get_contents("feature/verify_email.html");
-        $body = str_replace("::name::", $name, $body);
-        $body = str_replace("::verification_link::", $verificationLink, $body);
+function submitAccountActivationEmailPear($name, $to) {
+    require_once "Mail.php";
 
-        $from     = "Metahill <welcome@metahill.com>";
-        $subject  = "Activate your metahill account";
-        //$body     = "";
+    $verificationLink = "http://www.metahill.com/activate-account.php?name=" . $name . "&email=" . $to . "&code=" . hlpCreateAccoutActivationCode($name, $to);
+    $body = file_get_contents("feature/verify_email.html");
+    $body = str_replace("::name::", $name, $body);
+    $body = str_replace("::verification_link::", $verificationLink, $body);
 
-        $host     = "ssl://smtp.gmail.com";
-        $port     = "465";
-        $username = "welcome@jakob.tv";
-        $password = '7!+/*f}<^Hjy+Ff[}}@>?.Dz8';
+    $from     = "Metahill <welcome@metahill.com>";
+    $subject  = "Activate your metahill account";
+    //$body     = "";
 
-        $headers = array(
-            'From'    => $from,
-            'To'      => $to,
-            'Subject' => $subject,
-            'MIME-Version' => "1.0",
-            'Content-type' => "text/html; charset=iso-8859-1"
-        );
-        $smtp = Mail::factory('smtp', array(
-            'host'     => $host,
-            'port'     => $port,
-            'auth'     => true,
-            'username' => $username,
-            'password' => $password
-        ));
+    $host     = "ssl://smtp.gmail.com";
+    $port     = "465";
+    $username = "welcome@jakob.tv";
+    $password = '7!+/*f}<^Hjy+Ff[}}@>?.Dz8';
 
-        $mail = $smtp->send($to, $headers, $body);
+    $headers = array(
+        'From'    => $from,
+        'To'      => $to,
+        'Subject' => $subject,
+        'MIME-Version' => "1.0",
+        'Content-type' => "text/html; charset=iso-8859-1"
+    );
+    $smtp = Mail::factory('smtp', array(
+        'host'     => $host,
+        'port'     => $port,
+        'auth'     => true,
+        'username' => $username,
+        'password' => $password
+    ));
 
-        if (PEAR::isError($mail)) {
-            var_dump($mail->getMessage());
-            return false;
-        } else {
-            return true;
-        }
+    $mail = $smtp->send($to, $headers, $body);
+
+    if (PEAR::isError($mail)) {
+        var_dump($mail->getMessage());
+        return false;
+    } else {
+        return true;
     }
+}
 
 
 

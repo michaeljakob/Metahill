@@ -27,6 +27,7 @@
 ?>
 </style>
 <?php
+    $theme = 'default';
     if(isset($_GET['theme']) && trim($_GET['theme']) != '') {
         $theme = basename($_GET['theme']);
         if(file_exists("themes/$theme/css/chat.css")) {
@@ -38,6 +39,7 @@
 </head>
 <body>
     <div id="drag-and-drop-overlay"><h1>Upload</h1></div>
+    <img id="magnify-image-overlay"/>
     <?php require_once('feature/header.php'); ?>
     <section id="main-container">
         <div id="channels">
@@ -80,6 +82,19 @@
     
     <article id="submit-area">
         <div id="submit-message-wrapper"><input type="text" id="submit-message" autofocus autocomplete="off" /></div>
+        <?php
+            $changeThemeName;
+            $changeThemeUrl;
+            if(!isset($_GET['theme'])) {
+                $changeThemeName = "Into Darkness";
+                $changeThemeUrl = "http://www.metahill.com/?theme=dark";
+            } else {
+                $changeThemeName = "Back To Normality";
+                $changeThemeUrl = "http://www.metahill.com/";
+            }
+
+            echo "<button id='submit-switch-theme' class='btn' onclick='window.location.href=\"$changeThemeUrl\";'>$changeThemeName</button>";
+        ?>
         <div id="submit-status"></div>
     </article>
     <!-- data section -->
@@ -112,22 +127,20 @@
             if(dbRoomExists($roomName)) {
                 $room = dbGetRoomObjectFromName($roomName);
                 $roomId = $room->id;
-                $roomTopic = str_replace("\"", "&#34;", $room->topic);
+                $roomTopic = str_replace('"', "&#34;", $room->topic);
                 $roomOwner = $room->owner;
-
 
                 $out = "<script>$(document).ready(function(){setTimeout(function() {";
                 $out .= "var newRoom = '<li data-roomid=\"$roomId\" data-topic=\"$roomTopic\" data-owner=\"$roomOwner\">$roomName</li>';";
                 $out .= "metahill.main.onNewRoomClicked($(newRoom));";
                 $out .= "}, 800)});</script>";
 
-
                 echo $out;
             }
         }
 
     ?>
-
+    <script async="async" src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css<?php echo ($theme === 'dark') ? ("&skin=sons-of-obsidian") : (""); ?>"></script>
     
 
     <script>

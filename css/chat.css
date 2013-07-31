@@ -1,4 +1,3 @@
-
 #chat p {
     padding: 0;
     margin: 0;
@@ -6,7 +5,6 @@
 
 #chat .chat-entry {
     display: block;
-    border-bottom: 1px solid #f0f0f0;
 }
 
 #chat .chat-entry > .chat-entry-options {
@@ -24,10 +22,7 @@
 
 #chat .chat-entry > .chat-entry-message {
     padding: 3px;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -o-box;
-    display: box;
+    display: table-cell;
     word-wrap: break-word;
 }
 
@@ -227,10 +222,16 @@
     padding: 0;
 }
 
+#submit-switch-theme {
+    float: right;
+    width: 180px;
+}
+
 #add-new-room {
     padding: 4px 10px !important;
     float: left;
-    margin-top: 2px;
+    margin-top: 1px;
+    margin-left: 2px;
 }
 
 .room-close {
@@ -238,56 +239,25 @@
     left: 20px;
 }
 
-/* tooltip */
-.image-tooltip {
-    text-decoration:none;
-    position:relative;
-    display: block;
-    line-height: 15px;
-    margin: 0;
-    margin-top: 2px;
-    margin-bottom: -2px;
-}
-
-.image-tooltip img {
-    /* do not replace below with height: 100px; */
-    min-height: 100px;
-    max-height: 100px;
-    width: auto;
+img.image-message {
     padding-bottom: 2px;
+    height: 100px;
 }
 
-.image-tooltip span img {
-    float:left;
+#magnify-image-overlay {
+    position: absolute;
+    top: 210px;
+    right: 220px;
+    display: none;
+
     height: auto;
     width: auto;
     max-height: 40%;
     max-width: 40%;
-    position: fixed;
-    right: 215px;
-    top: 209px;
+
     background: #f0f0f0;
     border-radius: 3px;
     padding: 3px;
-}
-
-.image-tooltip span {
-    display: none;
-}
-
-@media all and (min-width: 1000px) {
-    .image-tooltip:hover span {
-        display: block;    
-        position:absolute;
-        top:0;
-        right:0;
-        z-index:10;
-        width:auto;
-        margin-top:12px;
-        margin-left:32px;
-        overflow:hidden;
-        padding:8px;
-    }
 }
 
 .unseen-messages {
@@ -341,8 +311,8 @@
 }
 
 .admin-message {
-    /* red */
-    color: #B21F00;
+    /* red: #B21F00; */
+    color: #FBC731;
 }
 
 .mod-message {
@@ -359,6 +329,12 @@
     border-color: transparent;
 }
 
+pre.prettyprint {
+    margin: 0 !important;
+    padding: 0 5px !important;
+    border-radius: 2px !important;
+    border: none !important;
+}
 
 
 

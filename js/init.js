@@ -54,7 +54,7 @@ $(function() {
                     }
 
                     var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
-                    channelAttendeesEntries.height(attendeesBarHeight - 53); // top margin + inputbox size substracted
+                    channelAttendeesEntries.height(attendeesBarHeight - 51); // top margin + inputbox size substracted
                     chatEntries.height(attendeesBarHeight - 50);
 
                     h = nh;

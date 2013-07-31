@@ -28,7 +28,7 @@ header img {
 
 header > a > img {
     height: 50px;
-    width: 50px;
+    width: 100px;
     margin-top: 14px;
     margin-left: 5px;
 }

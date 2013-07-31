@@ -96,32 +96,32 @@ metahill.formatMessages.replaceTextSmilies = function() {
 /*
     Apply basic format.
     `: code         <code>
-    *: italics      <strong>
-    _: italics      <em>
+    *: italics      <b>
+    _: italics      <i>
 */
 metahill.formatMessages.boldItalicsCode = function(text) {
     if(!metahill.modals.preferences.enable_formatting) {
         return text;
     }
     
-    // **: <strong>
+    // **: <b>
     // text = text.replace(/(\*\*[^`]+\*\*|`[^`]+`)/g, function(_, grp) {
-    //                 return grp[0] === '*' ? grp.replace(/^\*\*(.*)\*\*$/, "<strong>$1</strong>") : grp;
+    //                 return grp[0] === '*' ? grp.replace(/^\*\*(.*)\*\*$/, "<b>$1</b>") : grp;
     //             });
                     
-    // *: <em> 
+    // *: <b> 
     text = text.replace(/(\*[^`]+\*|`[^`]+`)/g, function(_, grp) {
-                    return grp[0] === '*' ? grp.replace(/^\*(.*)\*$/, "<strong>$1</strong>") : grp;
+                    return grp[0] === '*' ? grp.replace(/^\*(.*)\*$/, '<b>$1</b>') : grp;
                 });
                 
-    // _: <em>
+    // _: <i>
     text = text.replace(/(_[^`]+_|`[^`]+`)/g, function(_, grp) {
-                    return grp[0] === '_' ? grp.replace(/^_(.*)_$/, "<em>$1</em>") : grp;
+                    return grp[0] === '_' ? grp.replace(/^_(.*)_$/, '<i>$1</i>') : grp;
                 });
     
             
     // `: code  
-    text = text.replace(/`(.+?)`/g, "<code>$1</code>");
+    text = text.replace(/`(.+?)`/g, '<pre class="prettyprint">$1</pre>');
     
     return text;
 };

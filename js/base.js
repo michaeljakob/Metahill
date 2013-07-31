@@ -37,6 +37,9 @@ $(function() {
     metahill.base.support.isMac = navigator.platform.toLowerCase().indexOf('mac') > -1;
     metahill.base.support.isWindows = navigator.appVersion.indexOf('Win') > -1;
 
+    // devices
+    metahill.base.support.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
+
     // functionality
     metahill.base.support.isAnimated = metahill.base.support.isChrome || metahill.base.support.isFirefox || metahill.base.support.isOpera;
 

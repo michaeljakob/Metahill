@@ -19,6 +19,46 @@
     padding-top: 30px;
 }
 
+#login-native {
+    margin-bottom: 15px;
+}
+
+#login-native > .alert {
+    margin-top: 5px;
+    width: 250px;
+}
+
+#login-native > * {
+    margin-bottom: 5px;
+}
+
+#login-chooser {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+#login-chooser h2 {
+    font-size: 25px;
+    font-weight: 300;
+}
+
+#login-chooser td.content {
+    width: 300px;
+}
+
+#login-chooser p.or {
+    margin-top: 30px;
+    margin-left: -10px;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+#login-chooser td {
+    vertical-align: top;
+}
+
 #action-chooser > .alert {
     margin-top: 5px;
     width: 250px;
@@ -32,13 +72,12 @@
     padding: 10px;
 }
 
-#action-chooser > * {
-    margin-bottom: 5px;
-}
 
 #action-chooser > h2 {
     font-size: 25px;
 }
+
+
 
 input {
     padding: 0;
@@ -89,14 +128,14 @@ footer {
 
 #share {
     position: absolute;
-    top: 180px;
+    top: 140px;
     left: 30px;
     text-align: left;
 }
 
-#share > div {
+#share > div, #share > iframe {
     display: block;
-    margin: 0;
+    margin: 0 0 5px 0;
     padding: 0;
 }
 
@@ -107,6 +146,24 @@ footer {
     width: 150px;
 }
 
-.invis {
-    display: none;
+.no-account-yet {
+    margin-top: 5px;
+}
+
+img.facebook-login {
+    margin-top: 20px;
+    width: 250px;
+}
+
+hr {
+    margin: 0;
+}
+
+hr.style-two {
+    border: 0;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+    background-image:    -moz-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+    background-image:     -ms-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
+    background-image:      -o-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
 }
