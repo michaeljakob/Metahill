@@ -11,6 +11,11 @@ body {
     background: rgb(70,70,70);
 }
 
+#add-new-room {
+    margin-top: 1px;
+}
+
+
 #submit-message, #add-new-room-search {
     background-color: #2A2A2A;
     border-color: #222;
@@ -84,7 +89,9 @@ button.close:hover {
     border-bottom: none;
 }
 
-
+.unseen-messages {
+    color: #999;
+}
 
 
 

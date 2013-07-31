@@ -5,6 +5,7 @@
 
 #chat .chat-entry {
     display: block;
+    line-height: normal;
 }
 
 #chat .chat-entry > .chat-entry-options {
@@ -205,7 +206,7 @@
     display: block;
     position: absolute;
     left: 220px;
-    right: 215px;
+    right: 212px;
 }
 
 
@@ -224,13 +225,14 @@
 
 #submit-switch-theme {
     float: right;
-    width: 180px;
+    width: 160px;
+    margin-right: -3px;
 }
 
 #add-new-room {
     padding: 4px 10px !important;
     float: left;
-    margin-top: 1px;
+    margin-top: 2px;
     margin-left: 2px;
 }
 
@@ -241,7 +243,7 @@
 
 img.image-message {
     padding-bottom: 2px;
-    height: 100px;
+    max-height: 100px;
 }
 
 #magnify-image-overlay {

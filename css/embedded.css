@@ -1,0 +1,24 @@
+#submit-area {
+    height: 30px;
+    padding: 3px;
+}
+
+#submit-switch-theme {
+    margin-right: 5px;
+}
+
+#channel-attendees > form input[type='text'] {
+    width: 173px;
+    margin: 0px 0px 0px 7px;
+}
+
+#submit-metahill {
+    float: left;
+    width: 120px;
+    margin-right: 5px;
+}
+
+#submit-help {
+    float: left;
+    width: 40px;
+}
