@@ -42,8 +42,9 @@ $(function() {
 
     // functionality
     metahill.base.support.isAnimated = metahill.base.support.isChrome || metahill.base.support.isFirefox || metahill.base.support.isOpera;
+    metahill.base.support.isEmbedded = window.location.pathname.indexOf('embedded.php') > -1;
 
-    if(metahill.base.support.isInternetExplorer && window.location.toString().indexOf('get-a-modern-browser') === -1) {
+    if(metahill.base.support.isInternetExplorer && window.location.pathname.indexOf('get-a-modern-browser.php') === -1) {
         window.location = 'http://www.metahill.com/get-a-modern-browser.php';
     }
 });

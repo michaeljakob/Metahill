@@ -16,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="css/index.css"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css"/>
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="css/embedded.css"/>
 
 
 <style id="phpcss">
@@ -35,27 +36,32 @@
         }
     }
 ?>
-
 </head>
 <body>
     <div id="drag-and-drop-overlay"><h1>Upload</h1></div>
-    <img id="magnify-image-overlay"/>
-    <?php require_once('feature/header.php'); ?>
+    <?php
+        $userId = $user->id;
+        $userName = $user->name;
+        echo "<div id='user-id' style='display:none;'>$userId</div>";
+        echo '<div id="userbar" style="display:none">
+                <div class="btn-group" id="user-name">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">'. $userName .'&nbsp;<span class="caret"></span></button>
+                </div>
+              </div>';
+
+    ?>
     <section id="main-container">
-        <div id="channels">
+        <div id="channels" style="display:none">
             <ul id="channels-list">
                 <?php
-                    $rooms = dbGetFavoriteRooms($_SESSION['name']);
-                    foreach($rooms as $room) {
-                        $topic = str_replace("'", "&#39;", $room->topic);
-                        $roomName = $room->name;
-                        $roomId = $room->id;
-                        $roomOwner = $room->owner;
-                        echo  "<li class='btn room-favorite' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$topic'>".
-                                "$roomName<button class='close room-close'>&times;</button>".
-                                "<span class='unseen-messages'></span>".
-                              "</li>";
-                    }
+                    $room = dbGetRoomObjectFromName($_GET['room']);
+                    $roomName = $room->name;
+                    $roomId = $room->id;
+                    $roomOwner = $room->owner;
+                    echo  "<li class='btn room-favorite' data-owner='$roomOwner' data-roomid='$roomId'>".
+                            "$roomName<button class='close room-close'>&times;</button>".
+                            "<span class='unseen-messages'></span>".
+                          "</li>";
                 ?>
             </ul>
             <span id="add-new-room" class="btn btn-inverse" data-toggle="popover" data-placement="bottom">+</span>
@@ -68,7 +74,7 @@
                 </form>
             </aside>
             <article id="chat">
-                <div id="chat-header">
+                <div id="chat-header" style="display:none;">
                     <span class='label'>Topic</span>
                     <button class="btn" id="view-log-button" alt="View Log" title="View Log" >
                         <img src="img/icon/view_log.png" />View Log
@@ -81,16 +87,21 @@
     </section>
     
     <article id="submit-area">
+        <?php
+            $roomNameUrlEncoded = rawurlencode($roomName);
+            echo "<a target='_blank' id='submit-metahill' href='http://www.metahill.com/join/$roomNameUrlEncoded' class='btn'>Metahill</a>";
+            echo "<a target='_blank' id='submit-help' href='http://www.metahill.com/help' class='btn'>Help</a>";
+        ?>
         <div id="submit-message-wrapper"><input type="text" id="submit-message" autofocus autocomplete="off" /></div>
         <?php
             $changeThemeName;
             $changeThemeUrl;
             if(!isset($_GET['theme'])) {
                 $changeThemeName = "Into Darkness";
-                $changeThemeUrl = "http://www.metahill.com/?theme=dark";
+                $changeThemeUrl = "http://www.metahill.com/embedded.php?room=$roomName&theme=dark";
             } else {
                 $changeThemeName = "Back To Normality";
-                $changeThemeUrl = "http://www.metahill.com/";
+                $changeThemeUrl = "http://www.metahill.com/embedded.php?room=$roomName";
             }
 
             echo "<a id='submit-switch-theme' class='btn' href='$changeThemeUrl'>$changeThemeName</a>";
@@ -113,7 +124,6 @@
     </div>
     <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom;  ?></div>
     <?php 
-        require_once('feature/modals.php');
         require_once('js/index.php.jsinclude');
         
         if(isset($_GET['join']) && strlen(trim($_GET['join'])) > 0) {

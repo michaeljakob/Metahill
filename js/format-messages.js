@@ -154,10 +154,17 @@ metahill.formatMessages.makeLinksClickable = function(text) {
 
     function replaceCallback(match) {
         match = match.replace(/_/g, "%5f");
+
+        var optionalAttributes = '';
+        // is it an image?
+        if(match.match(/\.(png|jpg|jpeg|gif|svg)$/)) {
+            optionalAttributes = metahill.main.getMagnifyOnHoverCode(match);
+        }
+
         if(match.indexOf('http') === 0) {
-            return '<a target="_blank" href="'+match+'">'+match+'</a>';
+            return '<a target="_blank" '+optionalAttributes+' href="'+match+'">'+match+'</a>';
         } else {
-            return '<a target="_blank" href="http://'+match+'">'+match+'</a>';
+            return '<a target="_blank" '+optionalAttributes+' href="http://'+match+'">'+match+'</a>';
         }
     }
 

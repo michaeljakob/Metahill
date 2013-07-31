@@ -45,7 +45,7 @@ $(function() {
 
                 if(h !== nh) {
                     // min-aheight
-                    if(nh < 500) {
+                    if(!metahill.base.support.isEmbedded && nh < 500) {
                         submitArea.addClass('height-limiter');
                         chatEntries.height(190);
                         return;
@@ -54,8 +54,13 @@ $(function() {
                     }
 
                     var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
-                    channelAttendeesEntries.height(attendeesBarHeight - 51); // top margin + inputbox size substracted
-                    chatEntries.height(attendeesBarHeight - 50);
+                    channelAttendeesEntries.height(attendeesBarHeight + 50);
+
+                    if(!metahill.base.support.isEmbedded) {
+                        chatEntries.height(attendeesBarHeight - 50);
+                    } else {
+                        chatEntries.height(attendeesBarHeight + 85);
+                    }
 
                     h = nh;
                 }

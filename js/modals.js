@@ -16,8 +16,6 @@ $(document).ready(function() {
     metahill.modals.preferences.enable_tips = $('#modals-pref-enable-tips').val();
     metahill.modals.preferences.user_id = metahill.main.userId;
 
-    metahill.modals.liveUpdateChatTextSize();
-
     $('#modals-profile-current-password-info, #modals-room-pref-current-password-info').popover({
         trigger: 'hover',
         placement: 'left',
@@ -33,6 +31,7 @@ metahill.modals.liveUpdateFont = function() {
 };
 
 metahill.modals.liveUpdateChatTextSize = function() {
+    console.log('updatelucts');
     var fontSize = $('#modals-pref-textsize option:selected').text().replace(' ', '');
     $('#chat-entries').css('font-size', fontSize);
     
@@ -45,8 +44,10 @@ metahill.modals.liveUpdateChatTextSize = function() {
     }
     $('.chat-entry-user').css('width', userWidth);
 
-    var padding = (fontSizeInt - 10);
-    $('#chat .chat-entry').children().css('padding-top', padding + 'px').css('padding-bottom', padding + 'px');
+
+    if(fontSizeInt === 10) {
+        $('.chat-entry > *').css({'padding-top': 0, 'padding-bottom': 0});
+    }
 
     $(window).resize();
 };

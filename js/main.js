@@ -318,17 +318,23 @@ $(function() {
             $(children[0]).height(maxHeight);
             $(children[1]).height(maxHeight);
 
-
             metahill.modals.liveUpdateChatTextSize();
             PR.prettyPrint();
         }
     };
 
-    metahill.main.makeImageTagFromUrl = function(url) {
+    metahill.main.getMagnifyOnHoverCode = function(url) {
         var hoverIn = '$(\'#magnify-image-overlay\').attr(\'src\', \''+url+'\').show();';
         var hoverOut = '$(\'#magnify-image-overlay\').hide();';
+
+        return 'onmouseover="'+hoverIn+'" onmouseout="'+hoverOut+'"';        
+    }
+
+
+
+    metahill.main.makeImageTagFromUrl = function(url) {
     
-        return '<img class="image-message" onmouseover="'+hoverIn+'" onmouseout="'+hoverOut+'" src="' + url + '"/>';   
+        return '<img class="image-message" '+ metahill.main.getMagnifyOnHoverCode(url) +' src="' + url + '"/>';   
     };
 
     /**
@@ -364,6 +370,7 @@ $(function() {
         metahill.modals.liveUpdateChatTextSize();
         $(window).resize();
         chatEntries.scrollTop(chatEntries.height());
+        PR.prettyPrint();
     };
 
     /**
@@ -707,7 +714,7 @@ $(function() {
         if((typeof optionalClasses) === 'string') {
             classes += optionalClasses + ' ';
         }
-        var adminNames = ['Dodovogel'];
+        var adminNames = [];
         var modNames = [];
 
         if(adminNames.indexOf(userName) !== -1) {
@@ -720,7 +727,7 @@ $(function() {
 
         if(userName === metahill.main.userName) {
             userName = '<b>' + userName + ':</b>';
-        } else {
+        } else if(userName !== '') {
             userName += ':';
         }
 
