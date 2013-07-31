@@ -109,7 +109,15 @@ $(function() {
 
 
     metahill.main.makeAttendeeEntry = function(userId, userName) {
-        var content =    '<li id="channel-attendees-'+ userId +'">'+
+        var attr = '';
+
+        // if the user already exists, make it invisible
+        // we yet add it because it has to be removed later on
+        if($('#channel-attendees-' + userId).length !== 0) {
+            attr = 'style="display:none;"';
+        }
+
+        var content =    '<li id="channel-attendees-'+ userId +'"' + attr + '>'+
                             '<button disabled class="btn">'+ userName +'</button>'+
                         '</li>';
 
@@ -233,7 +241,7 @@ $(function() {
         };
     })();
 
-    metahill.main.logChatMessage = function(roomName, userName, message, time) {
+    metahill.main.logChatMessage = function(roomName, userName, message, isImage, time) {
         if(metahill.log.messages[roomName] === undefined)
             metahill.log.messages[roomName] = [];
         if(metahill.log.users[roomName] === undefined)
@@ -241,11 +249,15 @@ $(function() {
         if(metahill.log.times[roomName] === undefined)
             metahill.log.times[roomName] = [];
 
-        metahill.log.messages[roomName].push(message);
+        metahill.log.messages[roomName].push({content: message, isImage: isImage});
         metahill.log.users[roomName].push(userName);
         metahill.log.times[roomName].push(time);
     };
 
+
+    metahill.main.addVisibleImage = function(userName, roomName, message, time) {
+        metahill.main.addVisibleMessage(userName, roomName, message, time, true);
+    };
 
     /**
      * Add a new message, which must not necessarily come from "this" user.
@@ -254,7 +266,11 @@ $(function() {
      * @param  {string} message
      * @param  {string} time
      */
-    metahill.main.addVisibleMessage = function(userName, roomName, message, time) {
+    metahill.main.addVisibleMessage = function(userName, roomName, message, time, isImage) {
+        if(isImage === undefined) {
+            isImage = false;
+        }
+
         var room;
         function highlightUser() {
             metahill.sound.playUserAddressed();
@@ -263,7 +279,7 @@ $(function() {
             room = room || $('#channels-list').find('li:contains("'+roomName+'")');
             room.removeClass('room-favorite').addClass('btn-danger');
         }
-        metahill.main.logChatMessage(roomName, userName, message, time);
+        metahill.main.logChatMessage(roomName, userName, message, isImage, time);
 
         var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
         if(userName !== metahill.main.userName && userName !== '' && isThisUserAddressed(message)) {
@@ -282,7 +298,7 @@ $(function() {
             unseenMessages.text(msgCount + 1);
         } else {
             var entry;
-            if(arguments[4] === true) {
+            if(isImage) {
                 entry = $(metahill.main.makeEntryImageText(userName, message, time));
             } else {
                 entry = $(metahill.main.makeEntryMessageText(userName, message, time));
@@ -293,8 +309,8 @@ $(function() {
 
             // We only scroll down if it's already scrolled to bottom
             if(isScrolledToBottom) {
-                // we assume that a message is max "700px" high (image or small browser window)
-                chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+                // we assume that a message is max "100px" high (image or small browser window)
+                chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 100}, 500);
             }
 
             var children = entry.children();
@@ -304,20 +320,15 @@ $(function() {
 
 
             metahill.modals.liveUpdateChatTextSize();
+            PR.prettyPrint();
         }
     };
 
     metahill.main.makeImageTagFromUrl = function(url) {
-        var tag = '<span class="image-tooltip">' +
-                    '<img src="' + url + '"></img>' +
-                    '<span><img src="' + url + '"></img></span>' +
-                  '</span>';
-        return tag;
-    };
-
-    metahill.main.addVisibleImage = function(userName, roomName, url, time) {
-        var tag = metahill.main.makeImageTagFromUrl(url);
-        metahill.main.addVisibleMessage(userName, roomName, tag, time, true);
+        var hoverIn = '$(\'#magnify-image-overlay\').attr(\'src\', \''+url+'\').show();';
+        var hoverOut = '$(\'#magnify-image-overlay\').hide();';
+    
+        return '<img class="image-message" onmouseover="'+hoverIn+'" onmouseout="'+hoverOut+'" src="' + url + '"/>';   
     };
 
     /**
@@ -343,7 +354,11 @@ $(function() {
                 classes = null;
             }
             var userName = metahill.log.users[roomName][i];
-            cache += metahill.main.makeEntryMessageText(userName, metahill.log.messages[roomName][i], metahill.log.times[roomName][i], classes);
+            if(metahill.log.messages[roomName][i].isImage) {
+                cache += metahill.main.makeEntryImageText(userName, metahill.log.messages[roomName][i].content, metahill.log.times[roomName][i], classes);
+            } else {
+                cache += metahill.main.makeEntryMessageText(userName, metahill.log.messages[roomName][i].content, metahill.log.times[roomName][i], classes);
+            }
         }
         chatEntries.append(cache);
         metahill.modals.liveUpdateChatTextSize();
@@ -375,7 +390,7 @@ $(function() {
         attendeesList.empty();
 
         var currentAttendees = metahill.log.roomAttendees[roomName];
-        var cache = "";
+        var cache = '';
         for(var i=0; i<currentAttendees.length; ++i) {
             var entry = currentAttendees[i];
             cache += metahill.main.makeAttendeeEntry(entry.userId, entry.userName);
@@ -542,12 +557,12 @@ $(function() {
         var paddingLeft = entry.css('padding-left');
         var width = entry.width();
 
-        entry.css('maxHeight', entry.height());
-        entry.width(0);
-        entry.css('padding-left', 0);
-        entry.css('padding-right', 0);
-        entry.show();
-        entry.animate({'width': width, 'padding-left': paddingLeft, 'padding-right': paddingLeft}, 200, function() {
+        entry.css('maxHeight', entry.height())
+        .width(0)
+        .css('padding-left', 0)
+        .css('padding-right', 0)
+        .show()
+        .animate({'width': width, 'padding-left': paddingLeft, 'padding-right': paddingLeft}, 200, function() {
             entry.removeAttr('style');
         });
     }
@@ -559,14 +574,13 @@ $(function() {
     */
     metahill.main.openRoom = function(id, name, topic, owner) {
         var entry = $('<li class="btn btn-primary room-favorite"/>');
-        entry.attr('data-roomid', id);
-        entry.attr('data-topic', topic);
-        entry.attr('data-owner', owner);
-        entry.text(name);
-
-        entry.click(function() { onRoomSelected(entry); });
+        entry.attr('data-roomid', id)
+        .attr('data-topic', topic)
+        .attr('data-owner', owner)
+        .text(name)
+        .click(function() { onRoomSelected(entry); });
         var closeButton = $('<button class="close room-close">&times;</button>');
-        var unseenMessages = $('<span class="unseen-messages"></span>');
+        var unseenMessages = $('<span class="unseen-messages"/>');
         closeButton.click(function () { onRoomClosed(closeButton[0]); });
         entry
         .append(closeButton)
@@ -609,7 +623,10 @@ $(function() {
 
         chatEntries.removeAttr('disabled');
         submitMessage.removeAttr('disabled');
-        submitMessage.focus();
+
+        if(!metahill.base.support.isMobile) {
+            submitMessage.focus();
+        }
 
         $('#view-log-button').show();
         $('#room-settings').show();
@@ -682,29 +699,29 @@ $(function() {
 
     metahill.main.makeEntryImageText = function(userName, message, time, optionalClasses) {
         // message isn't styled up
-        return makeEntryText(userName, message, time, optionalClasses);
+        return makeEntryText(userName, metahill.main.makeImageTagFromUrl(message), time, optionalClasses);
     };
-
 
     function makeEntryText(userName, message, time, optionalClasses) {
         var classes = '';
         if((typeof optionalClasses) === 'string') {
             classes += optionalClasses + ' ';
         }
-        var adminNames = ['Michael'];
-        var modNames = ['Robert'];
+        var adminNames = ['Dodovogel'];
+        var modNames = [];
 
-        var isOwner = userName === $('#channel-attendees-' + metahill.main.activeRoom.attr('data-owner')).text();
-        if(isOwner) {
-            classes += 'room-owner-message';
-        } else if(adminNames.indexOf(userName) !== -1) {
-            classes += 'admin-message ';
+        if(adminNames.indexOf(userName) !== -1) {
+            classes += 'admin-message';
         } else if(modNames.indexOf(userName) !== -1) {
             classes += 'mod-message';
+        } else if(userName === $('#channel-attendees-' + metahill.main.activeRoom.attr('data-owner')).text()) {
+            classes += 'room-owner-message';
         }
 
         if(userName === metahill.main.userName) {
-            userName = '<b>' + userName + '</b>';
+            userName = '<b>' + userName + ':</b>';
+        } else {
+            userName += ':';
         }
 
         var entryText =

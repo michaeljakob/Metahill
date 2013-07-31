@@ -73,7 +73,7 @@
                 $imageEntryTemplate =   '<div class="chat-entry">'.
                                             '<span class="chat-entry-options">%s</span>'.
                                             '<span class="chat-entry-user">%s</span>'.
-                                            '<span class="image-tooltip"><a href="%s"><img src="%s"/></a></span>'.
+                                            '<span class="chat-entry-message"><a href="%s"><img class="image-message" src="%s"/></a></span>'.
                                         '</div>';
 
                 $textEntryTemplate =    '<div class="chat-entry">'.

@@ -57,9 +57,8 @@ $(function() {
             var formData = new FormData();
             formData.append('file', file);
             formData.append('userName', metahill.main.userName);
-            
-            var imageText = metahill.main.makeImageTagFromUrl('http://metahill.com/img/loading.gif');
-            var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, imageText, new Date().getTime()));
+
+            var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, 'http://metahill.com/img/loading.gif', new Date().getTime()));
             var chatEntries = $('#chat-entries');
             chatEntries
             .append(entry)

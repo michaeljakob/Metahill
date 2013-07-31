@@ -4,16 +4,23 @@ body {
 }
 
 #channels {
-    background: rgb(90,90,90);
+    background: rgb(30,30,30);
 }
 
 #channel-attendees > form, #chat-header, #channel-attendees-entries, #submit-area  {
     background: rgb(70,70,70);
 }
 
+#submit-message, #add-new-room-search {
+    background-color: #2A2A2A;
+    border-color: #222;
+    color: #999;
+}
 
-#chat-header-topic {
-    color: #ccc;
+#filter-search-user{
+    background-color: #2A2A2A;
+    border-color: #222;
+    color: #999;
 }
 
 header {
@@ -27,42 +34,56 @@ header {
     color: #f0f0f0;
 }
 
-span.heading-desc, span.heading-desc-large {
-    color: #81CFF0 !important;
+.btn:not(.btn-inverse):not(.btn-info):not(.btn-primary):not(.btn-danger), textarea, input[type="text"], input[type="password"] {
+    background: #363636;
+    border:none;
+    text-shadow:none;
+    color:#eee;
 }
 
-input {
-    background: #ddd;
+.btn-primary {
+    border: none;
+}
+
+button.close { 
+    color: #fff;
+    text-shadow: none;
+    opacity: .6;
+}
+
+button.close:hover {
+    color: #ccc;
+}
+
+#view-log-button img, #room-settings img {
+    display: none;
+}
+
+.btn.room-favorite:hover{
+    background: #222222;
 }
 
 #chat-entries {
     color: #999;
 }
 
-.label {
-    background: #ccc;
-    color: #555;
-    text-shadow: none;
-}
-
 #chat .chat-entry {
-    border-bottom: 1px solid #666;
-}
-
-
-#company-icon {
-    content: url("../img/metahill.png");
-}
-
-.btn.disabled, .btn[disabled] {
-    background: #999;
-    text-shadow: none;
+    background-color: #2A2A2A;
 }
 
 #channel-attendees-entries > li > button:first-child {
     color: #f0f0f0;
-    background: rgb(50,50,50);
+    background-color: rgb(50,50,50);
 }
+
+.popover {
+    background-color: none;
+}
+
+.popover-title {
+    border-bottom: none;
+}
+
 
 
 

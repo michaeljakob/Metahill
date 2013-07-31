@@ -16,8 +16,8 @@
             echo "Please choose a username with at least 3 characters.";
             return false;
         }
-        if($lenName > 20) {
-            echo "Please choose a username with not more than 20 characters."; 
+        if($lenName > 12) {
+            echo "Please choose a username with not more than 12 characters."; 
             return false;    
         }
         if(strpos($name, '@') !== false) {
@@ -68,7 +68,6 @@
             if($ret) {
                 $_SESSION["logged_in"] = true;
                 $_SESSION["name"] = htmlspecialchars($name);
-                $_SESSION["password"] = $password;
                 $_SESSION["verified"] = false;
                 if(submitAccountActivationEmailPear($name, $email)) {
                     header("Location: signup-succeeded.php");

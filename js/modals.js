@@ -267,7 +267,7 @@ $(function() {
             $('#modals-new-room-name').val('');
             $('#modals-new-room-topic').val('');
 
-            metahill.main.openRoom(roomId, json.name, metahill.helper.htmlEncode(json.topic), metahill.main.userId);
+            metahill.main.openRoom(roomId, json.name, json.topic, metahill.main.userId);
             metahill.chat.sendUserJoin(roomId, json.name);
             metahill.chat.sendMessage('You just created the room <b>'+json.name+'</b>, congratulations!', -1, 'server', roomId, json.name);
             
@@ -352,8 +352,8 @@ $(function() {
             } else {
                 currentPasswordBox.attr('placeholder', 'Wrong pass :(');
                 currentPasswordBox.focus();
-                submitButton.prop('disabled', true);
             }
+            submitButton.prop('disabled', true);
         });
 
     });

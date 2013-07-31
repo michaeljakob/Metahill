@@ -3,6 +3,7 @@
 
 $(function() {
     var totalStatus = [false, false, false];
+    // email, name, password
     
     var reg_name = $('#reg_name');
     var reg_email = $('#reg_email');
@@ -21,7 +22,14 @@ $(function() {
     });
 
     function isSubmitAvailable() {
-        return $.trim(reg_name.val()).length > 0 && $.trim(reg_email.val()).length > 0 && $.trim(reg_password.val()).length > 0 && totalStatus[0] && totalStatus[1] && totalStatus[2];
+        if(window.location.pathname.indexOf('signup-with-facebook.php') !== -1) {
+            return $.trim(reg_name.val()).length > 0 && totalStatus[1];
+        } else {
+            return  $.trim(reg_name.val()).length > 0 && 
+                    $.trim(reg_email.val()).length > 0 && 
+                    $.trim(reg_password.val()).length > 0 && 
+                    totalStatus[0] && totalStatus[1] && totalStatus[2];
+        }
     }
 
     function updateSubmitButton() {
@@ -58,10 +66,10 @@ $(function() {
             status.addClass('label-alert');
             status.text("Your name should be at least 3 characters.");
             totalStatus[1] = false;
-        } else if(name.length > 20){
+        } else if(name.length > 12){
             status.removeClass('label-success');
             status.addClass('label-alert');
-            status.text("Your name should be no longer than 20 characters.");
+            status.text("Your name should be no longer than 12 characters.");
             totalStatus[1] = false;
         } else if(name.indexOf('@') !== -1) {
             status.removeClass('label-success');
@@ -157,6 +165,7 @@ $(function() {
                 status.addClass('label-alert');
                 status.text('This username already exists :[');
                 totalStatus[1] = false;
+                updateSubmitButton();
             }
         }
         var json = { 'username': name };

@@ -14,17 +14,17 @@ $(function(){
     }
 
     // open connection
-    var address = 'ws://127.0.0.1:1337';
-    //var address = 'ws://81.169.246.231:80';
+    var mAddress = 'ws://127.0.0.1:1337';
+    //var mAddress = 'ws://81.169.246.231:80';
 
     metahill.chat.isOnline = true;
 
     var RETRY_DELAY = 30000;
-    var connectionFailedFirstTime = true;
+    var mConnectionFailedFirstTime = true;
 
     var connection_onopen = function () {
         metahill.chat.isOnline = true;
-        connectionFailedFirstTime = true;
+        mConnectionFailedFirstTime = true;
 
         // join favorite rooms 
         var favoriteRooms = []; // array of {roomId: roomId, roomName: roomName}
@@ -52,8 +52,8 @@ $(function(){
 
     var connection_onclose = function () {
         metahill.chat.isOnline = false;
-        if(connectionFailedFirstTime) {
-            connectionFailedFirstTime = false;
+        if(mConnectionFailedFirstTime) {
+            mConnectionFailedFirstTime = false;
             metahill.main.disableInput();
             removeAllChannelAttendees();
             
@@ -113,12 +113,11 @@ $(function(){
         var cache = '';
         for(var i=0; i<entries.length; ++i) {
             var entry = entries[i];
-            metahill.main.logChatMessage(roomName, entry.account_name, entry.content, entry.submitted_time);
+            metahill.main.logChatMessage(roomName, entry.account_name, entry.content, entry.is_image, entry.submitted_time);
 
             if(activeRoomName === roomName) {
                 if(entry.is_image) {
-                    var imageTaggedContent = metahill.main.makeImageTagFromUrl(entry.content);
-                    cache += metahill.main.makeEntryImageText(entry.account_name, imageTaggedContent, entry.submitted_time, 'logged-message');
+                    cache += metahill.main.makeEntryImageText(entry.account_name, entry.content, entry.submitted_time, 'logged-message');
                 } else {
                     cache += metahill.main.makeEntryMessageText(entry.account_name, entry.content, entry.submitted_time, 'logged-message');
                 }
@@ -138,7 +137,9 @@ $(function(){
         
         var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
         if(isActiveRoom) {
-            writeSystemMessage(roomName, userName + ' joined the room.');
+            if(userName !== metahill.main.userName) {
+                writeSystemMessage(roomName, userName + ' joined the room.');
+            }
             $('#channel-attendees-entries').append(metahill.main.makeAttendeeEntry(userId, userName));
         }
     }
@@ -159,8 +160,11 @@ $(function(){
         
         var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
         if(isActiveRoom) {
-            writeSystemMessage(roomName, userName + ' quit the room.');
+            if(userName !== metahill.main.userName) {
+                writeSystemMessage(roomName, userName + ' quit the room.');
+            }
             $('#channel-attendees-' + userId).remove();
+            $('#channel-attendees-' + userId).show();
         }
 
     }
@@ -179,7 +183,7 @@ $(function(){
     }
 
     function setupConnection() {
-        metahill.chat.connection = new WebSocket(address);
+        metahill.chat.connection = new WebSocket(mAddress);
         metahill.chat.connection.onopen = connection_onopen;
         metahill.chat.connection.onerror = connection_onerror;
         metahill.chat.connection.onclose = connection_onclose;
@@ -196,7 +200,6 @@ $(function(){
     Methods for the outer world following
 ************************************************************************/
 metahill.chat.updateAttendeesList = function(list, roomId, roomName) {
-    //console.log(JSON.stringify(list));
     metahill.log.roomAttendees[roomName] = list;
 
     var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
@@ -205,9 +208,8 @@ metahill.chat.updateAttendeesList = function(list, roomId, roomName) {
         channelAttendeesEntries.empty();
         var cache = '';
         list.forEach(function(entry) {
-            cache += metahill.main.makeAttendeeEntry(entry.userId, entry.userName);
+            channelAttendeesEntries.append(metahill.main.makeAttendeeEntry(entry.userId, entry.userName));
         });
-        channelAttendeesEntries.append(cache);
     }
 };
 
