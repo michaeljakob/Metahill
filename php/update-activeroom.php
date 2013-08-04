@@ -17,7 +17,7 @@ $success = $statement->execute(array(':user_id' => $userId, ':active_room' => $a
 if($success) {
     header('Status: 200 OK');
 } else {
-    header('Status: 400 Bad Request');
+    header('Status: 400 Bad Request', true, 400);
     header('Content-Description: ' . var_dump($statement->errorInfo()));
 }
 

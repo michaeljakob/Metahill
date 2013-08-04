@@ -16,7 +16,7 @@
                 <p class="desc">To sign in with it, <a href="logout.php">go here</a>.</p>
             </form>
             <footer>
-                <a href="forum" target="_blank">Forum</a>&nbsp;|
+                <a href="blog" target="_blank">Blog</a>&nbsp;|
                 <a href="help" target="_blank">Help</a>
             </footer>
       </article>

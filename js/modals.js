@@ -31,23 +31,19 @@ metahill.modals.liveUpdateFont = function() {
 };
 
 metahill.modals.liveUpdateChatTextSize = function() {
-    console.log('updatelucts');
     var fontSize = $('#modals-pref-textsize option:selected').text().replace(' ', '');
-    $('#chat-entries').css('font-size', fontSize);
     
     var fontSizeInt = parseInt(fontSize, 10);
     var userWidth;
-    if(fontSizeInt >= 16) {
+    if(fontSizeInt >= 18) {
+        userWidth = 300;
+    } else if(fontSizeInt >= 14) {
         userWidth = 210;
     } else {
         userWidth = 150;
     }
-    $('.chat-entry-user').css('width', userWidth);
-
-
-    if(fontSizeInt === 10) {
-        $('.chat-entry > *').css({'padding-top': 0, 'padding-bottom': 0});
-    }
+    var css = '.chat-entry-user { width: '+userWidth+';} #chat-entries-parent > div { font-size:'+fontSize+';}';
+    $('#live-update-chat-text-size').empty().append(css);
 
     $(window).resize();
 };

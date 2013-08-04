@@ -73,6 +73,7 @@
                                     $smilies['unsure'] = ':S, :s';
                                     $smilies['squint'] = '^^';
                                     $smilies['love'] = '<3';
+                                    $smilies['tongue'] = ':P; :p';
 
                                     if(array_key_exists($name, $smilies)) {
                                         return htmlspecialchars($smilies[$name]);
@@ -173,9 +174,9 @@
                         <li>
                             <h2>Behind all this is an open community</h2>
                             <p>
-                                Everything you see here has been created by engaged professionals in their spare time. All members -no matter for how long- can participate in <a href="../forum">forum</a>
+                                Everything you see here has been created by engaged professionals in their spare time. All members -no matter for how long- can participate in <a href="../blog">blog</a>
                                 discussions where <i>we all</i> decide what's going to happen next. New features and the modification of existing ones - everything from design to functionality is decided by you.
-                                Additionally, we maintain a <a href="../forum">forum</a> to keep interested users posted, ask for feedback and make polls.
+                                Additionally, we maintain a <a href="../blog">blog</a> to keep interested users posted, ask for feedback and make polls.
                                 At IRC disputes are very commonly only about <i>hating</i>, <i>egocentricity</i> and <i>power</i> (altough irc was awesome at its time). We try to be different. If you encounter any issues, get in touch with the support.
                             </p>
                         </li>
@@ -187,10 +188,6 @@
                             </p>
                         </li>
                     </ol>
-                    <p>
-                        Tell us what <em>your</em> favorite feature of metahill is. <a href="../forum/index.php?action=post;board=3.0">What do you like most about it?</a>
-                    </p>
-
                 </div>
                 <div class="tab-pane" id="support">
                     <h1>I still got a question</h1>
@@ -199,8 +196,8 @@
                         you can take next.
                     </p>
                     <ol>
-                        <li>Ask in the room named <i>metahill</i> to get live-support. <a href="http://www.metahill.com/join/metahill">Join the metahill room now</a>.</li>
-                        <li>Let us hear from you in our <a href="../forum">forum</a>.</li>
+                        <li>Ask in the room named <i>metahill</i> to get live-support. <a href="http://www.metahill.com/join/metahill">Join the metahill room now</a>. Bug reports are very welcome there!</li>
+                        <li>Let us hear from you in our <a href="../blog">blog</a>.</li>
                         <li>Write us an email. Our address is <a href="mailto:support@metahill.com">support@metahill.com</a>.</li>
                     </ol>
                     <p>
@@ -214,10 +211,7 @@
     </section>
     
     <script src="../js/vendor/jquery-2.0.3.min.js" ></script>
-    <script src="../js/vendor/modernizr-2.6.2-respond-1.1.0.min.js" ></script>
     <script src="../js/vendor/bootstrap.min.js" ></script>
-    <script src="../js/helper.js" ></script>
-    <script src="../js/base.js" ></script>
     <script>
         $('#help-sections a').click(function(e) {
             e.preventDefault();

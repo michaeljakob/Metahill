@@ -47,7 +47,7 @@
             <footer>
                 <span><a href="login.php">Sign in</a>&nbsp;|</span>
                 <span><a href="signup.php">Sign up</a>&nbsp;|</span>
-                <span><a href="forum" target="_blank">Forum</a>&nbsp;|</span>
+                <span><a href="blog" target="_blank">Blog</a>&nbsp;|</span>
                 <span><a href="help" target="_blank">Help</a></span>
             </footer>
         </article>

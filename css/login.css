@@ -1,5 +1,5 @@
 #main-container {
-    height: 9999px;
+    height: 10000px;
     color: #dfdfdf;
     text-align: center;
 }
@@ -153,17 +153,4 @@ footer {
 img.facebook-login {
     margin-top: 20px;
     width: 250px;
-}
-
-hr {
-    margin: 0;
-}
-
-hr.style-two {
-    border: 0;
-    height: 1px;
-    background-image: -webkit-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
-    background-image:    -moz-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
-    background-image:     -ms-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
-    background-image:      -o-linear-gradient(left, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0)); 
 }

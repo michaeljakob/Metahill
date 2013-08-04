@@ -21,7 +21,6 @@ java -jar "$compiler" \
             bootstrap-select.min.js \
             jquery-ui-1.10.3.custom.min.js \
             jquery.filterList.js \
-            jquery.titlealert.min.js \
             debounce.js \
     > ../vendor.js
 

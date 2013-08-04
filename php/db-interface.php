@@ -65,6 +65,12 @@ function dbGetRoomObjectFromId($id) {
     $statement = $dbh->prepare('SELECT * FROM rooms WHERE id=:id' );
     $statement->execute(array(':id' => $id));
     
+
+    if($statement->rowCount() == 0) {
+        return null;
+    }
+    
+    
     return $statement->fetch(PDO::FETCH_OBJ);
 }
 
@@ -73,6 +79,10 @@ function dbGetRoomObjectFromName($name) {
                 
     $statement = $dbh->prepare('SELECT * FROM rooms WHERE name=:name');
     $statement->execute(array(':name' => $name));
+
+    if($statement->rowCount() == 0) {
+        return null;
+    }
     
     return $statement->fetch(PDO::FETCH_OBJ);
 }

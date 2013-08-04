@@ -93,6 +93,24 @@ button.close:hover {
     color: #999;
 }
 
+.logged-message {
+    color: #666;
+}
 
+.admin-message {
+}
 
+.mod-message {
+}
+
+.room-owner-message {
+}
+
+#submit-smiley-content li {
+    background: #333;
+}
+
+#submit-smiley-content li:hover {
+    background: #222;
+}
 

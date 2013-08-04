@@ -22,7 +22,7 @@
             <p>Do you want to <a href="http://www.metahill.com/login.php">Sign in</a> or <a href="http://www.metahill.com/signup.php">Sign up</a>?</p>
             <p>If you seek help for using this platform, <a href="http://www.metahill.com/help">go here</a>.</p>
             <footer>
-                    <a href="http://www.metahill.com/forum" target="_blank">Forum</a>&nbsp;|&nbsp;
+                    <a href="http://www.metahill.com/blog" target="_blank">Blog</a>&nbsp;|&nbsp;
                     <a href="http://www.metahill.com/help" target="_blank">Help</a>
             </footer>
         </article>

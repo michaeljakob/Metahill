@@ -34,6 +34,8 @@ metahill.formatMessages.replaceTextSmilies = function() {
     smiliesShortcut[':s'] = 'unsure.png';
     smiliesShortcut['^^'] = 'squint.png';
     smiliesShortcut['<3'] = 'love.png';
+    smiliesShortcut[':P'] = 'tongue.png';
+    smiliesShortcut[':p'] = 'tongue.png';
 
     var smiliesWordy = {};
     smiliesWordy[':angry'] = 'angry.png';
@@ -157,8 +159,15 @@ metahill.formatMessages.makeLinksClickable = function(text) {
 
         var optionalAttributes = '';
         // is it an image?
-        if(match.match(/\.(png|jpg|jpeg|gif|svg)$/)) {
+        if(match.match(/\.(png|jpg|jpeg|gif|svg)$/i)) {
             optionalAttributes = metahill.main.getMagnifyOnHoverCode(match);
+        } else if(match.toLowerCase().indexOf('www.youtube.com') !== -1) {
+            var lastEqualsSign = match.lastIndexOf('=');
+            if(lastEqualsSign !== -1) {
+                var youtubeId = match.substring(lastEqualsSign + 1);
+                var url = 'http://img.youtube.com/vi/'+youtubeId+'/0.jpg';
+                optionalAttributes = metahill.main.getMagnifyOnHoverCode(url);
+            }
         }
 
         if(match.indexOf('http') === 0) {

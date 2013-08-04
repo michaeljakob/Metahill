@@ -7,6 +7,9 @@ $(function() {
 
     var timerId = 0;
     function doDrag() {
+        if(metahill.main.isGuest) {
+            return;
+        }
         timerId = setInterval(function() {
             if(isDragging) {
                 $('#drag-and-drop-overlay').fadeIn(500);
@@ -36,6 +39,13 @@ $(function() {
         if(event.preventDefault !== null) {
             event.preventDefault();
         }
+        
+        if(metahill.main.isGuest) {
+            var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+            metahill.main.addVisibleMessage('', activeRoomName, "Guests are not allowed to share images", new Date());
+            return;
+        }
+
         isDragging = false;
         doDrag();
 
@@ -58,8 +68,8 @@ $(function() {
             formData.append('file', file);
             formData.append('userName', metahill.main.userName);
 
-            var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, 'http://metahill.com/img/loading.gif', new Date().getTime()));
-            var chatEntries = $('#chat-entries');
+            var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, metahill.main.activeRoom, 'http://www.metahill.com/img/loading.gif', new Date().getTime()));
+            var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
             chatEntries
             .append(entry)
             .animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
@@ -68,13 +78,14 @@ $(function() {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'php/image-upload.php');
             xhr.onload = function () {
+                entry.remove();
                 if (xhr.status == 200) {
-                    var fileName = xhr.getResponseHeader('Content-Description');
                     console.log('all done: ' + xhr.status + ':' + fileName);
-                    entry.remove();
+                    var fileName = xhr.getResponseHeader('Content-Description');
                     metahill.chat.sendImage(fileName, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
                 } else {
-                    console.log('Something went terribly wrong...' + xhr.status  + ':' + xhr.statusText);
+                    //console.log('Something went terribly wrong...' + xhr.status  + ': ' + xhr.statusText);
+                    console.log('Nope');
                 }
             };
             

@@ -23,6 +23,13 @@ $(function() {
 
     $(window).ready(function() {
         $(window).resize();
+
+        var headerSize = 100;
+        if(location.pathname.indexOf('embedded.php') !== -1) {
+            headerSize = 0;
+        }
+        
+        $('#main-container').height($(window).height()-headerSize);
     });
 });
 

@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="css/modals.css">
+<link rel="stylesheet" type="text/css" href="css/modals.css?v=<?php echo $version; ?>">
 
 <div id="modal-pref" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-header">
@@ -38,7 +38,7 @@
                 <td>
                     <select id="modals-pref-font" class="selectpicker">
                         <?php
-                            $fonts = array('Helvetica', 'Verdana', 'Times New Roman', 'Georgia', 'Courier New');
+                            $fonts = array('Helvetica', 'Numans', 'Verdana', 'Times New Roman', 'Georgia', 'Courier New');
                             for($i=0; $i<count($fonts); ++$i) {
                                 $font = $fonts[$i];
                                 $attr = '';

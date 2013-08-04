@@ -1,27 +1,45 @@
 <?php
+    if(!isset($_GET['room'])) {
+        exit("No room specified. Use the `room` GET parameter.");
+    }
+
     session_start();
     if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['verified']) && $_SESSION['verified']) {
         session_regenerate_id(true);
     } else {
-        header('Location: login.php');
+        header("Location: embedded-login.php?{$_SERVER['QUERY_STRING']}");
         exit();
     }
+    
+    $api_isMini = isset($_GET['size']) && $_GET['size'] === 'mini';
+    $api_hideAttendeesBar = $api_isMini || isset($_GET['hide-attendees-bar']) && $_GET['hide-attendees-bar'] === 'true';
+
+    require_once('php/db-interface.php');
+    $room = dbGetRoomObjectFromName(htmlspecialchars(basename($_GET['room'])));
+    if($room === null) {
+        exit("No room `{$_GET['room']}` found.");
+    }
+
+
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<base href="http://127.0.0.1/Documents/Development/Web/metahill.com/"/>
+<base href="http://127.0.0.1/metahill.com/"/>
 <title>Metahill | Chatrooms for enthusiasts</title>
 <link rel="stylesheet" type="text/css" href="css/base.css"/>
 <link rel="stylesheet" type="text/css" href="css/index.css"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css"/>
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css"/>
-<link rel="stylesheet" type="text/css" href="css/embedded.css"/>
-
+<link rel="stylesheet" type="text/css" href="css/embedded/index.css"/>
+<?php
+    if($api_isMini) {
+        echo '<link rel="stylesheet" type="text/css" href="css/embedded/size-mini.css"/>';
+    }
+?>
 
 <style id="phpcss">
 <?php
-    require_once('php/db-interface.php');
     $user = dbGetUserObject($_SESSION['name']);
     $font = $user->chat_text_font;
     echo "body, body *{font-family:'$font';}";
@@ -30,9 +48,11 @@
 <?php
     $theme = 'default';
     if(isset($_GET['theme']) && trim($_GET['theme']) != '') {
-        $theme = basename($_GET['theme']);
-        if(file_exists("themes/$theme/css/chat.css")) {
-            echo "<link rel='stylesheet' type='text/css' href='themes/$theme/css/chat.css'/>";
+        $theme = htmlspecialchars($_GET['theme']);
+        if(file_exists("theme/$theme.css")) {
+            echo "<link rel='stylesheet' type='text/css' href='theme/$theme.css'/>";
+        } else {
+            echo "<link rel='stylesheet' type='text/css' href='$theme'/>";
         }
     }
 ?>
@@ -40,6 +60,9 @@
 <body>
     <div id="drag-and-drop-overlay"><h1>Upload</h1></div>
     <?php
+        if($user->is_guest) {
+            echo "<div id='is-guest' style='display:none;'></div>";
+        }
         $userId = $user->id;
         $userName = $user->name;
         echo "<div id='user-id' style='display:none;'>$userId</div>";
@@ -50,11 +73,11 @@
               </div>';
 
     ?>
+    
     <section id="main-container">
         <div id="channels" style="display:none">
             <ul id="channels-list">
                 <?php
-                    $room = dbGetRoomObjectFromName($_GET['room']);
                     $roomName = $room->name;
                     $roomId = $room->id;
                     $roomOwner = $room->owner;
@@ -67,7 +90,7 @@
             <span id="add-new-room" class="btn btn-inverse" data-toggle="popover" data-placement="bottom">+</span>
         </div>
         <div id="chat-and-attendees">
-            <aside id="channel-attendees">
+            <aside id="channel-attendees" <?php if($api_hideAttendeesBar) {echo "style='display:none';"; }?>>
                 <form>
                     <input type="text" id="filter-search-user" autocomplete="off" placeholder="Search user">
                     <ul id="channel-attendees-entries"></ul>
@@ -81,7 +104,7 @@
                     </button>
                     <span id="chat-header-topic"></span>
                 </div>
-                <div id="chat-entries"></div>
+                <div id="chat-entries-parent"></div>
             </article>
         </div>
     </section>
@@ -89,22 +112,33 @@
     <article id="submit-area">
         <?php
             $roomNameUrlEncoded = rawurlencode($roomName);
-            echo "<a target='_blank' id='submit-metahill' href='http://www.metahill.com/join/$roomNameUrlEncoded' class='btn'>Metahill</a>";
-            echo "<a target='_blank' id='submit-help' href='http://www.metahill.com/help' class='btn'>Help</a>";
-        ?>
-        <div id="submit-message-wrapper"><input type="text" id="submit-message" autofocus autocomplete="off" /></div>
-        <?php
-            $changeThemeName;
-            $changeThemeUrl;
-            if(!isset($_GET['theme'])) {
-                $changeThemeName = "Into Darkness";
-                $changeThemeUrl = "http://www.metahill.com/embedded.php?room=$roomName&theme=dark";
-            } else {
-                $changeThemeName = "Back To Normality";
-                $changeThemeUrl = "http://www.metahill.com/embedded.php?room=$roomName";
+
+            $submitMetahillText = "Metahill";
+            $submitHelpText = "Help";
+
+            if($api_isMini) {
+                $submitMetahillText = "<img src='http://www.metahill.com/favicon.ico' style='width:20px;'/>";
+                $submitHelpText = "?";
             }
 
-            echo "<a id='submit-switch-theme' class='btn' href='$changeThemeUrl'>$changeThemeName</a>";
+            echo "<a target='_blank' id='submit-metahill' href='http://www.metahill.com/join/$roomNameUrlEncoded' class='btn'>$submitMetahillText</a>";
+            echo "<a target='_blank' id='submit-help' href='http://www.metahill.com/help' class='btn'>$submitHelpText</a>";
+        ?>
+        <div id="submit-message-wrapper"><input type="text" id="submit-message" autocomplete="off" /></div>
+        <?php
+            if(!$api_isMini) {
+                $changeThemeName;
+                $changeThemeUrl;
+                if(!isset($_GET['theme'])) {
+                    $changeThemeName = "Into Darkness";
+                    $changeThemeUrl = "embedded.php?{$_SERVER['QUERY_STRING']}&theme=dark";
+                } else {
+                    $changeThemeName = "Back To Normality";
+                    $changeThemeUrl = str_replace("&theme=dark", "", "embedded.php?{$_SERVER['QUERY_STRING']}");
+                }
+
+                echo "<a id='submit-switch-theme' class='btn' href='$changeThemeUrl'>$changeThemeName</a>";
+            }
         ?>
         <div id="submit-status"></div>
     </article>
@@ -122,37 +156,11 @@
             </form>
         </div>
     </div>
-    <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom;  ?></div>
     <?php 
-        require_once('js/index.php.jsinclude');
-        
-        if(isset($_GET['join']) && strlen(trim($_GET['join'])) > 0) {
-            $roomName = $_GET['join'];
-            // is it already a favorite?
-            foreach($rooms as $room) {
-                if($room->name === $roomName) {
-                    return;
-                }
-            }
-            if(dbRoomExists($roomName)) {
-                $room = dbGetRoomObjectFromName($roomName);
-                $roomId = $room->id;
-                $roomTopic = str_replace('"', "&#34;", $room->topic);
-                $roomOwner = $room->owner;
-
-                $out = "<script>$(document).ready(function(){setTimeout(function() {";
-                $out .= "var newRoom = '<li data-roomid=\"$roomId\" data-topic=\"$roomTopic\" data-owner=\"$roomOwner\">$roomName</li>';";
-                $out .= "metahill.main.onNewRoomClicked($(newRoom));";
-                $out .= "}, 800)});</script>";
-
-                echo $out;
-            }
-        }
-
+        require_once('js/index.php.jsinclude.php');
     ?>
     <script async="async" src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css<?php echo ($theme === 'dark') ? ("&skin=sons-of-obsidian") : (""); ?>"></script>
     
-
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

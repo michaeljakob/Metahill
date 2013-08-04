@@ -67,7 +67,7 @@
         <footer>
             <a href="login.php">Sign in</a>&nbsp;|
             <a href="signup.php">Sign up</a>&nbsp;|
-            <a href="forum">Forum</a>&nbsp;|
+            <a href="blog">Blog</a>&nbsp;|
             <a href="help">Help</a>
         </footer>
 
