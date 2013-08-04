@@ -1,40 +1,45 @@
 <header>
     <a href="http://www.metahill.com"><img id="company-icon" alt="metahill icon" src="http://www.metahill.com/img/metahill.png" /></a>
 
-        
+
     <?php
         if( isset($_SESSION['name']) && 
             isset($_SESSION['verified']) && 
             isset($_SESSION['logged_in']) && 
             strpos($_SERVER['PHP_SELF'], 'index.php') !== false) {
-              $name = $_SESSION['name'];
-              // $user already set in index.php
-              $userId = $user->id;
-              
-              echo '<div class="menu">
-                      <div id="site-status" class="alert">
-                          Some status message here
-                      </div>';
 
-              echo "<div id='user-id' style='display:none;'>$userId</div>";
-              
-              // user
-              echo '<div id="userbar">
-                      <div class="btn-group" id="user-name">
-                          <button class="btn dropdown-toggle" data-toggle="dropdown">'. $name .'&nbsp;<span class="caret"></span></button>
-                          <ul class="dropdown-menu pull-right">
-                            <li><a href="#modal-pref" data-toggle="modal">Preferences</a></li>
-                            <li><a href="#modal-profile" data-toggle="modal">Profile</a></li>
-                            <li><a href="help" target="_blank">Help</a></li>
-                            <li><a href="forum" target="_blank">Forum</a></li>
-                            <li class="divider"></li>
-                            <li><a href="logout.php">Sign out</a></li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>';
 
-        }
+            if(!$user->is_guest) {
+                echo "<div class='menu'>";
+                echo     "<div id='site-status' class='alert'>";
+                echo "</div>";
+            }
+
+
+            echo "<div id='user-id' style='display:none;'>{$user->id}</div>";
+
+            // user
+            $name = $user->name;
+            echo "<div id='userbar'>";
+                echo "<div class='btn-group' id='user-name'>";
+                        echo   "<button class='btn dropdown-toggle' data-toggle='dropdown'>". $name ."&nbsp;<span class='caret'></span></button>";
+                        echo   "<ul class='dropdown-menu pull-right'>";
+                        if($user->is_guest) {
+                            echo "<li><a target='_blank' href='signup.php'>Register</a></li>";
+                        }
+                        if(!$user->is_guest) {
+                            echo  "<li><a href='#modal-pref' data-toggle='modal'>Preferences</a></li>";
+                            echo  "<li><a href='#modal-profile' data-toggle='modal'>Profile</a></li>";
+                        }
+                        echo        "<li class='divider'></li>";
+                        echo        "<li><a href='help' target='_blank'>Help</a></li>";
+                        echo        "<li><a href='blog' target='_blank'>Blog</a></li>";
+                        echo        "<li class='divider'></li>";
+                        echo        "<li><a href='logout.php'>Sign out</a></li>";
+                        echo    "</ul>";
+                echo "</div>"; // #user-name
+            echo "</div>"; // #userbar
+        } 
     ?>
-    
+
 </header>

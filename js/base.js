@@ -12,8 +12,14 @@ metahill.base.support = {};
 $(function() {
     metahill.base.isWindowFocused = true;
 
+    var originalDocumentTitle = document.title;
     $(window).focus(function() {
         metahill.base.isWindowFocused = true;
+
+        if(metahill.log.unseenMessages !== undefined) {
+            document.title = originalDocumentTitle;
+            metahill.log.unseenMessages = 0;
+        }
     });
 
     $(window).blur(function() {

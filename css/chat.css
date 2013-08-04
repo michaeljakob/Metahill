@@ -4,26 +4,29 @@
 }
 
 #chat .chat-entry {
-    display: block;
-    line-height: normal;
+    display: table;
+    line-height: 100%;
+    padding: 1px;
 }
 
 #chat .chat-entry > .chat-entry-options {
     float: left;
-    padding: 3px;
     width: 60px;
 }
 
 #chat .chat-entry > .chat-entry-user {
     width: 150px;
     float: left;
-    padding: 3px;
     text-align: right;
+    margin-right: 3px;
 }
 
 #chat .chat-entry > .chat-entry-message {
-    padding: 3px;
-    display: table-cell;
+    display:-webkit-box;
+    display:-moz-box;
+    display:-o-box;
+    display:box;
+
     word-wrap: break-word;
 }
 
@@ -44,9 +47,8 @@
     width: 20px;
 }
 
-#chat-entries {
+#chat-entries-parent > div {
     overflow-y: scroll;
-    font-size: 11pt;
 }
 
 #view-log-button {
@@ -191,6 +193,12 @@
     right: 0;
 }
 
+#submit-smiley {
+    float: left;
+    position: fixed;
+    left: 180px;
+}
+
 .height-limiter {
     top:380px;
     height:auto;
@@ -227,6 +235,12 @@
     float: right;
     width: 160px;
     margin-right: -3px;
+}
+
+.submit-switch-theme-absolute {
+    left: 605px;
+    width: 160px;
+    position: absolute;
 }
 
 #add-new-room {
@@ -312,20 +326,6 @@ img.image-message {
     background-image: none;
 }
 
-.admin-message {
-    /* red: #B21F00; */
-    color: #FBC731;
-}
-
-.mod-message {
-    /* blue */
-    color: steelblue;
-}
-
-.room-owner-message {
-    /* green */
-    color: green;
-}
 
 .alert {
     border-color: transparent;
@@ -333,12 +333,53 @@ img.image-message {
 
 pre.prettyprint {
     margin: 0 !important;
-    padding: 0 5px !important;
     border-radius: 2px !important;
     border: none !important;
+    padding: 3px;
+
+    white-space: pre-line !important;
+    display: inline !important;
 }
 
 
+.rank-symbol {
+    margin: 0;
+    padding: 0 3px 0 0;
+}
+
+#submit-smiley-content ul {
+    list-style-type: none;
+    display: block;
+    margin: 0;
+    padding-left: 1px;
+}
+
+#submit-smiley-content ul:first-child {     
+    padding-bottom: 6px;
+}
 
 
+#submit-smiley-content ul:nth-child(3) { 
+    padding-top: 4px;
+}
 
+#submit-smiley-content li {
+    background: #f7f7f7;
+    border-radius: 2px;
+    height: 31px;
+    margin: 2px;
+    padding: 7px;
+    display: inline-block;
+}
+
+#submit-smiley-content img {
+    width: 31px;
+    vertical-align: -webkit-baseline-middle;
+    vertical-align: -moz-baseline-middle;
+    vertical-align: -o-baseline-middle;
+    vertical-align: baseline-middle;
+}
+
+#submit-smiley-content li:hover {
+    background: #f0f0f0;
+}

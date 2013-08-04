@@ -72,13 +72,13 @@
 
                 $imageEntryTemplate =   '<div class="chat-entry">'.
                                             '<span class="chat-entry-options">%s</span>'.
-                                            '<span class="chat-entry-user">%s</span>'.
+                                            '<span class="chat-entry-user">%s:</span>'.
                                             '<span class="chat-entry-message"><a href="%s"><img class="image-message" src="%s"/></a></span>'.
                                         '</div>';
 
                 $textEntryTemplate =    '<div class="chat-entry">'.
                                             '<span class="chat-entry-options">%s</span>'.
-                                            '<span class="chat-entry-user">%s</span>'.
+                                            '<span class="chat-entry-user">%s:</span>'.
                                             '<span class="chat-entry-message">%s</span>'.
                                         '</div>';
 
@@ -100,7 +100,7 @@
     <script src="js/vendor/jquery-2.0.3.min.js" ></script>
     <script src="js/base.js" ></script>
     <script>
-        $('#chat-entries').scrollTop(10000000000);
+        $("#chat-entries").prop({ scrollTop: $("#chat-entries").prop("scrollHeight")});
     </script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

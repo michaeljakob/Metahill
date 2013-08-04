@@ -127,7 +127,7 @@
             </form>
             <p>I have an account. <a href="login.php">Sign in</a>.</p>
             <footer>
-                <a href="forum" target="_blank">Forum</a>&nbsp;|
+                <a href="blog" target="_blank">Blog</a>&nbsp;|
                 <a href="help" target="_blank">Help</a>
             </footer>
       </article>

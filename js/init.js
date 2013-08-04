@@ -14,74 +14,64 @@ $(function() {
             css = '<link rel="stylesheet" type="text/css" href="css/windows-fixes.css"/>';
             $(css).appendTo('head');
         }
-
-
-
-        $(window).on('resize', $.debounce(250, function() {
-            // keep scrolled to bottom
-            var chatEntries = $('#chat-entries');
-            chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
-        }));
-
-        $(window).resize((function() {
-            var submitArea = $('#submit-area');
-            var channelAttendeesEntries = $('#channel-attendees-entries');
-            var chatEntries = $('#chat-entries');
-            var header = $('header');
-
-            var h = -1;
-            var w = -1;
-            return function() {
-                var nh = $(window).height();
-                var nw = $(window).width();
-
-                if(w !== nw) {
-                    bringRowHeightInOrder();
-                    // keep scrolled to bottom
-                    chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
-
-                    w = nw;
-                }
-
-                if(h !== nh) {
-                    // min-aheight
-                    if(!metahill.base.support.isEmbedded && nh < 500) {
-                        submitArea.addClass('height-limiter');
-                        chatEntries.height(190);
-                        return;
-                    } else {
-                        submitArea.removeClass('height-limiter');
-                    }
-
-                    var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
-                    channelAttendeesEntries.height(attendeesBarHeight + 50);
-
-                    if(!metahill.base.support.isEmbedded) {
-                        chatEntries.height(attendeesBarHeight - 50);
-                    } else {
-                        chatEntries.height(attendeesBarHeight + 85);
-                    }
-
-                    h = nh;
-                }
-            };
-        })());
-        
-        $(window).resize();
     });
 
-    /*
-        Make option, username and message div be the same height.
-    */
-    function bringRowHeightInOrder() {
+
+    $(window).on('resize', $.debounce(250, function() {
+        // keep scrolled to bottom
         var chatEntries = $('#chat-entries');
-        chatEntries.children().each(function(_, element) {
-            var children = $(element).children();
-            var maxHeight = $(children[2]).height();
-            $(children[0]).height(maxHeight);
-            $(children[1]).height(maxHeight);
-        });
-    }
+        chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+    }));
+
+    $(window).resize((function() {
+        var submitArea = $('#submit-area');
+        var channelAttendeesEntries = $('#channel-attendees-entries');
+        var header = $('header');
+        var submitSwitchTheme = $('#submit-switch-theme');
+
+        var h = -1;
+        var w = -1;
+        return function() {
+            var nh = $(window).height();
+            var nw = $(window).width();
+
+            var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
+
+            if(w !== nw) {
+                chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+
+                if(nw <= 800) {
+                    submitSwitchTheme.addClass('submit-switch-theme-absolute');
+                } else {
+                    submitSwitchTheme.removeClass('submit-switch-theme-absolute');
+                }
+
+                w = nw;
+            }
+
+            if(h !== nh) {
+                // min-height
+                if(!metahill.base.support.isEmbedded && nh < 500) {
+                    submitArea.addClass('height-limiter');
+                    chatEntries.height(190);
+                    return;
+                } else {
+                    submitArea.removeClass('height-limiter');
+                }
+                h = nh;
+            }
+
+            // we always check for scrollability - it is the most important thing
+            var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
+            channelAttendeesEntries.height(attendeesBarHeight + 50);
+
+            if(!metahill.base.support.isEmbedded) {
+                chatEntries.height(attendeesBarHeight - 50);
+            } else {
+                chatEntries.height(attendeesBarHeight + 85);
+            }
+        };
+    })()); // window.resize
     
     $('.selectpicker').selectpicker();
     $('#add-new-room').popover({ 
@@ -93,26 +83,52 @@ $(function() {
         content: function() {
             return $('#add-new-room-content').html();
         }
-    }).click((function() {
-        var addNewRoomSearch = $('#add-new-room-search');
-        return function() {
-            addNewRoomSearch.focus();
-        };
-    })());
-
+    }).click(function() {
+        $('#add-new-room-search').focus();
+    });
 
     // remove "add-new-room"-popover if you click anywhere
     $('body').on('click', function (e) {
         var submitMessage = $('#submit-message');
-        $('#add-new-room').each(function () {
+        $('#add-new-room, #submit-smiley').each(function () {
             if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
                 $(this).popover('hide');
             }
         });
     });
+
+    $('#submit-smiley').popover({ 
+        trigger: 'click',
+        html: true,
+        title: function() {
+            return $('#submit-smiley-title').html();
+        },
+        content: function() {
+            return $('#submit-smiley-content-parent').html();
+        }
+    }).click(function() {
+        $('#submit-smiley-content img').click(function() {
+            $('#submit-smiley').popover('hide');
+            var imageUrl = 'http://www.metahill.com/' + $(this).attr('src');
+            var roomId = metahill.main.activeRoom.attr('data-roomid');
+            var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+            metahill.chat.sendImage(imageUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
+        });
+    });
+
+    $('#chat-entries-parent').click(function() {
+        $('#submit-message').focus();
+    });
         
     // filter
-    $('#filter-search-user').filterList();
+    $('#filter-search-user')
+    .filterList()
+    .keydown(function(e) {
+        // disable ENTER
+        if(e.keyCode === 13) {
+            e.preventDefault();
+        }
+    });
 });
 
 // channels-list Sortable (dragging room positions)
@@ -131,8 +147,10 @@ $(function() {
             json.roomId = ui.item.attr('data-roomid');
             json.userId = metahill.main.userId;
 
-            metahill.helper.submitHttpRequest('update-room-positions.php', json);
-            metahill.helper.submitHttpRequest('update-activeroom.php', { userId: metahill.main.userId, activeRoom: metahill.main.activeRoom.index()});
+            if(!metahill.main.isGuest) {
+                metahill.helper.submitHttpRequest('update-room-positions.php', json);
+                metahill.helper.submitHttpRequest('update-activeroom.php', { userId: metahill.main.userId, activeRoom: metahill.main.activeRoom.index()});
+            }
         }
 
     });

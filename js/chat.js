@@ -58,7 +58,7 @@ $(function(){
             removeAllChannelAttendees();
             
             metahill.main.isStatusPersistent = true;
-            metahill.main.setCurrentStatus('Awwr. It seems we got a server problem. We\'re working on it...', 'alert-error', -1);
+            metahill.main.setCurrentStatus('Awwr. It seems we got a server problem. We got that!', 'alert-error', -1);
         }
         setTimeout(function() {
             setupConnection();
@@ -108,63 +108,78 @@ $(function(){
         Events & Callbacks
     ************************************************************************/
     function addLatestChatEntries(roomId, roomName, entries) {
-        var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
-        
+        var room = $('#channels-list').find('li:contains("'+roomName+'")');
+
         var cache = '';
         for(var i=0; i<entries.length; ++i) {
             var entry = entries[i];
-            metahill.main.logChatMessage(roomName, entry.account_name, entry.content, entry.is_image, entry.submitted_time);
-
-            if(activeRoomName === roomName) {
-                if(entry.is_image) {
-                    cache += metahill.main.makeEntryImageText(entry.account_name, entry.content, entry.submitted_time, 'logged-message');
-                } else {
-                    cache += metahill.main.makeEntryMessageText(entry.account_name, entry.content, entry.submitted_time, 'logged-message');
-                }
+            if(entry.is_image) {
+                cache += metahill.main.makeEntryImageText(entry.account_name, room, entry.content, entry.submitted_time, 'logged-message');
+            } else {
+                cache += metahill.main.makeEntryMessageText(entry.account_name, room, entry.content, entry.submitted_time, 'logged-message');
             }
         }
 
-        $('#chat-entries').append(cache);
+        var div = $(document.createElement('div'));
+        div
+        .attr('id', 'chat-entries-' + roomId)
+        .append(cache);
+        var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+        $('#chat-entries-parent').append(div);
+        if(activeRoomName !== roomName) {
+            div.hide();
+        } else {
+            var activeRoomId = metahill.main.activeRoom.attr('data-roomid');
+            var newChatEntries = $('#chat-entries-' + activeRoomId);
+            newChatEntries.show();
+        }
+
         metahill.modals.liveUpdateChatTextSize();
+        $('#chat-entries-parent').children('div').scrollTop(10000);
     }
 
     function onUserJoin(userId, userName, roomName) {
-        //console.log('userjoin:' + userId + '=' + userName + ' in ' + roomName);
         if(metahill.log.roomAttendees[roomName] === undefined) {
-            metahill.log.roomAttendees[roomName] = [];    
+            metahill.log.roomAttendees[roomName] = {};
         }
-        metahill.log.roomAttendees[roomName].push({"userId": userId, "userName": userName});
-        
-        var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
-        if(isActiveRoom) {
-            if(userName !== metahill.main.userName) {
-                writeSystemMessage(roomName, userName + ' joined the room.');
+
+        if(metahill.log.roomAttendees[roomName][userName] === undefined) {
+            var u = {};
+            u.id = userId;
+            u.numLogins = 1;
+
+            metahill.log.roomAttendees[roomName][userName] = u;
+
+            var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
+            if(isActiveRoom) {
+                if(userName !== metahill.main.userName) {
+                    addJoinQuitMessage(roomName, userName + ' joined the room.');
+                }
+                $('#channel-attendees-entries').append(metahill.main.makeAttendeeEntry(userId, userName));
             }
-            $('#channel-attendees-entries').append(metahill.main.makeAttendeeEntry(userId, userName));
+        } else {
+            ++metahill.log.roomAttendees[roomName][userName].numLogins;
         }
     }
     
     function onUserQuit(userId, userName, roomName) {    
-        //console.log('userquit:' + userId + ' in ' + roomName);    
         // should never be triggered
         if(metahill.log.roomAttendees[roomName] === undefined) {
             console.log('userquit with undefined roomName');
             return;
         }
+
+        --metahill.log.roomAttendees[roomName][userName].numLogins;
+        if(metahill.log.roomAttendees[roomName][userName].numLogins === 0) {
+            delete metahill.log.roomAttendees[roomName][userName];     
         
-        for(var i=0; i<metahill.log.roomAttendees[roomName].length; ++i) {
-            if(metahill.log.roomAttendees[roomName][i].userId === userId) {
-                metahill.log.roomAttendees[roomName].remove(i);
+            var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
+            if(isActiveRoom) {
+                if(userName !== metahill.main.userName) {
+                    addJoinQuitMessage(roomName, userName + ' quit the room.');
+                }
+                $('#channel-attendees-' + userId).remove();
             }
-        }        
-        
-        var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
-        if(isActiveRoom) {
-            if(userName !== metahill.main.userName) {
-                writeSystemMessage(roomName, userName + ' quit the room.');
-            }
-            $('#channel-attendees-' + userId).remove();
-            $('#channel-attendees-' + userId).show();
         }
 
     }
@@ -172,7 +187,7 @@ $(function(){
     /************************************************************************
         Helper functions
     ************************************************************************/
-    function writeSystemMessage(roomName, message) {
+    function addJoinQuitMessage(roomName, message) {
         var userName = '';
         var time = new Date();
         message = '_' + message + '_';
@@ -199,17 +214,18 @@ $(function(){
 /************************************************************************
     Methods for the outer world following
 ************************************************************************/
-metahill.chat.updateAttendeesList = function(list, roomId, roomName) {
-    metahill.log.roomAttendees[roomName] = list;
+metahill.chat.updateAttendeesList = function(userList, roomId, roomName) {
+    metahill.log.roomAttendees[roomName] = userList;
 
     var isActiveRoom = roomName === metahill.helper.getSimpleText(metahill.main.activeRoom);
     if(isActiveRoom) {
         var channelAttendeesEntries = $('#channel-attendees-entries');           
         channelAttendeesEntries.empty();
         var cache = '';
-        list.forEach(function(entry) {
-            channelAttendeesEntries.append(metahill.main.makeAttendeeEntry(entry.userId, entry.userName));
-        });
+        for(var name in userList) {
+            cache += metahill.main.makeAttendeeEntry(userList[name].id, name);
+        }
+        channelAttendeesEntries.append(cache);
     }
 };
 
@@ -248,18 +264,38 @@ metahill.chat.sendMessage = function(message, userId, userName, roomId, roomName
     metahill.chat.connection.send(JSON.stringify(messageObject));
 };
 
-metahill.chat.sendImage = function(imageUrl, userId, userName, roomId, roomName) {
-    var messageObject = { 
-        content: imageUrl, 
-        intent: 'tell-image', 
-        userId: userId, 
-        userName: userName, 
-        roomId: roomId, 
-        roomName: roomName
-    };
+metahill.chat.sendImage = (function() {
+    var lastSubmissionTime = 0;
+    function isSubmitAllowed() {
+        var now = new Date().getTime();
+        if(now - lastSubmissionTime > 60*1000) {
+            lastSubmissionTime = now;
+            return true;
+        }
+        metahill.main.setSubmitStatus('Awwr', 'You only may share one image each 60 seconds.');
+        return false;
+    }
 
-    metahill.chat.connection.send(JSON.stringify(messageObject));
-};
+    return function(imageUrl, userId, userName, roomId, roomName) {
+        if(!isSubmitAllowed()) {
+            return false;
+        }
+
+        var messageObject = { 
+            content: imageUrl, 
+            intent: 'tell-image', 
+            userId: userId, 
+            userName: userName, 
+            roomId: roomId, 
+            roomName: roomName
+        };
+
+        metahill.chat.connection.send(JSON.stringify(messageObject));
+        return true;
+    };
+})();
+
+
 
 
 

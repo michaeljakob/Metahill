@@ -34,7 +34,7 @@ if($success) {
     header('Status: 200 OK');
     header('Content-Description: ' . $statement->rowCount());
 } else {
-    header('Status: 400 Bad Request');
+    header('Status: 400 Bad Request', true, 400);
     header('Content-Description: ' . var_dump($statement->errorInfo()));
 }
 

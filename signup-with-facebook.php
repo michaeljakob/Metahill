@@ -39,7 +39,11 @@ if($facebookUserProfile !== null) {
                     $_SESSION["name"] = $name;
                     $_SESSION["logged_in"] = true;
                     $_SESSION["verified"] = true;
-                    header("Location: index.php");
+                    if(isset($_GET['embedded']) && $_GET['embedded'] === 'true') {
+                        header("Location: embedded.php");
+                    } else {
+                        header("Location: index.php");
+                    }
                     exit();
                 } else {
                     $errorMessage = "This email address is already in use. Please <a href='signup.php'>create an account manually</a>.";

@@ -1,21 +1,27 @@
 <?php
     session_start();
-    if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['verified']) && $_SESSION['verified']) {
-        session_regenerate_id(true);
-    } else {
+    session_regenerate_id(true);
+
+    if( !isset($_SESSION['logged_in']) || !$_SESSION['logged_in'] || 
+        !isset($_SESSION['verified']) || !$_SESSION['verified'] || 
+        !isset($_SESSION['name']) || !$_SESSION['name']) {
+
         header('Location: login.php');
         exit();
     }
+
+    $version = sha1(date('ddyyyymm'));
+    
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<base href="http://127.0.0.1/Documents/Development/Web/metahill.com/"/>
+<base href="http://127.0.0.1/metahill.com/"/>
 <title>Metahill | Chatrooms for enthusiasts</title>
-<link rel="stylesheet" type="text/css" href="css/base.css"/>
-<link rel="stylesheet" type="text/css" href="css/index.css"/>
-<link rel="stylesheet" type="text/css" href="css/chat.css"/>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css"/>
+<link rel="stylesheet" type="text/css" href="css/base.css?v=<?php echo $version; ?>"/>
+<link rel="stylesheet" type="text/css" href="css/index.css?v=<?php echo $version; ?>"/>
+<link rel="stylesheet" type="text/css" href="css/chat.css?v=<?php echo $version; ?>"/>
+<link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css?v=<?php echo $version; ?>"/>
 
 
 <style id="phpcss">
@@ -26,12 +32,20 @@
     echo "body, body *{font-family:'$font';}";
 ?>
 </style>
+<style id="live-update-chat-text-size"></style>
+<style>
+    @import url(http://fonts.googleapis.com/css?family=Numans);
+</style>
+
+
 <?php
     $theme = 'default';
-    if(isset($_GET['theme']) && trim($_GET['theme']) != '') {
-        $theme = basename($_GET['theme']);
-        if(file_exists("themes/$theme/css/chat.css")) {
-            echo "<link rel='stylesheet' type='text/css' href='themes/$theme/css/chat.css'/>";
+    if(isset($_GET['theme']) && trim($_GET['theme']) != "") {
+        $theme = htmlspecialchars($_GET['theme']);
+        if(file_exists("theme/$theme.css")) {
+            echo "<link rel='stylesheet' type='text/css' href='theme/$theme.css?v=<?php echo $version; ?>'/>";
+        } else {
+            echo "<link rel='stylesheet' type='text/css' href='$theme'/>";
         }
     }
 ?>
@@ -40,12 +54,23 @@
 <body>
     <div id="drag-and-drop-overlay"><h1>Upload</h1></div>
     <img id="magnify-image-overlay"/>
-    <?php require_once('feature/header.php'); ?>
+    <?php
+        if($user->is_guest) {
+            echo "<div id='is-guest' style='display:none;'></div>";
+        }
+        require_once('feature/header.php');
+    ?>
     <section id="main-container">
         <div id="channels">
             <ul id="channels-list">
                 <?php
-                    $rooms = dbGetFavoriteRooms($_SESSION['name']);
+                    $rooms;
+                    if($user->is_guest) {
+                        $rooms = array(dbGetRoomObjectFromName('metahill'));
+                    } else {
+                        $rooms = dbGetFavoriteRooms($_SESSION['name']);
+                    }
+
                     foreach($rooms as $room) {
                         $topic = str_replace("'", "&#39;", $room->topic);
                         $roomName = $room->name;
@@ -75,12 +100,15 @@
                     </button>
                     <span id="chat-header-topic"></span>
                 </div>
-                <div id="chat-entries"></div>
+                <div id="chat-entries-parent">
+                </div>
             </article>
         </div>
     </section>
     
     <article id="submit-area">
+
+        <span id="submit-smiley" class="btn" data-toggle="popover" data-placement="top">:)</span>
         <div id="submit-message-wrapper"><input type="text" id="submit-message" autofocus autocomplete="off" /></div>
         <?php
             $changeThemeName;
@@ -107,16 +135,55 @@
                 <div id="add-new-room-rooms-parent">
                     <ul id="add-new-room-rooms"></ul>
                 </div>
-                <a id="add-new-room-create-new-room" class="btn btn-info" href="#modal-new-room" data-toggle="modal">Create new room</a>
+                <?php 
+                    if(!$user->is_guest) {
+                        echo "<a id='add-new-room-create-new-room' class='btn btn-info' href='#modal-new-room' data-toggle='modal'>Create new room</a>";
+                    }
+                ?>
             </form>
+        </div>
+    </div>
+    <div id="submit-smiley-title" style="display:none">Image Lounge</div>
+    <div id="submit-smiley-content-parent" style="display:none">
+        <div id="submit-smiley-content">
+            <ul>
+                <?php
+                    $files = glob("img/extra-smilies/*");
+                    foreach($files as $file) {
+                        echo "<li><img src='$file'/></li>";
+                    }
+                ?>
+            </ul>
+            
+            <?php
+                if(!$user->is_guest) {
+                    $files = glob("image-upload/{$user->name}.*");
+                    if(!empty($files)) {
+                        usort($files, create_function('$a,$b', 'return filemtime($a) - filemtime($b);'));
+                        echo "<hr class='fade-gray'>";
+                        echo "<ul>";
+
+                        $i = 0;
+                        foreach($files as $file) {
+                            if($i >= 10) {
+                                break;
+                            }
+                            ++$i;
+                            echo "<li><img src='$file'/></li>";
+                        }
+
+                        echo "</ul>";
+                    }
+                }
+            ?>
         </div>
     </div>
     <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom;  ?></div>
     <?php 
         require_once('feature/modals.php');
-        require_once('js/index.php.jsinclude');
+        require_once('js/index.php.jsinclude.php');
         
-        if(isset($_GET['join']) && strlen(trim($_GET['join'])) > 0) {
+        if((!$user->is_guest) && isset($_GET['join']) && strlen(trim($_GET['join'])) > 0) {
             $roomName = $_GET['join'];
             // is it already a favorite?
             foreach($rooms as $room) {

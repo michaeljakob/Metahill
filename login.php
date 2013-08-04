@@ -134,7 +134,7 @@
             <table id="login-chooser">
                 <tr>
                     <td colspan="3">
-                        <h2>Sign in<hr class="style-two"></h2>
+                        <h2>Sign in<hr class="fade-white"></h2>
                     </td>
                 </tr>
                 <tr>
@@ -163,20 +163,19 @@
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <hr class="style-two">
-                        <p class="no-account-yet">I don't have an account. <a href="signup.php">Sign up</a>.</p>
+                        <hr class="fade-white">
+                        <p class="no-account-yet">I don't have an account. <a href="signup.php">Sign up</a> or <a href="join-as-guest.php">join as a guest</a>.</p>
                     </td>
                 </tr>           
             </table>
         </article>
         <footer>
-            <a href="forum" target="_blank">Forum</a>&nbsp;|
+            <a href="blog" target="_blank">Blog</a>&nbsp;|
             <a href="help" target="_blank">Help</a>
         </footer>
 
     </section>
 
-    <script async src="js/login.js" async="async"></script>
     <script type="text/javascript" async="async">
         // Google+
         (function() {
@@ -198,6 +197,7 @@
     </script>
     <script src="js/vendor/jquery-2.0.3.min.js"></script>
     <script async src="js/base.js" ></script>
+    <script async src="js/login.js" async="async"></script>
 
 </body>
 </html>

@@ -3,7 +3,6 @@
 <script src="js/vendor/bootstrap-select.min.js" ></script>
 <script src="js/vendor/jquery-ui-1.10.3.custom.min.js" ></script>
 <script src="js/vendor/jquery.filterList.js" ></script>
-<script src="js/vendor/jquery.titlealert.min.js" ></script> 
 <script src="js/vendor/debounce.js" ></script> 
 
 <script src="js/base.js" ></script>
