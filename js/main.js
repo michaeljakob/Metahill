@@ -24,6 +24,11 @@ $(function() {
      */
      function openFavoriteRooms() {
         var favorites = $('#channels-list').children();
+        // if(favorites.length === 0) {
+        //     //metahill.main.disableInput();
+        //     return;
+        // }
+
         var activeRoomIndex = parseInt($('#data-activeroomid').html(),10);
         var isAnyRoomSelected = false;
         favorites.each(function(index, entry) {
@@ -343,7 +348,6 @@ $(function() {
         attendeesList.append(cache);
     };
 
-    ;
     function onRoomSelected(newRoom) {
         newRoom = $(newRoom);
         if(newRoom.attr('id') === 'add-new-room'){
@@ -358,7 +362,6 @@ $(function() {
         var newRoomName = metahill.helper.getSimpleText(newRoom);
 
         if(newRoomName !== oldRoomName) {
-            console.log(oldRoomName + "<>" + newRoomName);
             metahill.main.enableInput();
             metahill.log.roomAttendees[newRoomName] = metahill.log.roomAttendees[newRoomName] || {};
 
@@ -460,6 +463,8 @@ $(function() {
         }
         if(newActiveRoom.length !== 0) {
             onRoomSelected(newActiveRoom);
+        } else {
+            $('#channel-attendees-entries').empty();
         }
     }
 
