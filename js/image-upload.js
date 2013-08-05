@@ -2,6 +2,23 @@
 /*global document, console, $, XMLHttpRequest, FormData */
 
 $(function() {
+
+    document.onpaste = function(e){
+        var items = e.clipboardData.items;
+        console.log(JSON.stringify(items));
+        if (e.clipboardData.items[1].kind === 'file') {
+            // get the blob
+            var imageFile = items[1].getAsFile();
+            console.log(imageFile);
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                console.log(event.target.result); // data url!
+                submitFileForm(event.target.result, 'paste');
+            };
+            reader.readAsBinaryString(imageFile);
+        }
+    };
+
     var dropElement = document.body;
     var isDragging = null;
 
@@ -64,33 +81,38 @@ $(function() {
         };
         
         if (acceptedTypes[file.type] === true) {
-            var formData = new FormData();
-            formData.append('file', file);
-            formData.append('userName', metahill.main.userName);
-
-            var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, metahill.main.activeRoom, 'http://www.metahill.com/img/loading.gif', new Date().getTime()));
-            var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
-            chatEntries
-            .append(entry)
-            .animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
-
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'php/image-upload.php');
-            xhr.onload = function () {
-                entry.remove();
-                if (xhr.status == 200) {
-                    console.log('all done: ' + xhr.status + ':' + fileName);
-                    var fileName = xhr.getResponseHeader('Content-Description');
-                    metahill.chat.sendImage(fileName, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
-                } else {
-                    //console.log('Something went terribly wrong...' + xhr.status  + ': ' + xhr.statusText);
-                    console.log('Nope');
-                }
-            };
-            
-            xhr.send(formData);
+            submitFileForm(file, 'drag');
         }
         return false;
     };
+
+    function submitFileForm(file, type) {
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('userName', metahill.main.userName);
+        formData.append('submissionType', type);
+
+        var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, metahill.main.activeRoom, 'http://www.metahill.com/img/loading.gif', new Date().getTime()));
+        var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
+        chatEntries
+        .append(entry)
+        .animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'php/image-upload.php');
+        xhr.onload = function () {
+            entry.remove();
+            if (xhr.status == 200) {
+                var fileName = xhr.getResponseHeader('Content-Description');
+                console.log('all done: ' + xhr.status + ':' + fileName);
+                metahill.chat.sendImage(fileName, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
+            } else {
+                //console.log('Something went terribly wrong...' + xhr.status  + ': ' + xhr.statusText);
+                console.log('Nope');
+            }
+        };
+        
+        xhr.send(file);
+    }
 });

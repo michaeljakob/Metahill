@@ -5,13 +5,17 @@ Twitter             : @metahill_com
 Location            : Karlsruhe, Germany
                         
 /* THANKS */
-Robert Jakob, Maximilian Seitz, Josef Drasch
+...to just all the things I've ever had contact with.
+
+
+/* THANKS TO OUR BRAVE USERS */
+Dodovogel, Weexe, dot
 
 
                         
 /* SITE */
-Last update         : 2013/24/07
-Standards           : HTML5, CSS3, ECMAScript
+Last update         : Rolling Release, so probably today.
+Standards           : HTML5, CSS3, ECMAScript, Python, PHP
 Components          : Modernizr, jQuery, Bootstrap
 Software            : Mac OS X, Sublime Text 2, a plethora of terminal commands
    

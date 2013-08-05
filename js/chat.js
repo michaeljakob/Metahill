@@ -37,7 +37,6 @@ $(function(){
         });
 
         metahill.roomProposer.requestRoomProposals();
-        metahill.main.enableInput();
         setTimeout(function() {
             metahill.main.isStatusPersistent = false;
             metahill.main.setCurrentStatus('Welcome back!', 'alert-success');
@@ -142,6 +141,7 @@ $(function(){
         if(metahill.log.roomAttendees[roomName] === undefined) {
             metahill.log.roomAttendees[roomName] = {};
         }
+        metahill.main.enableInput();
 
         if(metahill.log.roomAttendees[roomName][userName] === undefined) {
             var u = {};
