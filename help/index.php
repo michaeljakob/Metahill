@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
 <meta name="description" content="Metahill is the easiest way to chat, text, message and share images in real time with other enthusiasts all across the web. The ability to exchange a lot of information including diagrams and links real-time makes it a first class business solution.">
 <meta name="author" content="">
@@ -17,7 +17,7 @@
 
 </head>
 <body>
-    <a name="#top"></a>
+    <a id="#top"></a>
     <header>
         <a href="../"><img src="../img/metahill.png" alt="metahill icon" /></a>
     </header>
@@ -84,24 +84,22 @@
                             ?>
                         </tbody>
                     </table>
-                    <h1>Formatting<a href="#top"><img class="anchor" title="go to top" src="img/up.png"/></a></h1>
+                    <h1>Formatting<a href="#top"><img class="anchor" title="go to top" alt="go to top" src="img/up.png"/></a></h1>
                     <p>
                         Add some formatting to your messages to emphasize important parts and make others easier comprehend.
                         Doing so is tremendously easy, just wrap your text into a special symbol.
-                        <ul>
-                            <li><b>*bold*</b></li>
-                            <li><i>_italics_</i></li>
-                            <li><code>`code`</code></li>
-                        </ul>
                     </p>
-                    <h1>Colored user names and messages</h1>
+                    <ul>
+                        <li><b>*bold*</b></li>
+                        <li><i>_italics_</i></li>
+                        <li><code>`code`</code></li>
+                    </ul>
+                    <h1>Users with fancy icons before their names</h1>
                     <p>
-                        You may have came across users who write in a catchy color. If so, you then
-                        stumbled upon either an administrator, a moderator or the room owner of the currently active room.
-                        In the example image below, we're all within the room <code>java</code>.
-                        <img class="example" src="img/colored-usernames-and-messages.png" />
+                        Those are usually admins, mods or room administrators.
+                        <img class="example" src="img/colored-usernames-and-messages.png" alt="" />
                     </p>
-                    <h1>Share images<a href="#top"><img class="anchor" title="go to top" src="img/up.png"/></a></h1>
+                    <h1>Share images<a href="#top"><img class="anchor" title="go to top" alt="go to top" src="img/up.png"/></a></h1>
                     <p>
                         You want to share images? A business-plan, a table or a funny cat. Whatever it might be, it is super easy. 
                         Just drag the image to <a href="http://www.metahill.com/">metahill.com</a>, then drop it. Yeah, that's it.
@@ -220,7 +218,7 @@
 
     </script>
     
-    <script async="async">
+    <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

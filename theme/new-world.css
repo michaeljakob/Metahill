@@ -1,0 +1,44 @@
+
+body, #submit-area, #channel-attendees, #chat-header, #channels, .btn:not(.btn-inverse):not(.btn-info):not(.btn-primary):not(.btn-danger)  {
+    background: url('../img/background-index.png') repeat !important;
+    background-size: 100px 100px !important;
+}
+
+.btn-primary:hover {
+    background: url('../img/background-header-dark.png') !important;
+    background-size: 100px 100px !important;
+}
+
+.btn:not(.btn-inverse):not(.btn-info):not(.btn-primary):not(.btn-danger) {
+    border-bottom-color: rgb(53, 168, 215) !important;
+}
+
+.btn:not(.btn-inverse):not(.btn-info):not(.btn-primary):not(.btn-danger):hover {
+    background: url('../img/background-index-dark.png') !important;
+    background-size: 100px 100px !important;
+}
+
+.dropdown-menu > li > a:hover {
+    background: rgb(53, 168, 215) !important;
+}
+
+#submit-area {
+    border-top: 1px solid #ddd;
+}
+
+header, #channels, #chat-header {
+    border-bottom: 1px solid #ddd;
+}
+
+#channel-attendees-entries {
+    border-left: 1px solid #ddd;
+}
+
+header, .btn-primary {
+    background: url('../img/background-header.png') repeat !important;
+    background-size: 100px 100px !important;
+}
+
+#data-added-chat-entries-height {
+    margin-top: -5px;
+}

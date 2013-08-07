@@ -100,7 +100,17 @@
     <script src="js/vendor/jquery-2.0.3.min.js" ></script>
     <script src="js/base.js" ></script>
     <script>
-        $("#chat-entries").prop({ scrollTop: $("#chat-entries").prop("scrollHeight")});
+        $(function() {
+            var chatEntries = $("#chat-entries");
+            $(window).resize(function() {
+                chatEntries.height($(window).height() - 200);
+                chatEntries.prop({ scrollTop: chatEntries.prop('scrollHeight')});
+            });
+            $(window).resize();
+            setTimeout(function() { $(window).resize()}, 100);
+            setTimeout(function() { $(window).resize()}, 200);
+            setTimeout(function() { $(window).resize()}, 300);
+        });
     </script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
