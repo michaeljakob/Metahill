@@ -28,6 +28,7 @@ $(function() {
         var channelAttendeesEntries = $('#channel-attendees-entries');
         var header = $('header');
         var submitSwitchTheme = $('#submit-switch-theme');
+        var addedChatEntriesHeight = parseInt($('#data-added-chat-entries-height').css('margin-top'), 10);
 
         var h = -1;
         var w = -1;
@@ -53,7 +54,7 @@ $(function() {
                 // min-height
                 if(!metahill.base.support.isEmbedded && nh < 500) {
                     submitArea.addClass('height-limiter');
-                    chatEntries.height(190);
+                    chatEntries.height(190 + addedChatEntriesHeight);
                     return;
                 } else {
                     submitArea.removeClass('height-limiter');
@@ -63,12 +64,12 @@ $(function() {
 
             // we always check for scrollability - it is the most important thing
             var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
-            channelAttendeesEntries.height(attendeesBarHeight + 50);
+            channelAttendeesEntries.height(attendeesBarHeight + 50 + addedChatEntriesHeight);
 
             if(!metahill.base.support.isEmbedded) {
-                chatEntries.height(attendeesBarHeight - 50);
+                chatEntries.height(attendeesBarHeight - 50 + addedChatEntriesHeight);
             } else {
-                chatEntries.height(attendeesBarHeight + 85);
+                chatEntries.height(attendeesBarHeight + 85 + addedChatEntriesHeight);
             }
         };
     })()); // window.resize
@@ -116,7 +117,7 @@ $(function() {
         });
     });
 
-    $('#chat-entries-parent').click(function() {
+    $('#chat-entries-parent').mousedown(function() {
         $('#submit-message').focus();
     });
         

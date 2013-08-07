@@ -146,6 +146,11 @@ footer {
     width: 150px;
 }
 
+h1.desc {
+    max-width: 60%;
+    margin: auto;
+}
+
 .no-account-yet {
     margin-top: 5px;
 }
@@ -153,4 +158,9 @@ footer {
 img.facebook-login {
     margin-top: 20px;
     width: 250px;
+}
+
+.top-hr {
+    margin-top: -10px;
+    margin-bottom: 12px;
 }

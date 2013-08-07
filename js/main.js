@@ -24,10 +24,10 @@ $(function() {
      */
      function openFavoriteRooms() {
         var favorites = $('#channels-list').children();
-        // if(favorites.length === 0) {
-        //     //metahill.main.disableInput();
-        //     return;
-        // }
+        if(favorites.length === 0) {
+            metahill.main.disableInput();
+            return;
+        }
 
         var activeRoomIndex = parseInt($('#data-activeroomid').html(),10);
         var isAnyRoomSelected = false;
@@ -162,7 +162,7 @@ $(function() {
      * @param  {KeyboardEvent} e
      */
     var messageProcessor = (function(e) {
-        var INPUT_CHARACTER_LIMIT = 500;
+        var INPUT_CHARACTER_LIMIT = 512; // a bit more than the actual limit (500) for ` * _
         var submitMessage = $('#submit-message');
         var lastMessages = [];
         var lastMessagesIndex = -1;
@@ -314,7 +314,21 @@ $(function() {
     };
 
     metahill.main.makeImageTagFromUrl = function(url) {
-        return '<a target="_blank" href="'+url+'"><img class="image-message" '+ metahill.main.getMagnifyOnHoverCode(url) +' src="' + url + '"/></a>';   
+        var imageId = metahill.helper.generateRandomString(5);
+        var linkTag = $('<a target="_blank" href="'+url+'"></a>');
+        var imageTag = $('<img id="imgup-'+imageId+'" class="image-message" '+ metahill.main.getMagnifyOnHoverCode(url) +' src="' + url + '"/>');
+        linkTag.append(imageTag);
+
+
+        var newImg = new Image();
+        newImg.onload = function() {
+            if(newImg.height < 100){
+                $('#imgup-' + imageId).removeAttr('id onmouseover onmouseout');
+            }
+        };
+        newImg.src = url;
+
+        return linkTag[0].outerHTML;   
     };
 
     /**
@@ -687,10 +701,13 @@ $(function() {
             roleSymbol = '✧';
         } else if(adminNames.indexOf(userName) !== -1) {
             roleSymbol = '&#10037;';
+            classes += 'message-role-admin ';
         } else if(modNames.indexOf(userName) !== -1) {
             roleSymbol = '&#10036;';
+            classes += 'message-role-mod ';
         } else if(userName === $('#channel-attendees-' + room.attr('data-owner')).text()) {
             roleSymbol = '&#10035;';
+            classes += 'message-role-room-owner ';
         }
 
         if(userName === metahill.main.userName) {

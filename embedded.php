@@ -59,6 +59,7 @@
 </head>
 <body>
     <div id="drag-and-drop-overlay"><h1>Upload</h1></div>
+    <div id="data-added-chat-entries-height"></div>
     <?php
         if($user->is_guest) {
             echo "<div id='is-guest' style='display:none;'></div>";
@@ -124,7 +125,7 @@
             echo "<a target='_blank' id='submit-metahill' href='http://www.metahill.com/join/$roomNameUrlEncoded' class='btn'>$submitMetahillText</a>";
             echo "<a target='_blank' id='submit-help' href='http://www.metahill.com/help' class='btn'>$submitHelpText</a>";
         ?>
-        <div id="submit-message-wrapper"><input type="text" id="submit-message" autocomplete="off" /></div>
+        <div id="submit-message-wrapper"><input type="text" maxlength="500" id="submit-message" autocomplete="off" /></div>
         <?php
             if(!$api_isMini) {
                 $changeThemeName;

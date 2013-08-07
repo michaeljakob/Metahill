@@ -6,7 +6,7 @@
         !isset($_SESSION['verified']) || !$_SESSION['verified'] || 
         !isset($_SESSION['name']) || !$_SESSION['name']) {
 
-        header('Location: login.php');
+        header('Location: http://www.metahill.com/login.php');
         exit();
     }
 
@@ -54,6 +54,7 @@
 <body>
     <div id="drag-and-drop-overlay"><h1>Upload</h1></div>
     <img id="magnify-image-overlay"/>
+    <div id="data-added-chat-entries-height"></div>
     <?php
         if($user->is_guest) {
             echo "<div id='is-guest' style='display:none;'></div>";
@@ -109,7 +110,7 @@
     <article id="submit-area">
 
         <span id="submit-smiley" class="btn" data-toggle="popover" data-placement="top">:)</span>
-        <div id="submit-message-wrapper"><input type="text" id="submit-message" autofocus autocomplete="off" /></div>
+        <div id="submit-message-wrapper"><input type="text" maxlength="500" id="submit-message" autofocus autocomplete="off" /></div>
         <?php
             $changeThemeName;
             $changeThemeUrl;
@@ -117,7 +118,7 @@
                 $changeThemeName = "Into Darkness";
                 $changeThemeUrl = "http://www.metahill.com/?theme=dark";
             } else {
-                $changeThemeName = "Back To Normality";
+                $changeThemeName = "Back To Default";
                 $changeThemeUrl = "http://www.metahill.com/";
             }
 
@@ -159,10 +160,10 @@
                 if(!$user->is_guest) {
                     $files = glob("image-upload/{$user->name}.*");
                     if(!empty($files)) {
-                        usort($files, create_function('$a,$b', 'return filemtime($a) - filemtime($b);'));
                         echo "<hr class='fade-gray'>";
                         echo "<ul>";
 
+                        usort($files, create_function('$b,$a', 'return filemtime($a) - filemtime($b);'));
                         $i = 0;
                         foreach($files as $file) {
                             if($i >= 10) {
@@ -187,12 +188,13 @@
             $roomName = $_GET['join'];
             // is it already a favorite?
             foreach($rooms as $room) {
-                if($room->name === $roomName) {
+                if(strtolower($room->name) === strtolower($roomName)) {
                     return;
                 }
             }
             if(dbRoomExists($roomName)) {
                 $room = dbGetRoomObjectFromName($roomName);
+                $roomName = $room->name; // we want the original room name
                 $roomId = $room->id;
                 $roomTopic = str_replace('"', "&#34;", $room->topic);
                 $roomOwner = $room->owner;

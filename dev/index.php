@@ -47,6 +47,9 @@
             $(this).tab('show');
         });
 
+        // activate a specific tab
+        //$('#help-sections a').eq(2).tab('show');
+
     </script>
     
     <script async="async">

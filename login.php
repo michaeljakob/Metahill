@@ -88,14 +88,14 @@
                 <div class="g-plusone" data-size="medium"></div>
                 <div class="fb-like" data-href="http://www.metahill.com" data-send="false" data-layout="button_count" data-width="30" data-show-faces="true"></div>
                 <div id="fb-root"></div>
-                <script async="async">(function(d, s, id) {
+                <script>(function(d, s, id) {
                   var js, fjs = d.getElementsByTagName(s)[0];
                   if(d.getElementById(id)) return;
                   js = d.createElement(s); js.id = id;
                   js.src = "//connect.facebook.net/en_US/all.js";
                   fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk'));</script>
-                <script async="async">
+                <script>
                   window.fbAsyncInit = function() {
                     FB.init({
                             appId      : '392494720871725',
@@ -134,7 +134,8 @@
             <table id="login-chooser">
                 <tr>
                     <td colspan="3">
-                        <h2>Sign in<hr class="fade-white"></h2>
+                        <h2>Sign in</h2>
+                        <hr class="fade-white top-hr">
                     </td>
                 </tr>
                 <tr>
@@ -158,7 +159,7 @@
                         <p class="or">or</p>
                     </td>
                     <td class="content">
-                        <a href="#" onclick="fb_login();"><img class="facebook-login" src="img/facebook-login.png" border="0" alt="Sign up with facebook"></a>
+                        <a href="#" onclick="fb_login();"><img class="facebook-login" src="img/facebook-login.png" alt="Sign up with facebook"></a>
                     </td>
                 </tr>
                 <tr>
@@ -176,7 +177,7 @@
 
     </section>
 
-    <script type="text/javascript" async="async">
+    <script type="text/javascript">
         // Google+
         (function() {
             var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
@@ -185,7 +186,7 @@
         })();
     </script>
 
-    <script async="async">
+    <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -197,7 +198,7 @@
     </script>
     <script src="js/vendor/jquery-2.0.3.min.js"></script>
     <script async src="js/base.js" ></script>
-    <script async src="js/login.js" async="async"></script>
+    <script async src="js/login.js"></script>
 
 </body>
 </html>

@@ -15,8 +15,9 @@ $(function() {
     var originalDocumentTitle = document.title;
     $(window).focus(function() {
         metahill.base.isWindowFocused = true;
-
-        if(metahill.log.unseenMessages !== undefined) {
+        
+        if(metahill.log !== undefined && metahill.log.unseenMessages !== undefined) {
+            document.title = 'no-cache-in-chrome-for-windows';
             document.title = originalDocumentTitle;
             metahill.log.unseenMessages = 0;
         }
