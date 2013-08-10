@@ -11,5 +11,6 @@ RewriteRule ^log/(.+)$ log.php?room=$1 [B]
 RewriteRule ^join/(.+)$ index.php?join=$1 [B]
 
 # maintenance
-# RewriteCond %{REQUEST_URI} !=/maintenance.php
-# RewriteRule ([\.php|\.html])$ /maintenance.php [R=301]
+# RewriteCond %{REQUEST_URI} !(maintenance\.php|\.png|\.jpg)$
+# RewriteRule (.*) /maintenance.php [R=301]
+

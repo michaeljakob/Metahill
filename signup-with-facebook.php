@@ -33,9 +33,10 @@ if($facebookUserProfile !== null) {
     } else {
         if(isset($_POST["username"])) {
             $name = $_POST["username"];
+            $password = $_POST["username"];
             $nameLen = strlen($name);
             if($nameLen >= 3 && $nameLen <= 12 && strpos($name, "@") === false) {
-                if(dbAddFacebookAccount($name, $facebookUserProfile["email"], $facebookUserProfile["id"])) {
+                if(dbAddFacebookAccount($name, $password, $facebookUserProfile["email"], $facebookUserProfile["id"])) {
                     $_SESSION["name"] = $name;
                     $_SESSION["logged_in"] = true;
                     $_SESSION["verified"] = true;
@@ -80,12 +81,13 @@ if($facebookUserProfile !== null) {
     </section>
     <section id="main-container" class="signup">
         <article id="welcome">
-            <h1>Just one more thing...</h1>
+            <h1>Just two more things...</h1>
             <form method="post" id="action-chooser">
                 <h2 class="desc">Pick a nickname</h2>
                 
                 <input type="text" placeholder="Username" autofocus="true" pattern="[^@]*" name="username" id="reg_name" value="<?php echo $nickNameSuggestion; ?>" />
-                <span class="label"></span>
+                <input type="password" name="password" placeholder="Password" /><br/>
+                
                 
 
                 <input type="submit" value="Sign up" class="btn btn-success" />

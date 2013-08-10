@@ -182,7 +182,7 @@
                             <h2>It is easy to use</h2>
                             <p>
                                 <a href="http://www.metahill.com/">metahill</a> entails a beautiful design that follows function. We offer free community-driven support for everyone. Join the staff room <code>metahill</code> or write us an <a href="mailto:support@metahill.com">email</a>. 
-                                And the best: you don't have to get familiar with a whole new bunch of terminal-like commands to even log in (we're referring to IRC here).
+                                And the best: you don't have to get familiar with a whole new bunch of terminal-like commands to even log in (we're referring to IRC here). However, most of them exist anyway which makes it easier for those users.
                             </p>
                         </li>
                     </ol>

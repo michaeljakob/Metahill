@@ -77,11 +77,15 @@ metahill.helper.getGetParameters = function() {
 };
 
 metahill.helper.htmlEncode = function(value){
-    return $(document.createElement('div')).text(value).html().replace('\'', '&#39;').replace('"', '&#34;');
+    return $(document.createElement('div')).text(value).html();
 };
 
-metahill.helper.htmlDecode = function(value){
-    return $(document.createElement('div')).html(value).text().replace('&#39;', '\'').replace('&#34;', '"');
+metahill.helper.quotesEncode = function(value) {
+    return value.replace('\'', '&#39;').replace('"', '&#34;');
+};
+
+metahill.helper.quotesDecode = function(value){
+    return value.replace('&#39;', '\'').replace('&#34;', '"');
 };
 
 metahill.helper.generateRandomString = function (len) {

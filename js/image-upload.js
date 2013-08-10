@@ -64,38 +64,52 @@ $(function() {
         };
         
         if (acceptedTypes[file.type] === true) {
-            var formData = new FormData();
-            formData.append('file', file);
-            formData.append('userName', metahill.main.userName);
-
-            var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, metahill.main.activeRoom, 'http://www.metahill.com/img/loading.gif', new Date().getTime()));
-            var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
-            chatEntries
-            .append(entry)
-            .animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
-
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'php/image-upload.php');
-            xhr.onload = function () {
-                entry.remove();
-                if (xhr.status == 200) {
-                    var fileName = xhr.getResponseHeader('Content-Description');
-                    var url = 'http://www.metahill.com/' + fileName;
-                    console.log('all done: ' + xhr.status + ':' + fileName);
-                    metahill.chat.sendImage(fileName, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
-                    
-                    addRecentUploadedImageInLounge(url);
-                } else {
-                    //console.log('Something went terribly wrong...' + xhr.status  + ': ' + xhr.statusText);
-                    console.log('Nope');
-                }
-            };
-            
-            xhr.send(formData);
+            submitFileForm(file, 'drag');
         }
+
         return false;
     };
+
+    function submitFileForm(file, type) {
+        if(!metahill.chat.isImageSubmitAllowed()) {
+            return;
+        }
+
+        var extension = file.type.match(/\/([a-z0-9]+)/i)[1].toLowerCase();
+
+        var formData = new FormData();
+        formData.append('file', file, 'image_file');
+        formData.append('extension', extension );
+        formData.append('submissionType', type);
+        formData.append('userName', metahill.main.userName);
+
+
+        var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, metahill.main.activeRoom, 'http://www.metahill.com/img/loading.gif', new Date().getTime()));
+        var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
+        chatEntries
+        .append(entry)
+        .animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'php/image-upload.php');
+        xhr.onload = function () {
+            entry.remove();
+            if (xhr.status == 200) {
+                var fileName = xhr.getResponseHeader('Content-Description');
+                var url = 'http://www.metahill.com/' + fileName;
+                console.log('all done: ' + xhr.status + ':' + fileName);
+                metahill.chat.sendImage(fileName, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
+                
+                addRecentUploadedImageInLounge(url);
+            } else {
+                //console.log('Something went terribly wrong...' + xhr.status  + ': ' + xhr.statusText);
+                console.log('Nope');
+            }
+        };
+
+        xhr.send(formData);
+    }
+
 
     function addRecentUploadedImageInLounge(url) {
         if(metahill.main.isGuest) {
@@ -106,4 +120,16 @@ $(function() {
         recentsArea.children(':last-child').remove();
         recentsArea.prepend('<li><img src="'+url+'"/></li>');
     }
+
+    document.onpaste = function (e) {
+        var items = e.clipboardData.items;
+        var files = [];
+        for( var i = 0, len = items.length; i < len; ++i ) {
+            var item = items[i];
+            if( item.kind === 'file' ) {
+                submitFileForm(item.getAsFile(), 'paste');
+            }
+        }
+
+    };
 });

@@ -42,3 +42,12 @@ header, .btn-primary {
 #data-added-chat-entries-height {
     margin-top: -5px;
 }
+
+#channel-attendees-entries button:hover {
+    background: transparent !important;
+}
+
+#channel-attendees-entries > li > button:first-child {
+    padding-left: 0;
+    padding-right: 0;
+}

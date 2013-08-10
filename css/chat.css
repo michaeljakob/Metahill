@@ -167,6 +167,13 @@
     overflow-y: scroll;
 }
 
+#channel-attendees-entries img {
+    width: 20px;
+    margin-left: 5px;
+    cursor: pointer;
+    float: right;
+}
+
 #channel-attendees-entries > li {
     margin: 0 0 4px 0;
 }
@@ -175,6 +182,7 @@
     width: 185px;
     margin-left: 2px;
     border: none;
+    text-align: left;
 }
 
 .btn.disabled, .btn[disabled] {
@@ -272,7 +280,7 @@ img.image-message {
     max-height: 40%;
     max-width: 40%;
 
-    background: #f0f0f0;
+    background: #f7f7f7;
     border-radius: 3px;
     padding: 3px;
 }
@@ -349,10 +357,22 @@ pre.prettyprint {
     padding: 0 3px 0 0;
 }
 
-/* Customization option */
-.message-role-admin { }
-.message-role-mod { }
-.message-role-room-owner { }
+.message-role-server .chat-entry-user:before {
+    content: '\2736';
+}
+
+.message-role-admin .chat-entry-user:before {
+    content: '\2735';
+}
+
+.message-role-mod .chat-entry-user:before {
+    content: '\2734';
+}
+
+.message-role-room-owner .chat-entry-user:before {
+    content: '\2733';
+}
+
 
 #submit-smiley-content ul {
     list-style-type: none;

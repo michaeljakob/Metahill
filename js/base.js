@@ -5,6 +5,7 @@
 var metahill = metahill || {};
 metahill.base = {};
 metahill.base.support = {};
+metahill.base.user = {};
 
 /**
  * metahill.base
@@ -54,4 +55,17 @@ $(function() {
     if(metahill.base.support.isInternetExplorer && window.location.pathname.indexOf('get-a-modern-browser.php') === -1) {
         window.location = 'http://www.metahill.com/get-a-modern-browser.php';
     }
+});
+
+$(function() {
+    var adminNames = ['Michael'];
+    var modNames = ['Weexe', 'Dodovogel'];
+
+    metahill.base.user.isAdmin = function(userName) {
+        return adminNames.indexOf(userName) !== -1;
+    };
+
+    metahill.base.user.isMod = function(userName) {
+        return modNames.indexOf(userName) !== -1;
+    };
 });

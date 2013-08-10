@@ -307,6 +307,7 @@ $(function() {
 
         verificaton.currentTopic = metahill.helper.htmlEncode(metahill.main.activeRoom.attr('data-topic'));
         $('#modals-room-pref-topic').val(metahill.main.activeRoom.attr('data-topic'));
+        $('#modals-room-pref-topic').keyup();
     })
     .on('hidden', function() {
         $('#submit-message').focus();
@@ -343,7 +344,7 @@ $(function() {
             currentPasswordBox.val('');
             if(parseInt(returnCode, 10) >= 1) {
                 metahill.main.activeRoom.attr('data-topic', json.roomTopic);
-                $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(json.roomTopic));
+                $('#chat-header-topic').html(metahill.formatMessages.styleMessage(json.roomTopic));
                 $('#modal-room-pref').modal('hide');
                 currentPasswordBox.attr('placeholder', 'Your current password');
             } else {
@@ -368,12 +369,7 @@ $(function() {
     });
 
     function verifyRoomPreferencesInput() {
-        var topicOkay = verificaton.isTopicLengthOk;
-        if($('#modals-room-pref-delete').is(':checked')) {
-            topicOkay = true;
-        }
-
-        if(verificaton.isPasswordLengthOk && topicOkay) {
+        if(verificaton.isPasswordLengthOk && verificaton.isTopicLengthOk) {
             $('#modal-room-pref-submit').removeAttr('disabled');
         } else {
             $('#modal-room-pref-submit').prop('disabled', true);
