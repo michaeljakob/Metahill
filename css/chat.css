@@ -222,6 +222,48 @@
 }
 
 
+
+#submit-aside-right {
+    float: right;
+}
+
+
+#submit-aside-right .share {
+    text-align: center;
+}
+
+#submit-aside-right .share img {
+    height: 32px;
+
+    -webkit-transition: -webkit-transform .3s ease-out; 
+    -moz-transition: -moz-transform .3s ease-out; 
+}
+
+#submit-aside-right .share img:hover {
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -webkit-transition: -webkit-transform .3s ease-out; 
+    -moz-transition: -moz-transform .3s ease-out; 
+}
+
+
+#submit-aside-right .switch-theme {
+    width: 160px;
+    margin-right: -3px;
+    margin-bottom: 25px;
+}
+
+.submit-switch-theme-absolute {
+    left: 605px;
+    width: 160px;
+    position: absolute;
+}
+
+
+
+
+
+
 #submit-status {
     margin-top: 120px;
     margin-left: 210px;
@@ -233,18 +275,6 @@
     line-height: normal;
     margin: 0;
     padding: 0;
-}
-
-#submit-switch-theme {
-    float: right;
-    width: 160px;
-    margin-right: -3px;
-}
-
-.submit-switch-theme-absolute {
-    left: 605px;
-    width: 160px;
-    position: absolute;
 }
 
 #add-new-room {
@@ -400,6 +430,10 @@ pre.prettyprint {
     vertical-align: -moz-baseline-middle;
     vertical-align: -o-baseline-middle;
     vertical-align: baseline-middle;
+}
+
+#submit-smiley-content p {
+    text-align: center;
 }
 
 #submit-smiley-content li:hover {

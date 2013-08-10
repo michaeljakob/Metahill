@@ -43,6 +43,13 @@
     $user = dbGetUserObject($_SESSION['name']);
     $font = $user->chat_text_font;
     echo "body, body *{font-family:'$font';}";
+    
+    if(dbIsIpBanned($_SERVER["REMOTE_ADDR"])) {
+        header('Location: banned.php');
+        exit();
+    } 
+
+    dbUpdateLastLoginTime($user->name);
 ?>
 </style>
 <?php

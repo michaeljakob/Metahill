@@ -122,6 +122,12 @@ $(function() {
     }
 
     document.onpaste = function (e) {
+        
+        if(metahill.main.isGuest) {
+            var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+            metahill.main.addVisibleMessage('', activeRoomName, "Guests are not allowed to share images", new Date());
+            return;
+        }
         var items = e.clipboardData.items;
         var files = [];
         for( var i = 0, len = items.length; i < len; ++i ) {

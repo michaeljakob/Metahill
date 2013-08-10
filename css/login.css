@@ -133,10 +133,14 @@ footer {
     text-align: left;
 }
 
-#share > div, #share > iframe {
+#share > a {
     display: block;
     margin: 0 0 5px 0;
     padding: 0;
+}
+
+#share img {
+    height: 32px;
 }
 
 #banner-topright {
