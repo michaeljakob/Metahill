@@ -73,44 +73,47 @@ $(function() {
             });
         });
 
-        $('#channel-attendees-entries').on('click', 'img', function(e){
-            var $img = $(this);
-            var p = $img.parent();
-            var id = p.parent().attr('id');
 
-            switch($img.attr('class')) {
-                case 'whisper':
-                    metahill.main.onWhisperClicked(metahill.helper.getSimpleText(p), id.substring(id.lastIndexOf('-')+1));
-                    break;
-                case 'kick':
-                    metahill.main.onKickClicked(metahill.helper.getSimpleText(p), id.substring(id.lastIndexOf('-')+1));
-                    break;
-                default:
-                    console.log('Unknown image within `button` clicked');
-            }
-        });
+        if(!metahill.base.support.isEmbedded) {
+            $('#channel-attendees-entries').on('click', 'img', function(e){
+                var $img = $(this);
+                var p = $img.parent();
+                var id = p.parent().attr('id');
 
-        $('#channel-attendees-entries').on('mouseenter mouseleave', 'img', function(e){
-            var $img = $(this);
-            switch($img.attr('class')) {
-                case 'whisper':
-                    if(e.type === 'mouseenter') {
-                        $img.attr('src','img/icon/whisper-hover.png');
-                    } else {
-                        $img.attr('src','img/icon/whisper.png');
-                    }
-                    break;
-                case 'kick':
-                    if(e.type === 'mouseenter') {
-                        $img.attr('src','img/icon/kick-hover.png');
-                    } else {
-                        $img.attr('src','img/icon/kick.png');
-                    }
-                    break;
-                default:
-                    console.log('Unknown image within `button` hovered');
-            }
-        });
+                switch($img.attr('class')) {
+                    case 'whisper':
+                        metahill.main.onWhisperClicked(metahill.helper.getSimpleText(p), id.substring(id.lastIndexOf('-')+1));
+                        break;
+                    case 'kick':
+                        metahill.main.onKickClicked(metahill.helper.getSimpleText(p), id.substring(id.lastIndexOf('-')+1));
+                        break;
+                    default:
+                        console.log('Unknown image within `button` clicked');
+                }
+            });
+
+            $('#channel-attendees-entries').on('mouseenter mouseleave', 'img', function(e){
+                var $img = $(this);
+                switch($img.attr('class')) {
+                    case 'whisper':
+                        if(e.type === 'mouseenter') {
+                            $img.attr('src','img/icon/whisper-hover.png');
+                        } else {
+                            $img.attr('src','img/icon/whisper.png');
+                        }
+                        break;
+                    case 'kick':
+                        if(e.type === 'mouseenter') {
+                            $img.attr('src','img/icon/kick-hover.png');
+                        } else {
+                            $img.attr('src','img/icon/kick.png');
+                        }
+                        break;
+                    default:
+                        console.log('Unknown image within `button` hovered');
+                }
+            });
+        }
     }
 
     metahill.main.isStatusPersistent = false;
@@ -171,8 +174,8 @@ $(function() {
 
         return  '<li id="channel-attendees-'+ userId +'">'+
                     '<button disabled class="btn">'+ userName +
-                        ((isWhisperVisible)?'<img class="whisper" src="img/icon/whisper.png" />':'')+
-                        ((isKickVisible)?'<img class="kick" src="img/icon/kick.png" />':'')+
+                        ((isWhisperVisible && !metahill.base.support.isEmbedded)?'<img class="whisper" src="img/icon/whisper.png" />':'')+
+                        ((isKickVisible && !metahill.base.support.isEmbedded)?'<img class="kick" src="img/icon/kick.png" />':'')+
                     '</button>'+
                 '</li>';
     };

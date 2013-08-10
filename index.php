@@ -18,11 +18,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <base href="http://127.0.0.1/metahill.com/"/>
 <title>Metahill | Chatrooms for enthusiasts</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/base.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/index.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="theme/new-world.css?v=<?php echo $version; ?>"/>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css?v=<?php echo $version; ?>"/>
 
 
 <style id="phpcss">
@@ -104,8 +104,8 @@
             <article id="chat">
                 <div id="chat-header">
                     <span class='label'>Topic</span>
-                    <button class="btn" id="view-log-button" alt="View Log" title="View Log" >
-                        <img src="img/icon/view_log.png" />View Log
+                    <button class="btn" id="view-log-button" title="View Log">
+                        <img src="img/icon/view_log.png" alt="View Log" />View Log
                     </button>
                     <span id="chat-header-topic"></span>
                 </div>
@@ -116,22 +116,29 @@
     </section>
     
     <article id="submit-area">
-
         <span id="submit-smiley" class="btn" data-toggle="popover" data-placement="top">:)</span>
         <div id="submit-message-wrapper"><input type="text" maxlength="500" id="submit-message" autofocus autocomplete="off" /></div>
-        <?php
-            $changeThemeName;
-            $changeThemeUrl;
-            if(!isset($_GET['theme'])) {
-                $changeThemeName = "Into Darkness";
-                $changeThemeUrl = "http://www.metahill.com/?theme=dark";
-            } else {
-                $changeThemeName = "Back To Default";
-                $changeThemeUrl = "http://www.metahill.com/";
-            }
+        <aside id="submit-aside-right">
+            <?php
+                $changeThemeName;
+                $changeThemeUrl;
+                if(!isset($_GET['theme'])) {
+                    $changeThemeName = "Into Darkness";
+                    $changeThemeUrl = "http://www.metahill.com/?theme=dark";
+                } else {
+                    $changeThemeName = "Back To Default";
+                    $changeThemeUrl = "http://www.metahill.com/";
+                }
 
-            echo "<a id='submit-switch-theme' class='btn' href='$changeThemeUrl'>$changeThemeName</a>";
-        ?>
+                echo "<a class='switch-theme btn' href='$changeThemeUrl'>$changeThemeName</a>";
+            ?>
+            <div class="share">
+                <a target="_blank" href="https://plus.google.com/102169597518297251780/posts"><img src="img/share/google-plus.png"/></a>
+                <a target="_blank" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fmetahill.com&text=Elegantly%20designed%20real-time%20chat.%20Simple%20and%20(ad-)free."><img src="img/share/twitter.png"/></a>
+                <a target="_blank" href="https://www.facebook.com/metahillcommunity"><img src="img/share/facebook.png"/></a>
+                <a target="_blank" href="http://pinterest.com/michaelpoitroae/metahill/"><img src="img/share/pinterest.png"/></a>
+            </div>
+        </aside>  
         <div id="submit-status"></div>
     </article>
     <!-- data section -->
@@ -157,9 +164,13 @@
         <div id="submit-smiley-content">
             <ul>
                 <?php
-                    $files = glob("img/extra-smilies/*");
-                    foreach($files as $file) {
-                        echo "<li><img src='$file'/></li>";
+                    if(!$user->is_guest) {
+                        $files = glob("img/extra-smilies/*");
+                        foreach($files as $file) {
+                            echo "<li><img src='$file'/></li>";
+                        }
+                    } else {
+                        echo "<p>Guests are not allowed to share images.</p>";
                     }
                 ?>
             </ul>

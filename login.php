@@ -83,18 +83,13 @@
     <section id="main-container" class="login">
         <article id="welcome">
             <aside id="share">
-                <a href="https://twitter.com/metahill_com" class="twitter-follow-button" data-show-count="false">Follow @metahill_com</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                <div class="g-plusone" data-size="medium"></div>
-                <div class="fb-like" data-href="http://www.metahill.com" data-send="false" data-layout="button_count" data-width="30" data-show-faces="true"></div>
+
+                <a target="_blank" href="https://plus.google.com/102169597518297251780/posts"><img src="img/share/google-plus.png"/></a>
+                <a target="_blank" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fmetahill.com&text=Elegantly%20designed%20real-time%20chat.%20Simple%20and%20(ad-)free."><img src="img/share/twitter.png"/></a>
+                <a target="_blank" href="https://www.facebook.com/metahillcommunity"><img src="img/share/facebook.png"/></a>
+                <a target="_blank" href="http://pinterest.com/michaelpoitroae/metahill/"><img src="img/share/pinterest.png"/></a>
+                
                 <div id="fb-root"></div>
-                <script>(function(d, s, id) {
-                  var js, fjs = d.getElementsByTagName(s)[0];
-                  if(d.getElementById(id)) return;
-                  js = d.createElement(s); js.id = id;
-                  js.src = "//connect.facebook.net/en_US/all.js";
-                  fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));</script>
                 <script>
                   window.fbAsyncInit = function() {
                     FB.init({
@@ -176,15 +171,6 @@
         </footer>
 
     </section>
-
-    <script type="text/javascript">
-        // Google+
-        (function() {
-            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-            po.src = 'https://apis.google.com/js/plusone.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-        })();
-    </script>
 
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
