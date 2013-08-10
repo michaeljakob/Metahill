@@ -4,7 +4,6 @@
 }
 
 #chat .chat-entry {
-    display: table;
     line-height: 100%;
     padding: 1px;
 }
@@ -23,12 +22,9 @@
 }
 
 #chat .chat-entry > .chat-entry-message {
-    display:-webkit-box;
-    display:-moz-box;
-    display:-o-box;
-    display:box;
-
+    display: block;
     word-wrap: break-word;
+    margin-left: 216px;
 }
 
 #chat .chat-entry > .chat-entry-message > code {
@@ -203,9 +199,8 @@
 }
 
 #submit-smiley {
+    margin-left: 170px;
     float: left;
-    position: fixed;
-    left: 180px;
 }
 
 .height-limiter {

@@ -334,7 +334,8 @@ $(function() {
         } else {
             entry = $(metahill.main.makeEntryMessageText(userName, room, message, time));
         }
-        var isScrolledToBottom = chatEntries[0].scrollHeight - chatEntries.scrollTop() === chatEntries.outerHeight();
+        var scrollDeltaToBottom = (chatEntries[0].scrollHeight - chatEntries.scrollTop()) - chatEntries.outerHeight();
+        var isScrolledToBottom = scrollDeltaToBottom ===0 ;
         chatEntries.append(entry);
 
         // We only scroll down if it's already scrolled to bottom
