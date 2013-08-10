@@ -76,19 +76,15 @@ metahill.formatMessages.replaceTextSmilies = function() {
             return text;
         }
         Object.keys(smiliesWordy).forEach(function(entry) {
-            var image = '<img src="img/smilies/' + smiliesWordy[entry] + '"></img>';
-            
             if(text.indexOf(entry) !== -1) {
-                var regex = new RegExp('('+ escapeRegExp(entry) +')(?=(?:(?:[^`]*`){2})*[^`]*$)', 'g');
-                text = text.replace(regex, image);
+                var image = '<img src="img/smilies/' + smiliesWordy[entry] + '"/>';
+                text = text.replace(entry, image);
             }
         });
         Object.keys(smiliesShortcut).forEach(function(entry) {
-            var image = '<img src="img/smilies/' + smiliesShortcut[entry] + '"></img>';
-            
             if(text.indexOf(entry) !== -1) {
-                var regex = new RegExp('('+ escapeRegExp(entry) +')(?=(?:(?:[^`]*`){2})*[^`]*$)', 'g');
-                text = text.replace(regex, image);
+                var image = '<img src="img/smilies/' + smiliesShortcut[entry] + '"/>';
+                text = text.replace(entry, image);
             }
         });
         return text;
@@ -105,41 +101,24 @@ metahill.formatMessages.boldItalicsCode = function(text) {
     if(!metahill.modals.preferences.enable_formatting) {
         return text;
     }
-    
-    // **: <b>
-    // text = text.replace(/(\*\*[^`]+\*\*|`[^`]+`)/g, function(_, grp) {
-    //                 return grp[0] === '*' ? grp.replace(/^\*\*(.*)\*\*$/, "<b>$1</b>") : grp;
-    //             });
-                    
+
     // *: <b> 
-    text = text.replace(/(\*[^`]+\*|`[^`]+`)/g, function(_, grp) {
+    text = text.replace(/(\*[^`]+?\*|`[^`]+`)/g, function(_, grp) {
                     return grp[0] === '*' ? grp.replace(/^\*(.*)\*$/, '<b>$1</b>') : grp;
                 });
                 
     // _: <i>
-    text = text.replace(/(_[^`]+_|`[^`]+`)/g, function(_, grp) {
+    text = text.replace(/(_[^`_]+?_|`[^`_]+`)/g, function(_, grp) {
                     return grp[0] === '_' ? grp.replace(/^_(.*)_$/, '<i>$1</i>') : grp;
                 });
     
-            
-    // `: code  
+    // `: <code>  
     text = text.replace(/`(.+?)`/g, '<pre class="prettyprint">$1</pre>');
     
     return text;
 };
 
-/*
-*   Callback to style all messages
-*
-* @param config options on applying syltes
-            <code>
-            {
-                'basic-format': true,
-                'smilies': true
-            }
-            </code>
-*/
-metahill.formatMessages.styleMessage = function(text, config) {
+metahill.formatMessages.styleMessage = function(text) {
     text = metahill.formatMessages.makeLinksClickable(text);
     text = metahill.formatMessages.replaceTextSmilies(text);
     text = metahill.formatMessages.boldItalicsCode(text);

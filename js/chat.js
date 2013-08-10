@@ -15,7 +15,7 @@ $(function(){
 
     // open connection
     var mAddress = 'ws://127.0.0.1:1337';
-    //var mAddress = 'ws://81.169.246.231:80';
+    //var mAddress = 'ws://81.169.246.231:443';
 
     metahill.chat.isOnline = true;
 
@@ -155,7 +155,7 @@ $(function(){
                 if(userName !== metahill.main.userName) {
                     addJoinQuitMessage(roomName, userName + ' joined the room.');
                 }
-                $('#channel-attendees-entries').append(metahill.main.makeAttendeeEntry(userId, userName));
+                $('#channel-attendees-entries').append(metahill.main.makeAttendeeEntryText(userId, userName));
             }
         } else {
             ++metahill.log.roomAttendees[roomName][userName].numLogins;
@@ -223,7 +223,7 @@ metahill.chat.updateAttendeesList = function(userList, roomId, roomName) {
         channelAttendeesEntries.empty();
         var cache = '';
         for(var name in userList) {
-            cache += metahill.main.makeAttendeeEntry(userList[name].id, name);
+            cache += metahill.main.makeAttendeeEntryText(userList[name].id, name);
         }
         channelAttendeesEntries.append(cache);
     }
@@ -264,9 +264,10 @@ metahill.chat.sendMessage = function(message, userId, userName, roomId, roomName
     metahill.chat.connection.send(JSON.stringify(messageObject));
 };
 
-metahill.chat.sendImage = (function() {
+metahill.chat.isImageSubmitAllowed = (function() {
     var lastSubmissionTime = 0;
-    function isSubmitAllowed() {
+
+    return function() {
         var now = new Date().getTime();
         if(now - lastSubmissionTime > 60*1000) {
             lastSubmissionTime = now;
@@ -274,29 +275,22 @@ metahill.chat.sendImage = (function() {
         }
         metahill.main.setSubmitStatus('Awwr', 'You only may share one image each 60 seconds.');
         return false;
-    }
-
-    return function(imageUrl, userId, userName, roomId, roomName) {
-        if(!isSubmitAllowed()) {
-            return false;
-        }
-
-        var messageObject = { 
-            content: imageUrl, 
-            intent: 'tell-image', 
-            userId: userId, 
-            userName: userName, 
-            roomId: roomId, 
-            roomName: roomName
-        };
-
-        metahill.chat.connection.send(JSON.stringify(messageObject));
-        return true;
     };
 })();
 
+metahill.chat.sendImage = function(imageUrl, userId, userName, roomId, roomName) {
+    var messageObject = { 
+        content: imageUrl, 
+        intent: 'tell-image', 
+        userId: userId, 
+        userName: userName, 
+        roomId: roomId, 
+        roomName: roomName
+    };
 
-
+    metahill.chat.connection.send(JSON.stringify(messageObject));
+    return true;
+};
 
 
 

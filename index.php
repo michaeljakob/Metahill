@@ -6,7 +6,7 @@
         !isset($_SESSION['verified']) || !$_SESSION['verified'] || 
         !isset($_SESSION['name']) || !$_SESSION['name']) {
 
-        header('Location: http://www.metahill.com/login.php');
+        header('Location: login.php');
         exit();
     }
 
@@ -21,6 +21,7 @@
 <link rel="stylesheet" type="text/css" href="css/base.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/index.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css?v=<?php echo $version; ?>"/>
+<link rel="stylesheet" type="text/css" href="theme/new-world.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css?v=<?php echo $version; ?>"/>
 
 
@@ -30,6 +31,13 @@
     $user = dbGetUserObject($_SESSION['name']);
     $font = $user->chat_text_font;
     echo "body, body *{font-family:'$font';}";
+
+    if(dbIsIpBanned($_SERVER["REMOTE_ADDR"])) {
+        header('Location: banned.php');
+        exit();
+    } 
+
+    dbUpdateLastLoginTime($user->name);
 ?>
 </style>
 <style id="live-update-chat-text-size"></style>

@@ -72,6 +72,45 @@ $(function() {
                 $(entry).click(function() { metahill.main.onNewRoomClicked(entry); });
             });
         });
+
+        $('#channel-attendees-entries').on('click', 'img', function(e){
+            var $img = $(this);
+            var p = $img.parent();
+            var id = p.parent().attr('id');
+
+            switch($img.attr('class')) {
+                case 'whisper':
+                    metahill.main.onWhisperClicked(metahill.helper.getSimpleText(p), id.substring(id.lastIndexOf('-')+1));
+                    break;
+                case 'kick':
+                    metahill.main.onKickClicked(metahill.helper.getSimpleText(p), id.substring(id.lastIndexOf('-')+1));
+                    break;
+                default:
+                    console.log('Unknown image within `button` clicked');
+            }
+        });
+
+        $('#channel-attendees-entries').on('mouseenter mouseleave', 'img', function(e){
+            var $img = $(this);
+            switch($img.attr('class')) {
+                case 'whisper':
+                    if(e.type === 'mouseenter') {
+                        $img.attr('src','img/icon/whisper-hover.png');
+                    } else {
+                        $img.attr('src','img/icon/whisper.png');
+                    }
+                    break;
+                case 'kick':
+                    if(e.type === 'mouseenter') {
+                        $img.attr('src','img/icon/kick-hover.png');
+                    } else {
+                        $img.attr('src','img/icon/kick.png');
+                    }
+                    break;
+                default:
+                    console.log('Unknown image within `button` hovered');
+            }
+        });
     }
 
     metahill.main.isStatusPersistent = false;
@@ -109,14 +148,33 @@ $(function() {
     };
 
 
-    metahill.main.makeAttendeeEntry = function(userId, userName) {
-        var attr = '';
+    metahill.main.onWhisperClicked = function(userId, userName) {
+        console.log('whisper', userId, userName);
+    };
 
-        var content =    '<li id="channel-attendees-'+ userId +'"' + attr + '>'+
-                            '<button disabled class="btn">'+ userName +'</button>'+
-                        '</li>';
+    metahill.main.onKickClicked = function(userId, userName) {
+        console.log('kick', userId, userName);
 
-        return content;
+    };
+
+    metahill.main.makeAttendeeEntryText = function(userId, userName) {
+        var isOwner = metahill.main.userId === metahill.main.activeRoom.attr('data-owner');
+        var isKickVisible = isOwner || metahill.base.user.isAdmin(metahill.main.userName);
+        if(userName === metahill.main.userName || metahill.base.user.isAdmin(userName) || metahill.base.user.isMod(userName)) {
+            isKickVisible = false;
+        }
+        // TODO you can't kick other room admins
+        // 
+
+
+        var isWhisperVisible = userName !== metahill.main.userName;
+
+        return  '<li id="channel-attendees-'+ userId +'">'+
+                    '<button disabled class="btn">'+ userName +
+                        ((isWhisperVisible)?'<img class="whisper" src="img/icon/whisper.png" />':'')+
+                        ((isKickVisible)?'<img class="kick" src="img/icon/kick.png" />':'')+
+                    '</button>'+
+                '</li>';
     };
 
 
@@ -262,7 +320,7 @@ $(function() {
 
         if(userName !== metahill.main.userName && userName !== '' && !metahill.base.isWindowFocused) {
             ++metahill.log.unseenMessages;
-            document.title = 'Metahill | ' + metahill.log.unseenMessages + ' unread messages.';
+            document.title = '(' + metahill.log.unseenMessages + ') Metahill';
 
             if(isThisUserAddressed(message)) {
                 highlightUser();
@@ -357,7 +415,7 @@ $(function() {
         var currentAttendees = metahill.log.roomAttendees[roomName];
         var cache = '';
         for(var userName in currentAttendees) {
-            cache += metahill.main.makeAttendeeEntry(currentAttendees[userName].id, userName);
+            cache += metahill.main.makeAttendeeEntryText(currentAttendees[userName].id, userName);
         }
         attendeesList.append(cache);
     };
@@ -402,7 +460,7 @@ $(function() {
             metahill.main.activeRoom = newRoom;
             
             metahill.main.updateAttendeesList();
-            $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(metahill.helper.htmlEncode(newRoom.attr('data-topic'))));
+            $('#chat-header-topic').html(metahill.formatMessages.styleMessage(metahill.helper.htmlEncode(newRoom.attr('data-topic'))));
 
 
             // reset "unseen message" counter
@@ -508,7 +566,7 @@ $(function() {
             $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid')).hide();
         }
 
-        $('#chat-header-topic').html(metahill.formatMessages.makeLinksClickable(roomTopic));
+        $('#chat-header-topic').html(metahill.formatMessages.styleMessage(roomTopic));
 
         var entry = metahill.main.openRoom(roomId, roomName, roomTopic, roomOwner);
         
@@ -693,20 +751,14 @@ $(function() {
         if((typeof optionalClasses) === 'string') {
             classes += optionalClasses + ' ';
         }
-        var adminNames = ['Michael'];
-        var modNames = ['Weexe', 'Dodovogel'];
 
-        var roleSymbol = '';
         if(userName === '') {
-            roleSymbol = '✧';
-        } else if(adminNames.indexOf(userName) !== -1) {
-            roleSymbol = '&#10037;';
+            classes += 'message-role-server';
+        } else if(metahill.base.user.isAdmin(userName)) {
             classes += 'message-role-admin ';
-        } else if(modNames.indexOf(userName) !== -1) {
-            roleSymbol = '&#10036;';
+        } else if(metahill.base.user.isMod(userName)) {
             classes += 'message-role-mod ';
-        } else if(userName === $('#channel-attendees-' + room.attr('data-owner')).text()) {
-            roleSymbol = '&#10035;';
+        } else if($('#channel-attendees-'+room.attr('data-owner')).text() === metahill.main.userId) {
             classes += 'message-role-room-owner ';
         }
 
@@ -723,7 +775,7 @@ $(function() {
         var entryText =
                 '<div class="chat-entry '+ classes +'">' +
                     '<span class="chat-entry-options">'+metahill.helper.toHHMMSS(time)+'</span>' +
-                    '<span class="chat-entry-user"><span class="rank-symbol">'+roleSymbol+'</span>'+userName+'</span>' +
+                    '<span class="chat-entry-user">'+userName+'</span>' +
                     '<span class="chat-entry-message">'+message+'</span>' +
                 '</div>';
 

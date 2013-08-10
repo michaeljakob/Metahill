@@ -85,7 +85,9 @@ $(function() {
             return $('#add-new-room-content').html();
         }
     }).click(function() {
-        $('#add-new-room-search').focus();
+        if(!metahill.main.isEmbedded) {
+            $('#add-new-room-search').focus();
+        }
     });
 
     // remove "add-new-room"-popover if you click anywhere

@@ -41,6 +41,27 @@ function dbVerifyLogin($name, $pass) {
     }
 }
 
+function dbUpdateLastLoginTime($name) {
+    $dbh = getDBH();
+    $statement = $dbh->prepare('UPDATE `accounts` SET last_login_time=CURRENT_TIMESTAMP(), last_login_ip=INET_ATON(:remote_addr) WHERE name=:name');
+    $statement->execute(array(':name' => $name, ':remote_addr' => $_SERVER['REMOTE_ADDR']));
+}
+
+function dbIsIpBanned($ip) {
+    $dbh = getDBH();
+
+    $statement = $dbh->prepare('SELECT * FROM banned_ips WHERE ip=INET_ATON(:ip)');
+    $statement->execute(array(':ip' => $ip));
+    
+    $isBanned = $statement->rowCount() !== 0;
+
+    // lift ip bans older than x time
+    $statement = $dbh->prepare('DELETE FROM `banned_ips` WHERE impose_time <= DATE_SUB(NOW(), INTERVAL 6 HOUR)');
+    $statement->execute();
+
+    return $isBanned;
+}
+
 
 /*
  Returns an array of all rooms except the one within the $ids array.
@@ -192,18 +213,18 @@ function dbAddAccount($name, $password, $email) {
         $statement = $dbh->prepare('INSERT INTO `favorite_rooms`(`account_id`, `room_id`) VALUES ('.$userId.',5)');
         $statement->execute();
     }
-    
+
     return $ret;
 }
 
-function dbAddFacebookAccount($name, $email, $facebookId) {
+function dbAddFacebookAccount($name, $password, $email, $facebookId) {
     $dbh = getDBH();
                 
     $statement = $dbh->prepare(    
-                    'INSERT INTO `accounts`(`name`, `email`, `facebook_id`)'.
-                    'VALUES (:name, :email, :facebook_id)' );
+                    'INSERT INTO `accounts`(`name`, `password`, `email`, `facebook_id`)'.
+                    'VALUES (:name, :password, :email, :facebook_id)' );
                 
-    $ret = $statement->execute(array(':name' => $name, ':email' => $email, ':facebook_id' => $facebookId));
+    $ret = $statement->execute(array(':name' => $name, ':password' => $password, ':email' => $email, ':facebook_id' => $facebookId));
                 
     if($ret) {
         // add default favorite rooms: metahill(5)
