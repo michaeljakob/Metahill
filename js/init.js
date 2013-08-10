@@ -9,7 +9,8 @@ $(function() {
             // close buttons 'x' on the left side :)
             css = '<style>.room-close{left:auto;right:20px;}.close{float:left;}</style>';
             $(css).appendTo('body');
-        } else if(metahill.base.support.isWindows) {
+        }
+        if(metahill.base.support.isWindows || metahill.base.support.isFirefox) {
             // include some windows specific fixes
             css = '<link rel="stylesheet" type="text/css" href="css/windows-fixes.css"/>';
             $(css).appendTo('head');
@@ -69,7 +70,7 @@ $(function() {
             if(!metahill.base.support.isEmbedded) {
                 chatEntries.height(attendeesBarHeight - 50 + addedChatEntriesHeight);
             } else {
-                chatEntries.height(attendeesBarHeight + 85 + addedChatEntriesHeight);
+                chatEntries.height(attendeesBarHeight + 105 + addedChatEntriesHeight);
             }
         };
     })()); // window.resize
