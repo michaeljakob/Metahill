@@ -117,91 +117,104 @@
                     <p>
                         We think that <a href="http://www.metahill.com/">metahill</a> is unique in the way that it combines several established and amazing technologies and takes out the best of each, for your benefit.
                         For a variety of reasons -which are listed below- we think metahill surpasses email, forums, facebook, twitter, <a href="http://en.wikipedia.org/wiki/Internet_Relay_Chat">IRC</a> and <a href="http://en.wikipedia.org/wiki/Usenet_newsgroup">Usenet newsgroups</a>.
-                        Therefore we invite you to read through our points and <u>fell your own decision</u> afterwards.
+                        The goal of <a href="http://www.metahill.com">metahill</a> is not to replace them, but to complement them. 
+                        We created a small list enumerating some of the most significant features for you and push you to <u>fell your own decision</u> afterwards.
                     </p>
                     <ol>
                         <li>
                             <h2>Uniformity</h2>
                             <p>
-                                metahill looks everywhere exactly the same. It is optimized for your Mac and your PC. For your tablet and your mobile phone.
+                                Metahill has a consistently nice look-and-feel across all devices. It is optimized for your Mac and your PC. For your tablet and your mobile phone.
                             </p>
                         </li>
                         <li>
                             <h2>It is easy to get involved</h2>
                             <p>
                                 Creating an account doesn't even take 20 seconds. A username, an email and a password. That's it.
+                                Alternatively, you can login with your facebook account. That would be one click. :)
                             </p>
                         </li>
                         <li>
-                            <h2>It is lightning fast</h2>
+                            <h2>It is lightning fast, thanks to open standards</h2>
                             <p>
-                                No flash, no silverlight and no java applets. With open-standard techniques HTML5, CSS3 and JavaScript
-                                <a href="http://www.metahill.com/">metahill.com</a> works everywhere identically and is yet incredibly fast among all devices. And you don't get annoyed by
-                                installing arbitrary plugins.
+                                No flash, no silverlight and no insecure Java applets. With open webstandards, namely HTML5, CSS3, JavaScript and <a target="_blank" href="https://www.dartlang.org">Dart</a>
+                                metahill gains a great performance boost and stays future proof at the same time.
+                                And what's more: you don't get annoyed with installing shady plugins.
                             </p>
                         </li>
                         <li>
                             <h2>No desktop client needed</h2>
                             <p>
-                                If you don't need a client, you don't need an installer. No waiting (for installations), no annoying updating and no potential malware.
+                                If you don't need a locally installed client, you're always on the secure side.
+                                No waiting for long installations, no annoying updating and no potential malware.
+                                All you do is visiting <a href="http:/www.metahill.com">www.metahill.com</a>.
                             </p>
                         </li>
                         <li>
                             <h2>We're organized</h2>
                             <p>
-                                Messaging happens within rooms that have (more or less) a specific topic. These might be <i>english</i>, <i>math</i>, <i>linux</i>, <i>java</i>, <i>design</i>, <i>apple</i>, <i>...</i> 
-                                The list is endless because literally <i>everyone</i> is allowed to create new rooms. Organization &amp; and categorization are two of the most important things when exchanging information.
-                                And facebook and twitter are lacking both of them.
+                                Messaging happens within rooms that have (more or less) a specific topic. 
+                                These might be <i>english</i>, <i>math</i>, <i>linux</i>, <i>java</i>, <i>design</i>, <i>apple</i>, <i>...</i> 
+                                The list is endless because literally <i>everyone</i> is allowed to create new rooms. 
+                                Organizing &amp; categorizing data are the two most vital mechanisms when exchanging information, 
+                                we thought of this rule in every line of code that was written.
+                                Yet, we are staggered neither facebook nor twitter are implementing these strategies properly.
                             </p>
                         </li>
                         <li>
                             <h2>Beyond text</h2>
                             <p>
-                                You can send way more than just plain text. You can make text bold, italics and you can even make it look like programming code. 
-                                Sharing images has never been this easy ever before: just drag and drop one into the chat window. We support all the most common image formats, including png, jpg, gif and svg.
+                                You can send way more than just plain text.
+                                You can make text bold, italics and you can even make it look like programming code. 
+                                Sharing images has never been this easy ever before: just drag'n'drop a picture into the chat window and marvel.
+                                We support all of the most common image formats including png, jpg, gif and svg.
                             </p>
                         </li>
                         <li>
                             <h2>Never again miss anything</h2>
                             <p>
-                                All chat messages are logged for five days. You can look up what people said even if you were offline at this time.
-                             After five days these messages are deleted completely and permanently. There is no option to recover them. This 5-day limit 
-                             has been created by users - <a href="#">make your vote count</a> if you think that is too long or short.
-                         </p>
+                                All chat messages are logged for three days.
+                                You can look up what people said even if you were offline at this time.
+                                After three days all data is deleted completely and permanently. We do not make exceptions.
+                                There is no option to recover them.
+                                The 3-day limit has been created by users. If you think that is too long or too short, let us know.
+                            </p>
                         </li>
                         <li>
                             <h2>Behind all this is an open community</h2>
                             <p>
-                                Everything you see here has been created by engaged professionals in their spare time. All members -no matter for how long- can participate in <a href="../blog">blog</a>
-                                discussions where <i>we all</i> decide what's going to happen next. New features and the modification of existing ones - everything from design to functionality is decided by you.
-                                Additionally, we maintain a <a href="../blog">blog</a> to keep interested users posted, ask for feedback and make polls.
-                                At IRC disputes are very commonly only about <i>hating</i>, <i>egocentricity</i> and <i>power</i> (altough irc was awesome at its time). We try to be different. If you encounter any issues, get in touch with the support.
+                                Everything you see here has been created by engaged professionals in their spare time.
+                                All members are invited to participate in <a href="../blog">blog</a>
+                                discussions where <u>we all</u> collaborately decide what's going to happen next.
+                                If you encounter any issues, ask in the room <code>metahill</code> or get in touch with the support.
                             </p>
                         </li>
                         <li>
-                            <h2>It is easy to use</h2>
+                            <h2>Metahill is simple to use</h2>
                             <p>
-                                <a href="http://www.metahill.com/">metahill</a> entails a beautiful design that follows function. We offer free community-driven support for everyone. Join the staff room <code>metahill</code> or write us an <a href="mailto:support@metahill.com">email</a>. 
-                                And the best: you don't have to get familiar with a whole new bunch of terminal-like commands to even log in (we're referring to IRC here). However, most of them exist anyway which makes it easier for those users.
+                                <a href="http://www.metahill.com/">Metahill</a> entails a beautiful design that follows functionality.
+                                You will free community-driven support for everyone, where users help users.
+                                Join the general help room <code>metahill</code> or write us an <a href="mailto:support@metahill.com">email</a>
+                                if there is anything you want us to hear about. 
                             </p>
                         </li>
                     </ol>
                 </div>
                 <div class="tab-pane" id="support">
-                    <h1>I still got a question</h1>
+                    <h1>Hmmm. I still got a question</h1>
                     <p>
-                        If you couldn't find here what you were looking for there are basically two steps
-                        you can take next.
+                        We greatly appreciate any form of constructive feedback, bug-reports and feature requests.
+                        Hence, don't fear to get in touch with us :).
+                        There are basically two steps you can take next.
                     </p>
                     <ol>
-                        <li>Ask in the room named <i>metahill</i> to get live-support. <a href="http://www.metahill.com/join/metahill">Join the metahill room now</a>. Bug reports are very welcome there!</li>
-                        <li>Let us hear from you in our <a href="../blog">blog</a>.</li>
+                        <li>Ask in the room <code>metahill</code> to get live-support. <a href="http://www.metahill.com/join/metahill">Join the room <code>metahill</code> now</a>.</li>
                         <li>Write us an email. Our address is <a href="mailto:support@metahill.com">support@metahill.com</a>.</li>
                     </ol>
                     <p>
-                        Although we're trying to answer all emails within 12 hours, in special cases it might take a bit longer.
-                        You surely are better off if you try asking in <i>metahill</i>, since you're
-                        likely to get a reliable answer within a few minutes.
+                        Although we're trying to answer all emails within 12 hours, it might take a bit longer in some special cases.
+                        You surely are better off if you try asking in <code>metahill</code>, since you're
+                        likely to get a reliable answer within a few seconds.
                     </p>
                 </div>
             </div>

@@ -78,16 +78,14 @@
 <body>
     <?php require_once('feature/header.php'); ?>
     
-    <section id="banner-topright">
-    </section>
     <section id="main-container" class="login">
         <article id="welcome">
             <aside id="share">
 
-                <a target="_blank" href="https://plus.google.com/102169597518297251780/posts"><img src="img/share/google-plus.png"/></a>
-                <a target="_blank" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fmetahill.com&text=Elegantly%20designed%20real-time%20chat.%20Simple%20and%20(ad-)free."><img src="img/share/twitter.png"/></a>
-                <a target="_blank" href="https://www.facebook.com/metahillcommunity"><img src="img/share/facebook.png"/></a>
-                <a target="_blank" href="http://pinterest.com/michaelpoitroae/metahill/"><img src="img/share/pinterest.png"/></a>
+                <a target="_blank" href="https://plus.google.com/102169597518297251780/posts"><img alt="Metahill at Google+" src="img/share/google-plus.png"/></a>
+                <a target="_blank" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fmetahill.com&amp;text=Elegantly%20designed%20real-time%20chat.%20Simple%20and%20(ad-)free."><img alt="Metahill at Twitter" src="img/share/twitter.png"/></a>
+                <a target="_blank" href="https://www.facebook.com/metahillcommunity"><img alt="Metahill at Facebook" src="img/share/facebook.png"/></a>
+                <a target="_blank" href="http://pinterest.com/michaelpoitroae/metahill/"><img alt="Metahill at pInterest" src="img/share/pinterest.png"/></a>
                 
                 <div id="fb-root"></div>
                 <script>

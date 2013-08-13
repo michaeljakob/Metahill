@@ -21,7 +21,7 @@ $(function() {
         },64);
     }
 
-    dropElement.ondragover = function () {
+    dropElement.ondragover = function() {
         if(isDragging === null || isDragging === undefined) {
             doDrag();
         }
@@ -30,7 +30,7 @@ $(function() {
         return false; 
     };
 
-    dropElement.ondragleave = function () {
+    dropElement.ondragleave = function() {
         isDragging = false;
         return false;
     };
@@ -42,7 +42,7 @@ $(function() {
         
         if(metahill.main.isGuest) {
             var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
-            metahill.main.addVisibleMessage('', activeRoomName, "Guests are not allowed to share images", new Date());
+            metahill.main.setSubmitStatus('Guests cannot share images', 'Guests are not allowed to share images, sorry. :(');
             return;
         }
 
@@ -122,19 +122,15 @@ $(function() {
     }
 
     document.onpaste = function (e) {
-        
-        if(metahill.main.isGuest) {
-            var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
-            metahill.main.addVisibleMessage('', activeRoomName, "Guests are not allowed to share images", new Date());
-            return;
-        }
         var items = e.clipboardData.items;
-        var files = [];
-        for( var i = 0, len = items.length; i < len; ++i ) {
-            var item = items[i];
-            if( item.kind === 'file' ) {
-                submitFileForm(item.getAsFile(), 'paste');
+        var item = items[0];
+        if(item.kind === 'file' ) {
+            if(metahill.main.isGuest) {
+                var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+                metahill.main.setSubmitStatus('Guests cannot share images', 'Guests are not allowed to share images, sorry. :(');
+                return;
             }
+            submitFileForm(item.getAsFile(), 'paste');
         }
 
     };

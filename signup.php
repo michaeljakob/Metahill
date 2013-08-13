@@ -102,10 +102,6 @@
 <body>
     <?php require_once("feature/header.php"); ?>
     
-    
-    <section id="banner-topright">
-        <a href="signup.php"><img src="img/beta-banner.png" alt="Beta. Register now and benefit!" /></a>
-    </section>
     <section id="main-container" class="signup">
         <article id="welcome">
             <h1>Join metahill today!</h1>

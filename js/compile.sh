@@ -34,6 +34,7 @@ java -jar "$compiler" \
             init.js \
             room-proposer.js \
             chat.js \
+            command-interpreter.js \
     > combined.js
 
 

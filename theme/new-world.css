@@ -1,6 +1,6 @@
 
 body, #submit-area, #channel-attendees, #chat-header, #channels, .btn:not(.btn-inverse):not(.btn-info):not(.btn-primary):not(.btn-danger)  {
-    background: url('../img/background-index.png') repeat !important;
+    background: url('../img/background-index.png') repeat;
     background-size: 100px 100px !important;
 }
 

@@ -12,83 +12,90 @@ metahill.formatMessages = {};
 */
 metahill.formatMessages.replaceTextSmilies = function() {
     var smiliesShortcut = {};
-    smiliesShortcut[':)'] = 'smile.png';
-    smiliesShortcut[':-)'] = 'smile.png';
-    smiliesShortcut['=)'] = 'smile.png';
-    smiliesShortcut[':D'] = 'biggrin.png';
-    smiliesShortcut[':-D'] = 'biggrin.png';
-    smiliesShortcut['=D'] = 'biggrin.png';
-    smiliesShortcut[';)'] = 'wink.png';
-    smiliesShortcut[';D'] = 'wink.png';
-    smiliesShortcut[';-)'] = 'wink.png';
-    smiliesShortcut[';-D'] = 'wink.png';
-    smiliesShortcut[':?'] = 'confused.png';
-    smiliesShortcut[':-?'] = 'confused.png';
-    smiliesShortcut[':('] = 'sad.png';
-    smiliesShortcut[':-('] = 'sad.png';
-    smiliesShortcut[':\'('] = 'crying.png';
-    smiliesShortcut['>.<'] = 'pinch.png';
-    smiliesShortcut['>_<'] = 'pinch.png';
-    smiliesShortcut['=8-)'] = 'cool.png';
-    smiliesShortcut[':S'] = 'unsure.png';
-    smiliesShortcut[':s'] = 'unsure.png';
-    smiliesShortcut['^^'] = 'squint.png';
-    smiliesShortcut['<3'] = 'love.png';
-    smiliesShortcut[':P'] = 'tongue.png';
-    smiliesShortcut[':p'] = 'tongue.png';
+    smiliesShortcut[':)'] = { img: 'smile.png' };
+    smiliesShortcut[':-)'] = { img: 'smile.png' };
+    smiliesShortcut['=)'] = { img: 'smile.png' };
+    smiliesShortcut[':D'] = { img: 'biggrin.png' };
+    smiliesShortcut[':-D'] = { img: 'biggrin.png' };
+    smiliesShortcut['=D'] = { img: 'biggrin.png' };
+    smiliesShortcut[';)'] = { img: 'wink.png' };
+    smiliesShortcut[';D'] = { img: 'wink.png' };
+    smiliesShortcut[';-)'] = { img: 'wink.png' };
+    smiliesShortcut[';-D'] = { img: 'wink.png' };
+    smiliesShortcut[':?'] = { img: 'confused.png' };
+    smiliesShortcut[':-?'] = { img: 'confused.png' };
+    smiliesShortcut[':('] = { img: 'sad.png' };
+    smiliesShortcut[':-('] = { img: 'sad.png' };
+    smiliesShortcut[':\'('] = { img: 'crying.png' };
+    smiliesShortcut['>.<'] = { img: 'pinch.png' };
+    smiliesShortcut['>_<'] = { img: 'pinch.png' };
+    smiliesShortcut['=8-)'] = { img: 'cool.png' };
+    smiliesShortcut[':S'] = { img: 'unsure.png' };
+    smiliesShortcut[':s'] = { img: 'unsure.png' };
+    smiliesShortcut['^^'] = { img: 'squint.png' };
+    smiliesShortcut['<3'] = { img: 'love.png' };
+    smiliesShortcut[':P'] = { img: 'tongue.png' };
+    smiliesShortcut[':p'] = { img: 'tongue.png' };
 
     var smiliesWordy = {};
-    smiliesWordy[':angry'] = 'angry.png';
-    smiliesWordy[':biggrin'] = 'biggrin.png';
-    smiliesWordy[':blink'] = 'blink.png';
-    smiliesWordy[':confused'] = 'confused.png';
-    smiliesWordy[':cool'] = 'cool.png';
-    smiliesWordy[':crying'] = 'crying.png';
-    smiliesWordy[':cursing'] = 'cursing.png';
-    smiliesWordy[':evil'] = 'evil.png';
-    smiliesWordy[':huh'] = 'huh.png';
-    smiliesWordy[':love'] = 'love.png';
-    smiliesWordy[':mellow'] = 'mellow.png';
-    smiliesWordy[':pinch'] = 'pinch.png';
-    smiliesWordy[':rolleyes'] = 'rolleyes.png';
-    smiliesWordy[':sad'] = 'sad.png';
-    smiliesWordy[':sleeping'] = 'sleeping.png';
-    smiliesWordy[':smile'] = 'smile.png';
-    smiliesWordy[':squint'] = 'squint.png';
-    smiliesWordy[':thumbdown'] = 'thumbdown.png';
-    smiliesWordy[':thumbsup'] = 'thumbsup.png';
-    smiliesWordy[':thumbup'] = 'thumbup.png';
-    smiliesWordy[':tongue'] = 'tongue.png';
-    smiliesWordy[':unsure'] = 'unsure.png';
-    smiliesWordy[':w00t'] = 'w00t.png';
-    smiliesWordy[':wacko'] = 'wacko.png';
-    smiliesWordy[':whistling'] = 'whistling.png';
-    smiliesWordy[':wink'] = 'wink.png';
+    smiliesWordy[':angry'] = { img: 'angry.png' };
+    smiliesWordy[':biggrin'] = { img: 'biggrin.png' };
+    smiliesWordy[':blink'] = { img: 'blink.png' };
+    smiliesWordy[':confused'] = { img: 'confused.png' };
+    smiliesWordy[':cool'] = { img: 'cool.png' };
+    smiliesWordy[':crying'] = { img: 'crying.png' };
+    smiliesWordy[':cursing'] = { img: 'cursing.png' };
+    smiliesWordy[':evil'] = { img: 'evil.png' };
+    smiliesWordy[':huh'] = { img: 'huh.png' };
+    smiliesWordy[':love'] = { img: 'love.png' };
+    smiliesWordy[':mellow'] = { img: 'mellow.png' };
+    smiliesWordy[':pinch'] = { img: 'pinch.png' };
+    smiliesWordy[':rolleyes'] = { img: 'rolleyes.png' };
+    smiliesWordy[':sad'] = { img: 'sad.png' };
+    smiliesWordy[':sleeping'] = { img: 'sleeping.png' };
+    smiliesWordy[':smile'] = { img: 'smile.png' };
+    smiliesWordy[':squint'] = { img: 'squint.png' };
+    smiliesWordy[':thumbdown'] = { img: 'thumbdown.png' };
+    smiliesWordy[':thumbsup'] = { img: 'thumbsup.png' };
+    smiliesWordy[':thumbup'] = { img: 'thumbup.png' };
+    smiliesWordy[':tongue'] = { img: 'tongue.png' };
+    smiliesWordy[':unsure'] = { img: 'unsure.png' };
+    smiliesWordy[':w00t'] = { img: 'w00t.png' };
+    smiliesWordy[':wacko'] = { img: 'wacko.png' };
+    smiliesWordy[':whistling'] = { img: 'whistling.png' };
+    smiliesWordy[':wink'] = { img: 'wink.png' };
 
 
+    addRegex(smiliesShortcut);
+    addRegex(smiliesWordy);
+    
+    function addRegex(smilies) {
+        Object.keys(smilies).forEach(function(smily) {
+            smilies[smily].regex = new RegExp('(' + escapeRegExp(smily) + ')(?=(?:(?:[^`]*`){2})*[^`]*$)', 'g');
+        });
+    }
     
     function escapeRegExp(str) {
         return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
     }
 
-    return function(text) {
-        if(!metahill.modals.preferences.enable_smilies) {
-            return text;
-        }
-        Object.keys(smiliesWordy).forEach(function(entry) {
-            if(text.indexOf(entry) !== -1) {
-                var image = '<img src="img/smilies/' + smiliesWordy[entry] + '"/>';
-                text = text.replace(entry, image);
-            }
-        });
-        Object.keys(smiliesShortcut).forEach(function(entry) {
-            if(text.indexOf(entry) !== -1) {
-                var image = '<img src="img/smilies/' + smiliesShortcut[entry] + '"/>';
-                text = text.replace(entry, image);
+    function replace(text, smilies) {
+        Object.keys(smilies).forEach(function(entry) {
+            var image = '<img src="img/smilies/' + smilies[entry].img + '"/>';
+
+            if (text.indexOf(entry) !== -1) {
+                text = text.replace(smilies[entry].regex, image);
             }
         });
         return text;
+    }
+
+    return function(text) {
+        text = replace(text, smiliesWordy);
+        text = replace(text, smiliesShortcut);
+        return text;
     };
+
 }();
 
 /*
@@ -102,13 +109,18 @@ metahill.formatMessages.boldItalicsCode = function(text) {
         return text;
     }
 
+    // *****... and _____.... should not be replaced
+    text = text.replace(/\*\*/g, '&#42;&#42;');
+    text = text.replace(/__/g, '&#95;&#95;');
+    text = text.replace(/``/g, '&#96;&#96;');
+
     // *: <b> 
-    text = text.replace(/(\*[^`]+?\*|`[^`]+`)/g, function(_, grp) {
+    text = text.replace(/(\*[^`]+?\*|`[^`]+?`)/g, function(_, grp) {
                     return grp[0] === '*' ? grp.replace(/^\*(.*)\*$/, '<b>$1</b>') : grp;
                 });
                 
     // _: <i>
-    text = text.replace(/(_[^`_]+?_|`[^`_]+`)/g, function(_, grp) {
+    text = text.replace(/(_[^`]+?_|`[^`]+?`)/g, function(_, grp) {
                     return grp[0] === '_' ? grp.replace(/^_(.*)_$/, '<i>$1</i>') : grp;
                 });
     

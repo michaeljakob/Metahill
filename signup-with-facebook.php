@@ -74,11 +74,6 @@ if($facebookUserProfile !== null) {
 </head>
 <body>
     <?php require_once("feature/header.php"); ?>
-    
-    
-    <section id="banner-topright">
-        <a href="signup.php"><img src="img/beta-banner.png" alt="Beta. Register now and benefit!" /></a>
-    </section>
     <section id="main-container" class="signup">
         <article id="welcome">
             <h1>Just two more things...</h1>
@@ -86,8 +81,9 @@ if($facebookUserProfile !== null) {
                 <h2 class="desc">Pick a nickname</h2>
                 
                 <input type="text" placeholder="Username" autofocus="true" pattern="[^@]*" name="username" id="reg_name" value="<?php echo $nickNameSuggestion; ?>" />
-                <input type="password" name="password" placeholder="Password" /><br/>
-                
+                <span class="label"></span>
+                <input id="reg_password" type="password" name="password" placeholder="Password" />
+                <span class="label"></span>
                 
 
                 <input type="submit" value="Sign up" class="btn btn-success" />

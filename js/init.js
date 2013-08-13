@@ -17,12 +17,30 @@ $(function() {
         }
     });
 
+    $(function() {
+        var intervalId = setInterval(function() {
+            if(typeof(PR) !== 'undefined') {
+                clearInterval(intervalId);
+                PR.prettyPrint();
+            }
+        }, 100);
+    });
+
+
+    $(function() {
+        var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
+        chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 1000}, 0);
+    });
+
 
     $(window).on('resize', $.debounce(250, function() {
         // keep scrolled to bottom
-        var chatEntries = $('#chat-entries');
-        chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+        var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
+        chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 0);
     }));
+
+
+
 
     $(window).resize((function() {
         var submitArea = $('#submit-area');
@@ -41,7 +59,6 @@ $(function() {
 
             if(w !== nw) {
                 chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
-
                 if(nw <= 800) {
                     submitSwitchTheme.addClass('submit-switch-theme-absolute');
                 } else {
@@ -91,10 +108,14 @@ $(function() {
         }
     });
 
+    $('input[type="text"], input[type="password"], textarea').hover(function() {
+        $(this).focus();
+    });
+
     // remove "add-new-room"-popover if you click anywhere
     $('body').on('click', function (e) {
         var submitMessage = $('#submit-message');
-        $('#add-new-room, #submit-smiley').each(function () {
+        $('#add-new-room, #submit-smiley').each(function() {
             if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
                 $(this).popover('hide');
             }
@@ -113,15 +134,13 @@ $(function() {
     }).click(function() {
         $('#submit-smiley-content img').click(function() {
             $('#submit-smiley').popover('hide');
-            var imageUrl = 'http://www.metahill.com/' + $(this).attr('src');
-            var roomId = metahill.main.activeRoom.attr('data-roomid');
-            var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
-            metahill.chat.sendImage(imageUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
+            if(metahill.chat.isImageSubmitAllowed()) {
+                var imageUrl = 'http://www.metahill.com/' + $(this).attr('src');
+                var roomId = metahill.main.activeRoom.attr('data-roomid');
+                var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+                metahill.chat.sendImage(imageUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
+            }
         });
-    });
-
-    $('#chat-entries-parent').mousedown(function() {
-        $('#submit-message').focus();
     });
         
     // filter

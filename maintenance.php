@@ -1,3 +1,13 @@
+<?php
+    $filename = '.htaccess';
+    $searchfor1 = '# RewriteRule (.*) /maintenance.php';
+    $searchfor2 = '#RewriteRule (.*) /maintenance.php';
+    $file = file_get_contents($filename);
+    if(strpos($file, $searchfor1) || strpos($file, $searchfor2)) {
+        header('Location: login.php');
+        exit();
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +29,7 @@ article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,su
 
 <section id="main-container" class="signup">
     <article id="welcome">
-        <h1>We'll be back.</h1>
+        <h1>We'll be back soon.</h1>
         <p class="desc">We're busy updating the metahill website<br>for you and will be back soon.</p><br>
         <p class="desc">Thank you for your patience.</p>
     </article>
