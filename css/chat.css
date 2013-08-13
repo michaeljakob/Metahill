@@ -25,6 +25,7 @@
     display: block;
     word-wrap: break-word;
     margin-left: 216px;
+    white-space: pre-wrap;
 }
 
 #chat .chat-entry > .chat-entry-message > code {
@@ -33,6 +34,10 @@
 
 #chat .logged-message {
     color: #999;
+}
+
+#chat .whispered-message {
+    background: #ddd;
 }
 
 #chat-header {
@@ -171,6 +176,10 @@
 }
 
 #channel-attendees-entries > li {
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: #666;
     margin: 0 0 4px 0;
 }
 
@@ -221,8 +230,6 @@
     right: 212px;
 }
 
-
-
 #submit-aside-right {
     float: right;
 }
@@ -240,8 +247,8 @@
 }
 
 #submit-aside-right .share img:hover {
-    transform: scale(1.2);
-    -webkit-transform: scale(1.2);
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
     -webkit-transition: -webkit-transform .3s ease-out; 
     -moz-transition: -moz-transform .3s ease-out; 
 }
@@ -445,3 +452,26 @@ pre.prettyprint {
     margin: 0;
     padding: 0;
 }
+
+
+
+#channel-attendees-entries .popover {
+    width: 170px;
+}
+
+#data-kick-user-content-send, #data-kick-user-content button, #data-kick-user-content li {
+    width: 140px;
+}
+
+#data-kick-user-content ul {
+    min-width: initial;
+}
+
+#data-kick-user-content-send {
+    display: block;
+    width: 115px;
+}
+
+
+
+

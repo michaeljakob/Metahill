@@ -76,9 +76,8 @@ button.close:hover {
     background-color: #2A2A2A;
 }
 
-#channel-attendees-entries > li > button:first-child {
-    color: #f0f0f0;
-    background-color: rgb(50,50,50);
+#channel-attendees-entries > li {
+    color: #aaa;
 }
 
 .popover {
@@ -97,15 +96,6 @@ button.close:hover {
     color: #666;
 }
 
-.admin-message {
-}
-
-.mod-message {
-}
-
-.room-owner-message {
-}
-
 #submit-smiley-content li {
     background: #333;
 }
@@ -114,3 +104,16 @@ button.close:hover {
     background: #222;
 }
 
+#channel-attendees-entries img {
+    width: 20px;
+    margin-left: 5px;
+    cursor: pointer;
+    float: right;
+    background: #aaa;
+    border-radius: 3px;
+}
+
+#chat .whispered-message {
+    background: rgb(50, 160, 210);
+    color: #eee;
+}

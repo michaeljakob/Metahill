@@ -16,3 +16,4 @@
 <script src="js/init.js" ></script>
 <script src="js/room-proposer.js" ></script>
 <script src="js/chat.js"></script>
+<script src="js/command-interpreter.js"></script>

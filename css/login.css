@@ -143,13 +143,6 @@ footer {
     height: 32px;
 }
 
-#banner-topright {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 150px;
-}
-
 h1.desc {
     max-width: 60%;
     margin: auto;

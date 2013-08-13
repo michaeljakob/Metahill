@@ -14,15 +14,19 @@ $(function() {
     metahill.base.isWindowFocused = true;
 
     var originalDocumentTitle = document.title;
-    $(window).focus(function() {
+
+    function updateIsFocussedState() {
         metahill.base.isWindowFocused = true;
         
-        if(metahill.log !== undefined && metahill.log.unseenMessages !== undefined) {
-            document.title = 'no-cache-in-chrome-for-windows';
+        if(metahill.log !== undefined && metahill.log.unseenMessages !== undefined && metahill.log.unseenMessages !== 0) {
             document.title = originalDocumentTitle;
             metahill.log.unseenMessages = 0;
         }
-    });
+    }
+
+
+    $('body').click(updateIsFocussedState);
+    $(window).focus(updateIsFocussedState);
 
     $(window).blur(function() {
         metahill.base.isWindowFocused = false;

@@ -95,6 +95,12 @@ $(function(){
             case 'search-rooms':
                 metahill.roomProposer.handleIncomingSearchResults(json.list, json.inputSource);
                 break;
+            case 'whisper':
+                metahill.main.addVisibleMessage(json.srcUserName, json.roomName, json.content, json.time, false, 'whispered-message', 'title="This message was whispered to you. Only you can read it. Answer by typing /w '+json.srcUserName+' <message>"');
+                break;
+            case 'mute':
+                onUserMute(json);
+                break;
             default:
                 console.log('Unknown `intent`.');
         }
@@ -106,6 +112,45 @@ $(function(){
     /************************************************************************
         Events & Callbacks
     ************************************************************************/
+    function onUserMute(json) {
+        var mutedTime = 'unspecified time';
+        switch(json.mutedTime) {
+            case 20:
+                mutedTime = '20 minutes';
+                break;
+            case 60:
+                mutedTime = '1 hour';
+                break;
+            case 180:
+                mutedTime = '3 hours';
+                break;
+            case 1440:
+                mutedTime = '1 day';
+                break;
+        }
+
+        var content;
+
+        // this user was muted
+        if(json.userName === metahill.main.userName) {
+            if(json.roomId === metahill.main.activeRoom.attr('data-roomid')) {
+                $('#submit-message').prop('disabled', true).blur();
+            }
+            metahill.main.mutedRoomIds.push(json.roomId);
+            content = 'You have been muted for ' + mutedTime + ' within this room.';
+            setTimeout(function() {
+                metahill.main.mutedRoomIds.remove(metahill.main.mutedRoomIds.indexOf(json.roomId));   
+                metahill.main.addVisibleMessage('', json.roomName, 'You have been unmuted right now :)', new Date());
+                if(json.roomId === metahill.main.activeRoom.attr('data-roomid')) {
+                    $('#submit-message').removeAttr('disabled');
+                }
+            }, json.mutedTime * 60 * 1000);
+        } else {
+            content = 'The user ' + json.userName + ' has been muted for ' + mutedTime + ' within this room.';
+        }
+        metahill.main.addVisibleMessage('', json.roomName, content, json.time);
+    }
+
     function addLatestChatEntries(roomId, roomName, entries) {
         var room = $('#channels-list').find('li:contains("'+roomName+'")');
 
@@ -188,12 +233,8 @@ $(function(){
         Helper functions
     ************************************************************************/
     function addJoinQuitMessage(roomName, message) {
-        var userName = '';
-        var time = new Date();
-        message = '_' + message + '_';
-
         if(metahill.modals.preferences.chat_show_traffic) {
-            metahill.main.addVisibleMessage(userName, roomName, message, time);
+            metahill.main.addVisibleMessage('', roomName, message, new Date());
         }
     }
 

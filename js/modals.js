@@ -72,12 +72,10 @@ $(function() {
     // Preferences listener
     $('#modals-pref-enable-smilies').change(function() {
         metahill.modals.preferences.enable_smilies = $(this).is(':checked');
-        metahill.main.updateChatBox();
     });
 
     $('#modals-pref-enable-formatting').change(function() {
         metahill.modals.preferences.enable_formatting = $(this).is(':checked');
-        metahill.main.updateChatBox();
     });
 
     $('#modals-pref-enable-notification-sounds').change(function() {

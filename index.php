@@ -22,7 +22,6 @@
 <link rel="stylesheet" type="text/css" href="css/base.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/index.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css?v=<?php echo $version; ?>"/>
-<link rel="stylesheet" type="text/css" href="theme/new-world.css?v=<?php echo $version; ?>"/>
 
 
 <style id="phpcss">
@@ -47,15 +46,17 @@
 
 
 <?php
-    $theme = 'default';
+    $theme = 'new-world';
     if(isset($_GET['theme']) && trim($_GET['theme']) != "") {
         $theme = htmlspecialchars($_GET['theme']);
-        if(file_exists("theme/$theme.css")) {
-            echo "<link rel='stylesheet' type='text/css' href='theme/$theme.css?v=<?php echo $version; ?>'/>";
-        } else {
-            echo "<link rel='stylesheet' type='text/css' href='$theme'/>";
-        }
     }
+
+    if(file_exists("theme/$theme.css")) {
+        echo "<link rel='stylesheet' type='text/css' href='theme/$theme.css?v=<?php echo $version; ?>'/>";
+    } else {
+        echo "<link rel='stylesheet' type='text/css' href='$theme'/>";
+    }
+    
 ?>
 
 </head>
@@ -141,24 +142,6 @@
         </aside>  
         <div id="submit-status"></div>
     </article>
-    <!-- data section -->
-    <div id="add-new-room-popover" style="display:none">
-        <div id="add-new-room-title">Join new room<button type="button" class="close" onClick="$('#add-new-room').popover('hide');" data-dismiss="modal" aria-hidden="true">×</button></div>
-        <div id="add-new-room-content">
-            <form onsubmit="return false;">
-                <input type="text" id="add-new-room-search" autocomplete="off" placeholder="Search room" />
-                
-                <div id="add-new-room-rooms-parent">
-                    <ul id="add-new-room-rooms"></ul>
-                </div>
-                <?php 
-                    if(!$user->is_guest) {
-                        echo "<a id='add-new-room-create-new-room' class='btn btn-info' href='#modal-new-room' data-toggle='modal'>Create new room</a>";
-                    }
-                ?>
-            </form>
-        </div>
-    </div>
     <div id="submit-smiley-title" style="display:none">Image Lounge</div>
     <div id="submit-smiley-content-parent" style="display:none">
         <div id="submit-smiley-content">
@@ -182,7 +165,7 @@
                         echo "<hr class='fade-gray'>";
                         echo "<ul>";
 
-                        usort($files, create_function('$b,$a', 'return filemtime($a) - filemtime($b);'));
+                        usort($files, create_function('$b,$a', 'return fileatime($a) - fileatime($b);'));
                         $i = 0;
                         foreach($files as $file) {
                             if($i >= 10) {
@@ -198,7 +181,38 @@
             ?>
         </div>
     </div>
-    <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom;  ?></div>
+    <!-- data section -->
+    <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom; ?></div>
+    <div id="data-kick-user-content-container" style="display:none">
+        <div id="data-kick-user-content">
+            <p>Mute this user for...</p>
+            <select id="data-kick-user-duration" class="selectpicker">
+                <option value="20">20 minutes</option>
+                <option value="60">1 hour</option>
+                <option value="180">3 hours</option>
+                <option value="1440">1 day</option>
+            </select>
+            <span id="data-kick-user-content-send" class="btn">Mute</span>
+        </div>
+    </div>
+    <div id="add-new-room-popover" style="display:none">
+        <div id="add-new-room-title">Join new room<button type="button" class="close" onClick="$('#add-new-room').popover('hide');" data-dismiss="modal" aria-hidden="true">×</button></div>
+        <div id="add-new-room-content">
+            <form onsubmit="return false;">
+                <input type="text" id="add-new-room-search" autocomplete="off" placeholder="Search room" />
+                
+                <div id="add-new-room-rooms-parent">
+                    <ul id="add-new-room-rooms"></ul>
+                </div>
+                <?php 
+                    if(!$user->is_guest) {
+                        echo "<a id='add-new-room-create-new-room' class='btn btn-info' href='#modal-new-room' data-toggle='modal'>Create new room</a>";
+                    }
+                ?>
+            </form>
+        </div>
+    </div>
+    <!-- data section end -->
     <?php 
         require_once('feature/modals.php');
         require_once('js/index.php.jsinclude.php');
