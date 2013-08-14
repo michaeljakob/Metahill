@@ -2,6 +2,7 @@
     session_start();
     session_regenerate_id(true);
 
+    $isEmbedded = isset($_GET['source']) && $_GET['source'] == "embedded.php";
     function activateAccount() {
         $ERROR = '<h1>I could not activate that. :(</h1>';
         $SUCCESS = '<h1>Your account has been activated!</h1><h2>You are logged in.</h2>';
@@ -39,7 +40,7 @@
 
 </head>
 <body>
-    <?php require_once('feature/header.php'); ?>
+    <?php if(!$isEmbedded) { require_once('feature/header.php'); } ?>
     
     <section id="main-container" class="signup">
         <article id="welcome">
@@ -47,10 +48,14 @@
             <form method="post" id="action-chooser">
             </form>
             <p class="desc" id="redirect-message">We redirect you to the main page</p>
-            <footer>
-                <a href="blog" target="_blank">Blog</a>&nbsp;|
-                <a href="help" target="_blank">Help</a>
-            </footer>
+            <?php
+                if(!$isEmbedded) {
+                    echo '<footer>';
+                    echo '   <a href="blog" target="_blank">Blog</a>&nbsp;|';
+                    echo '   <a href="help" target="_blank">Help</a>';
+                    echo '</footer>';
+                }
+            ?>
       </article>
     </section>
     
@@ -66,7 +71,13 @@
             setTimeout(addDot, i * 1000);
         }
         setTimeout(function() { 
-            window.location = 'index.php';
+            <?php
+                $source = 'index.php';
+                if(isset($_GET['source'])) {
+                    $source = $_GET['source'] . '?room=' . $_GET['room'];
+                }
+                echo "window.location = '$source';";
+            ?>
         }, 4000);
     </script>
     

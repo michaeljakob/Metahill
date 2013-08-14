@@ -115,7 +115,6 @@ function dbGetRoomObjectFromName($name) {
 function dbGetFavoriteRooms($name) {
     $dbh = getDBH();
 
-
     $statement = $dbh->prepare('SELECT r.id, r.name, r.topic, r.owner
                                 FROM `favorite_rooms` favs
                                 INNER JOIN rooms r
@@ -323,10 +322,11 @@ function dbConfirmPasswordChangeRequest($userId, $newPassword) {
 
 
 
-function submitAccountActivationEmailPear($name, $to) {
+function submitAccountActivationEmailPear($name, $to, $optionalGetParameters) {
     require_once "Mail.php";
 
-    $verificationLink = "http://www.metahill.com/activate-account.php?name=" . $name . "&email=" . $to . "&code=" . hlpCreateAccoutActivationCode($name, $to);
+    $verificationLink = "http://www.metahill.com/activate-account.php?name=$name&email=$to&code=" . hlpCreateAccoutActivationCode($name, $to);
+    $verificationLink .= "&$optionalGetParameters";
     $body = file_get_contents("feature/verify_email.html");
     $body = str_replace("::name::", $name, $body);
     $body = str_replace("::verification_link::", $verificationLink, $body);

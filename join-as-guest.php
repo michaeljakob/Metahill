@@ -7,7 +7,11 @@
         $_SESSION['verified'] = true;
         $_SESSION['name'] = $_POST['guestname'];
 
-        header('Location: index.php');
+        if(isset($_POST["source"])) {
+            header("Location: {$_POST['source']}");
+        } else {
+            header("Location: index.php");
+        }
         exit();
     }
 
@@ -41,6 +45,12 @@
             <h1 class="guest-name"><?php echo $guestName; ?></h1>
             <form method="post">
                 <input type="text" name="guestname" value="<?php echo $guestName; ?> " style="display:none;"/>
+                <?php
+                    if(isset($_GET['source'])) {
+                        $source = $_GET['source'] . '?' . $_SERVER['QUERY_STRING'];
+                        echo "<input style='display:none;' type='text' name='source' value='$source' ></input>";
+                    }
+                ?>
                 <input class="btn btn-success" type="submit" value="Okay"></input>
             </form>
       </article>

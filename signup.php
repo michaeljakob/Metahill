@@ -69,8 +69,14 @@
                 $_SESSION["logged_in"] = true;
                 $_SESSION["name"] = htmlspecialchars($name);
                 $_SESSION["verified"] = false;
-                if(submitAccountActivationEmailPear($name, $email)) {
-                    header("Location: signup-succeeded.php");
+                $isEmbedded = isset($_GET['source']) && $_GET['source'] == "embedded.php";
+
+                if(submitAccountActivationEmailPear($name, $email, $_SERVER['QUERY_STRING'])) {
+                    if($isEmbedded) {
+                        header("Location: embedded-signup-succeeded.php");
+                    } else {
+                        header("Location: signup-succeeded.php");
+                    }
                 }
                 return true;
             } else {

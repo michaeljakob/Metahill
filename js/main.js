@@ -29,7 +29,7 @@ $(function() {
             return;
         }
 
-        var activeRoomIndex = parseInt($('#data-activeroomid').html(),10);
+        var activeRoomIndex = parseInt($('#data-activeroomid').html(), 2210);
         var isAnyRoomSelected = false;
         favorites.each(function(index, entry) {
             entry = $(entry);
@@ -76,10 +76,39 @@ $(function() {
         });
 
 
-        $('#data-kick-user-content-send').click(function() {
 
+        var $latestMuteImageClicked = null;
+        $('#channel-attendees-entries').on('click', 'img.kick', function() {
+            var $this = $(this);
+            if($latestMuteImageClicked !== null) {
+                console.log('!=null, hide, ret');
+                $latestMuteImageClicked.popover('destroy');
+                $latestMuteImageClicked = null;
+                return;
+            }
+
+            var userName = metahill.helper.getSimpleText($this.parent());
+
+            $this.popover({ 
+                trigger: 'click',
+                html: true,
+                placement: 'left',
+                content: $('#data-kick-user-content-container').html().replace('%s', userName),
+            }).popover('show');
+            $('#data-kick-user-content-send').click(function() {
+                $this.popover('hide');
+                var duration = $('#data-kick-user-duration').val();
+                $('#submit-message').val('/mute ' + userName + ' ' + duration).focus();
+                // hit enter
+                var e = jQuery.Event("keydown");
+                e.which = 13;
+                $('#submit-message').trigger(e);
+
+            });
+            $this.parent().find('.bootstrap-select').remove();
+            $('.selectpicker').selectpicker();
+            $latestMuteImageClicked = $this;
         });
-
 
         $('#chat-entries-parent').on('click', '.whispered-message', function() {
             var $entry = $(this);
@@ -94,40 +123,12 @@ $(function() {
             metahill.main.onWhisperClicked(userName);
         });
 
-        (function() {
-            var $latestClickedButton;
+        $('#channel-attendees-entries').on('click', 'img.whisper', function(e) {
+            var $img = $(this);
+            var $button = $img.parent();
 
-            $('#channel-attendees-entries').on('click', 'img', function(e) {
-                var $img = $(this);
-                var $button = $img.parent();
-                $latestClickedButton = $button;
-                var id = $button.parent().attr('id');
-
-                switch($img.attr('class')) {
-                    case 'whisper':
-                        metahill.main.onWhisperClicked(metahill.helper.getSimpleText($button));
-                        break;
-                    case 'kick':
-                        metahill.main.onKickClicked($img, id.substring(id.lastIndexOf('-')+1), metahill.helper.getSimpleText($button));
-                        break;
-                    default:
-                        console.log('Unknown image within `button` clicked');
-                }
-            });
-
-            $('#channel-attendees-entries').popover({ 
-                trigger: 'click',
-                html: true,
-                placement: 'left',
-                title: function() { 
-                    var name = metahill.helper.getSimpleText($latestClickedButton);
-                    return 'Mute ' + name;
-                },
-                content: $('#data-kick-user-content-container').html(),
-                selector: 'img.kick'
-            });
-
-        })();
+            metahill.main.onWhisperClicked(metahill.helper.getSimpleText($button));
+        });
 
         $('#channel-attendees-entries').on('mouseenter mouseleave', 'img', function(e){
             var $img = $(this);
@@ -197,20 +198,8 @@ $(function() {
         $submit.val('/whisper ' + userName + ' ' + oldText).focus();
     };
 
-    metahill.main.onKickClicked = function($img, userId, userName) {
-
-    };
-
     metahill.main.makeAttendeeEntryText = function(userId, userName) {
-        var isOwner = metahill.main.userId === metahill.main.activeRoom.attr('data-owner');
-        var isKickVisible = isOwner || metahill.base.user.isAdmin(metahill.main.userName);
-        if(userName === metahill.main.userName || metahill.base.user.isAdmin(userName) || metahill.base.user.isMod(userName)) {
-            isKickVisible = false;
-        }
-        // TODO you can't kick other room admins
-        // 
-
-
+        var isKickVisible = metahill.base.user.that.mayReignOver(userName);
         var isWhisperVisible = userName !== metahill.main.userName;
 
         return  '<li id="channel-attendees-'+ userId +'">'+
@@ -535,9 +524,11 @@ $(function() {
         var newRoomName = metahill.helper.getSimpleText(newRoom);
 
         if(newRoomName !== oldRoomName) {
-            if(metahill.main.mutedRoomIds.indexOf(newRoom.attr('data-roomid')) === -1) {
-                metahill.main.enableInput();
+            metahill.main.enableInput();
+            if(metahill.main.mutedRoomIds.indexOf(newRoom.attr('data-roomid')) !== -1) {
+                $('#submit-message').prop('disabled', true).blur();
             }
+
             metahill.log.roomAttendees[newRoomName] = metahill.log.roomAttendees[newRoomName] || {};
 
             if(!metahill.main.isGuest) {

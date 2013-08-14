@@ -185,12 +185,12 @@
     <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom; ?></div>
     <div id="data-kick-user-content-container" style="display:none">
         <div id="data-kick-user-content">
-            <p>Mute this user for...</p>
+            <p>Mute <i>%s</i> for…</p>
             <select id="data-kick-user-duration" class="selectpicker">
-                <option value="20">20 minutes</option>
-                <option value="60">1 hour</option>
-                <option value="180">3 hours</option>
-                <option value="1440">1 day</option>
+                <option value="20 minutes">20 minutes</option>
+                <option value="1 hour">1 hour</option>
+                <option value="3 hours">3 hours</option>
+                <option value="1 day">1 day</option>
             </select>
             <span id="data-kick-user-content-send" class="btn">Mute</span>
         </div>

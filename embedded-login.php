@@ -151,7 +151,7 @@
                 <tr>
                     <td colspan="3">
                         <hr class="style-two">
-                        <p class="no-account-yet">I don't have an account. <a target="_blank" href="signup.php">Sign up</a>.</p>
+                        <p class="no-account-yet">I don't have an account. <a target="_blank" href="signup.php?source=embedded.php&<?php echo $_SERVER['QUERY_STRING']; ?>">Sign up</a> or <a href="join-as-guest.php?source=embedded.php&<?php echo $_SERVER['QUERY_STRING']; ?>">join as a guest</a>.</p>
                     </td>
                 </tr>           
             </table>

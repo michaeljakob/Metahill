@@ -463,6 +463,10 @@ pre.prettyprint {
     width: 140px;
 }
 
+#data-kick-user-content > .bootstrap-select {
+    width: inherit;
+}
+
 #data-kick-user-content ul {
     min-width: initial;
 }
