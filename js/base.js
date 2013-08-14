@@ -6,6 +6,7 @@ var metahill = metahill || {};
 metahill.base = {};
 metahill.base.support = {};
 metahill.base.user = {};
+metahill.base.user.that = {};
 
 /**
  * metahill.base
@@ -72,4 +73,54 @@ $(function() {
     metahill.base.user.isMod = function(userName) {
         return modNames.indexOf(userName) !== -1;
     };
+
+    /*
+        Checks whether this user is the owner of the active room.
+     */
+    metahill.base.user.that.isActiveRoomOwner = function() {
+        return metahill.main.userId === metahill.main.activeRoom.attr('data-owner');
+    };
+
+    /**
+     * Checks whether this user's rank is higher than the
+     * one of the other user provided.
+     * The speciality is, that true is returned if
+     * - both are admins
+     * - both are mods
+     * and false is returned if
+     * - both are normal users
+     * This is legitimated by assuming that admins may do anything to other admins (same for mods),
+     * but a user may not reign over another user. This prevents trolling. :)
+     * @param  {string} other Username of the other user
+     * @return {bool}   
+     */
+    metahill.base.user.that.mayReignOver = function(other) {
+        var that = metahill.main.userName;
+        if(that === other) {
+            return false;
+        }
+
+        if(metahill.base.user.isAdmin(that))
+            return true;
+
+        if(metahill.base.user.isAdmin(other))
+            return false;
+
+        if(metahill.base.user.isMod(that))
+            return true;
+
+        if(metahill.base.user.isMod(other))
+            return false;
+
+        if(metahill.base.user.that.isActiveRoomOwner())
+            return true;
+
+        return false;
+    };
 });
+
+
+
+
+
+

@@ -25,7 +25,7 @@ $(function() {
         $(window).resize();
 
         var headerSize = 100;
-        if(location.pathname.indexOf('embedded.php') !== -1) {
+        if(location.pathname.indexOf('embedded') !== -1) {
             headerSize = 0;
         }
         
