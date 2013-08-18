@@ -34,8 +34,9 @@ java -jar "$compiler" \
             init.js \
             room-proposer.js \
             chat.js \
-            command-interpreter.js \
+            "command-interpreter.js" \
     > combined.js
+
 
 
 echo "Compile files individually"

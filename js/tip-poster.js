@@ -13,7 +13,7 @@ $(function() {
     tips.push('Enclose your text in * to make it <b>bold</b>.');
     tips.push('Enclose your text in ` to make it <code>code</code>.');
     tips.push('<b>metahill</b> is a non-for-profit service.');
-    tips.push('Join the <b>metahill</b>-room to give feedback.');
+    tips.push('Join the <b>metahill</b>-room to give us feedback.');
     tips.push('We visualize over 25 smilies. <a href="help/index.php?tab=messages&anchor=smilies" target="_blank">View the list</a>.');
     tips.push('Hold and drag rooms to change their order.');
     tips.push('Try to use up- and down-arrows at the input field.');

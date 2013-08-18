@@ -32,6 +32,8 @@ article,aside,details,figcaption,figure,footer,header,hgroup,main,nav,section,su
         <h1>We'll be back soon.</h1>
         <p class="desc">We're busy updating the metahill website<br>for you and will be back soon.</p><br>
         <p class="desc">Thank you for your patience.</p>
+        <br><br>
+        <p><?php echo "Updated ".date("F j, g:i:s a"); ?></p>
     </article>
 </section>
 </body>

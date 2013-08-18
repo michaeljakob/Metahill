@@ -114,6 +114,6 @@ button.close:hover {
 }
 
 #chat .whispered-message {
-    background: rgb(50, 160, 210);
+    background: #444;
     color: #eee;
 }

@@ -71,10 +71,10 @@ $(function() {
         status.addClass('label-alert');
         status.text("Your name should be no longer than 12 characters.");
         totalStatus[1] = false;
-      } else if(name.indexOf('@') !== -1) {
+      } else if(/[^a-zA-Z0-9]/.test(name)) {
         status.removeClass('label-success');
         status.addClass('label-alert');
-        status.text("Please do not use the @-sign.");
+        status.text("Please only use numbers and letters.");
         totalStatus[1] = false;
       } else {
         doesUsernameExist(name, $(this), status);

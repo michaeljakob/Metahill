@@ -27,16 +27,31 @@ $(function() {
     });
 
 
+    // scroll to bottom right after loading
     $(function() {
-        var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
-        chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 1000}, 0);
+        if(metahill.main.activeRoom !== undefined) {
+            var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
+            chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 1000}, 0);
+        }
     });
 
-
+    // scroll to bottom on window resize
     $(window).on('resize', $.debounce(250, function() {
         // keep scrolled to bottom
-        var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
-        chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 0);
+        if(metahill.main.activeRoom !== undefined) {
+            var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
+
+            var scrollDeltaToBottom = 0;
+            if(chatEntries[0] !== undefined) {
+                scrollDeltaToBottom = (chatEntries[0].scrollHeight - chatEntries.scrollTop()) - chatEntries.outerHeight();
+            }
+            // We only scroll down if it's already (almost) scrolled to bottom
+            if(scrollDeltaToBottom <= 70) {
+                chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 200}, 500);
+            }
+
+            // chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 1000);
+        }
     }));
 
 
@@ -87,7 +102,7 @@ $(function() {
             if(!metahill.base.support.isEmbedded) {
                 chatEntries.height(attendeesBarHeight - 50 + addedChatEntriesHeight);
             } else {
-                chatEntries.height(attendeesBarHeight + 105 + addedChatEntriesHeight);
+                chatEntries.height(attendeesBarHeight + 80 + addedChatEntriesHeight);
             }
         };
     })()); // window.resize
@@ -103,7 +118,7 @@ $(function() {
             return $('#add-new-room-content').html();
         }
     }).click(function() {
-        if(!metahill.main.isEmbedded) {
+        if(!metahill.base.support.isEmbedded) {
             $('#add-new-room-search').focus();
         }
     });
@@ -121,6 +136,7 @@ $(function() {
             }
         });
     });
+    
 
     $('#submit-smiley').popover({ 
         trigger: 'click',
@@ -138,6 +154,7 @@ $(function() {
                 var imageUrl = 'http://www.metahill.com/' + $(this).attr('src');
                 var roomId = metahill.main.activeRoom.attr('data-roomid');
                 var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+                metahill.helper.submitHttpRequest('touch-image.php', {image: imageUrl});
                 metahill.chat.sendImage(imageUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
             }
         });

@@ -27,7 +27,7 @@ switch($intent) {
 }
 
 if($success) {
-    header('Status: 200 OK');
+    header('Status: 200 OK', true, 200);
     header('Content-Description: ' . $intent . '>' . $statement->rowCount());
 } else {
     header('Status: 400 Bad Request', true, 400);

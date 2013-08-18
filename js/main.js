@@ -29,21 +29,21 @@ $(function() {
             return;
         }
 
-        var activeRoomIndex = parseInt($('#data-activeroomid').html(), 2210);
+        var activeRoomIndex = parseInt($('#data-activeroomid').html(), 10);
         var isAnyRoomSelected = false;
         favorites.each(function(index, entry) {
             entry = $(entry);
             animateRoomAppearance(entry);
 
             if(index === activeRoomIndex) {
-                onRoomSelected(entry);
+                metahill.main.selectRoom(entry);
                 isAnyRoomSelected = true;
             }
         });
 
 
         if(!isAnyRoomSelected) {
-            onRoomSelected(favorites[0]);
+            metahill.main.selectRoom(favorites[0]);
         }
     }
 
@@ -57,7 +57,7 @@ $(function() {
         // room navigation
         $('#channels-list').children().each(function(_, entry) {
             entry = $(entry);
-            entry.click(function() { onRoomSelected(entry); });
+            entry.click(function() { metahill.main.selectRoom(entry); });
             entry.children('button').each(function(_, be) {
                 $(be).click(function() { onRoomClosed(be); return false; });
             });
@@ -78,10 +78,10 @@ $(function() {
 
 
         var $latestMuteImageClicked = null;
+
         $('#channel-attendees-entries').on('click', 'img.kick', function() {
             var $this = $(this);
             if($latestMuteImageClicked !== null) {
-                console.log('!=null, hide, ret');
                 $latestMuteImageClicked.popover('destroy');
                 $latestMuteImageClicked = null;
                 return;
@@ -93,7 +93,7 @@ $(function() {
                 trigger: 'click',
                 html: true,
                 placement: 'left',
-                content: $('#data-kick-user-content-container').html().replace('%s', userName),
+                content: $('#data-kick-user-content-container').html().replace('%s', userName)
             }).popover('show');
             $('#data-kick-user-content-send').click(function() {
                 $this.popover('hide');
@@ -110,13 +110,21 @@ $(function() {
             $latestMuteImageClicked = $this;
         });
 
+        $('body').on('click', '.chat-entry, header, #submit-area', function(e) {
+            if($latestMuteImageClicked !== null) {
+                $latestMuteImageClicked.popover('destroy');
+                $latestMuteImageClicked = null;
+            }
+        });
+
         $('#chat-entries-parent').on('click', '.whispered-message', function() {
             var $entry = $(this);
             var userName = $entry.children('.chat-entry-user').eq(0).text().replace(/:$/, '');
             if(userName === metahill.main.userName) {
-                var text = $entry.children('.chat-entry-message').eq(0).text();
-                if(text.indexOf('/whisper') === 0 ) {
-                    userName = text.split(' ')[1];
+                var $message = $entry.children('.chat-entry-message').eq(0);
+                var spanText = $message.find('span').text();
+                if(spanText.indexOf('whisper to ') === 0) {
+                    userName = spanText.split(' ')[2];
                 }
             }
 
@@ -298,6 +306,7 @@ $(function() {
                     break;
                 // UP ARROW
                 case 38:
+                    e.preventDefault();
                     if(lastMessagesIndex === -1) {
                         scrollInputValue = submitMessage.val();
                     }
@@ -318,7 +327,6 @@ $(function() {
                     }
 
                     break;
-
                 default:
             }
         };
@@ -331,7 +339,7 @@ $(function() {
      * @return {bool} isAddressed
      */
     var isThisUserAddressed = (function() {
-        var regex = new RegExp('.*[\\s:;.,|<>]?'+metahill.main.userName+'[\\s:;.,!|<>]?.*', '');
+        var regex = new RegExp('.*([^a-zA-Z0-9]|^)'+metahill.main.userName+'([^a-zA-Z0-9]|$).*', 'i');
 
         return function(message) {
             return regex.test(message);
@@ -423,14 +431,14 @@ $(function() {
         } else {
             entry = $(metahill.main.makeEntryMessageText(userName, room, message, time, optionalClasses, optionalAttributes));
         }
-        var scrollDeltaToBottom = (chatEntries[0].scrollHeight - chatEntries.scrollTop()) - chatEntries.outerHeight();
-        var isScrolledToBottom = scrollDeltaToBottom ===0 ;
+        var scrollDeltaToBottom = 0;
+        if(chatEntries[0] !== undefined) {
+            scrollDeltaToBottom = (chatEntries[0].scrollHeight - chatEntries.scrollTop()) - chatEntries.outerHeight();
+        }
         chatEntries.append(entry);
 
-        // We only scroll down if it's already scrolled to bottom
-        if(isScrolledToBottom) {
-            // we assume that a message is max "400px" high (image or small browser window)
-            chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 400}, 500);
+        if(scrollDeltaToBottom <= 70) {
+            chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 400}, 700);
         }
 
         if(roomName !== metahill.helper.getSimpleText(metahill.main.activeRoom) && userName !== '') {
@@ -441,37 +449,51 @@ $(function() {
             }
             unseenMessages.text(msgCount + 1);
             var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
-            if(roomName !== activeRoomName && isThisUserAddressed(message)) {
+            if(roomName !== activeRoomName && userName !== metahill.main.userName && isThisUserAddressed(message)) {
                 highlightUser();
             }
         } else {
 
             metahill.modals.liveUpdateChatTextSize();
 
-            if(PR !== undefined) {
+            if(typeof PR !== 'undefined') {
                 PR.prettyPrint();
             }
         }
     };
 
-    metahill.main.getMagnifyOnHoverCode = function(url) {
-        var hoverIn = '$(\'#magnify-image-overlay\').attr(\'src\', \''+url+'\').show();';
-        var hoverOut = '$(\'#magnify-image-overlay\').hide();';
+    $(function() {
+        var $overlay = $('#magnify-image-overlay');
+        var latestUrl = null;
+        $('#chat-entries-parent').on('mouseenter mouseleave', '*[data-magnifyurl]:not(.no-magnify)', function(event) {
+            if(event.type === 'mouseenter') {
+                latestUrl = $(this).attr('data-magnifyurl');
+                $overlay.attr('src', latestUrl).show();
+            } else {
+                $overlay.attr('src', '').hide();
+            }
+        });
 
-        return 'onmouseover="'+hoverIn+'" onmouseout="'+hoverOut+'"';        
-    };
+        $overlay.hover(function() {
+            if(latestUrl !== null) {
+                $overlay.attr('src', latestUrl).show();
+            }
+        }, function() {
+            $overlay.attr('src', '').hide();
+        });
+    });
 
     metahill.main.makeImageTagFromUrl = function(url) {
         var imageId = metahill.helper.generateRandomString(5);
         var linkTag = $('<a target="_blank" href="'+url+'"></a>');
-        var imageTag = $('<img alt="" id="imgup-'+imageId+'" class="image-message" '+ metahill.main.getMagnifyOnHoverCode(url) +' src="' + url + '"/>');
+        var imageTag = $('<img alt="" id="imgup-'+imageId+'" class="image-message" data-magnifyurl="'+url+'" src="' + url + '"/>');
         linkTag.append(imageTag);
 
 
         var newImg = new Image();
         newImg.onload = function() {
             if(newImg.height < 100){
-                $('#imgup-' + imageId).removeAttr('id onmouseover onmouseout');
+                $('#imgup-' + imageId).removeAttr('id').addClass('no-magnify');
             }
         };
         newImg.src = url;
@@ -510,7 +532,7 @@ $(function() {
         attendeesList.append(cache);
     };
 
-    function onRoomSelected(newRoom) {
+    metahill.main.selectRoom = function(newRoom) {
         newRoom = $(newRoom);
         if(newRoom.attr('id') === 'add-new-room'){
             return;
@@ -524,10 +546,6 @@ $(function() {
         var newRoomName = metahill.helper.getSimpleText(newRoom);
 
         if(newRoomName !== oldRoomName) {
-            metahill.main.enableInput();
-            if(metahill.main.mutedRoomIds.indexOf(newRoom.attr('data-roomid')) !== -1) {
-                $('#submit-message').prop('disabled', true).blur();
-            }
 
             metahill.log.roomAttendees[newRoomName] = metahill.log.roomAttendees[newRoomName] || {};
 
@@ -552,17 +570,18 @@ $(function() {
             }
             
             metahill.main.activeRoom = newRoom;
+            metahill.main.enableInput();
+            if(metahill.main.mutedRoomIds.indexOf(newRoom.attr('data-roomid')) !== -1) {
+                $('#submit-message').prop('disabled', true).blur();
+            }
             
             metahill.main.updateAttendeesList();
             $('#chat-header-topic').html(metahill.formatMessages.styleMessage(metahill.helper.htmlEncode(newRoom.attr('data-topic'))));
-
 
             // reset "unseen message" counter
             var unseenMessages = newRoom.children('.unseen-messages');
             unseenMessages.hide(metahill.base.support.isAnimated && 'slow');
             unseenMessages.text('0');
-
-
 
             // set scrollbars accordingly
             $(window).resize();
@@ -574,7 +593,7 @@ $(function() {
             if(newChatEntries[0] !== undefined)
                 newChatEntries.scrollTop(newChatEntries[0].scrollHeight);
         }
-    }
+    };
 
     function removeButtonClasses(obj) {
         obj.removeClass('btn-warning btn-danger btn-primary btn-info btn-primary');
@@ -583,6 +602,16 @@ $(function() {
     function removeAlertClasses(obj) {
         obj.removeClass('alert-warning alert-error alert-info alert-success');
     }
+
+
+    metahill.main.getRoomFromName = function(roomName) {
+        return $('#channels-list').find('li:contains("'+roomName+'")');
+    };
+
+    metahill.main.closeRoom = function(roomName) {
+        var $button = metahill.main.getRoomFromName(roomName).find('button');
+        onRoomClosed($button);
+    };
 
     function onRoomClosed(obj) {
         var room = $(obj).parent();
@@ -630,7 +659,7 @@ $(function() {
                 newActiveRoom = room.prev();
             }
             if(newActiveRoom.length !== 0) {
-                onRoomSelected(newActiveRoom);
+                metahill.main.selectRoom(newActiveRoom);
             } else {
                 $('#channel-attendees-entries').empty();
             }
@@ -683,6 +712,10 @@ $(function() {
         });
 
         metahill.main.activeRoom = entry;
+        
+        if(typeof PR !== 'undefined') {
+            PR.prettyPrint();
+        }
     };
 
     function animateRoomAppearance(entry) {
@@ -726,7 +759,7 @@ $(function() {
         .attr('data-topic', topic)
         .attr('data-owner', owner)
         .text(name)
-        .click(function() { onRoomSelected(entry); });
+        .click(function() { metahill.main.selectRoom(entry); });
 
         var closeButton = $('<button class="close room-close">&times;</button>');
         closeButton.click(function () { onRoomClosed(closeButton[0]); return false; });
@@ -735,7 +768,7 @@ $(function() {
         .append(closeButton)
         .append(unseenMessages);
         $('#channels-list').append(entry);
-        onRoomSelected(entry);
+        metahill.main.selectRoom(entry);
 
         if(metahill.base.support.isAnimated) {
             animateRoomAppearance(entry);
@@ -767,17 +800,21 @@ $(function() {
         Enable input boxe(s) for chatting.
     */
     metahill.main.enableInput = function () {
-        if(!metahill.chat.isOnline) {
+        if(!metahill.chat.isOnline || metahill.main.activeRoom === undefined) {
             return;
         }
+        var isActiveRoomUnmuted = metahill.main.mutedRoomIds.indexOf(metahill.main.activeRoom.attr('data-roomid')) === -1;
         
         var submitMessage = $('#submit-message');
         var chatEntries = $('#chat-entries');
 
         chatEntries.removeAttr('disabled');
-        submitMessage.removeAttr('disabled');
 
-        if(!metahill.base.support.isMobile && !metahill.base.support.isEmbedded) {
+        if(isActiveRoomUnmuted) {
+            submitMessage.removeAttr('disabled');
+        }
+
+        if(!metahill.base.support.isMobile && !metahill.base.support.isEmbedded && isActiveRoomUnmuted) {
             submitMessage.focus();
         }
 
@@ -892,14 +929,55 @@ $(function() {
             message = '<i>' + message + '</i>';
         }
 
+        if(optionalClasses !== undefined && optionalClasses.indexOf('whispered-message') !== -1) {
+            var match = /data-to="(.*?)"/.exec(optionalAttributes);
+            if(match !== null) {
+                message = '<span class="label">whisper to '+match[1]+'</span>' + message;        
+            } else {
+                message = '<span class="label">whisper</span>' + message;        
+            }
+        }
+
+        // bold username
+        // var messageParts = message.split(' ');
+        // var lowerCaseUserName = metahill.main.userName.toLowerCase();
+        // for(var i=0; i<messageParts.length; ++i) {
+        //     if(messageParts[i].toLowerCase() === lowerCaseUserName) {
+        //         messageParts[i] = '<b>' + messageParts[i] + '</b>';
+        //     }
+        // }
+        // message = messageParts.join(' ');
+
         var entryText =
                 '<div '+optionalAttributes+' class="chat-entry '+ classes +'">' +
-                    '<span class="chat-entry-options">'+metahill.helper.toHHMMSS(time)+'</span>' +
+                    '<span class="chat-entry-options">'+metahill.helper.toHHMMSS(time)+'&nbsp;</span>' +
                     '<span class="chat-entry-user">'+userName+'</span>' +
                     '<span class="chat-entry-message">'+message+'</span>' +
                 '</div>';
 
         return entryText;
     }
+
+    metahill.main.unmuteRoomId = function(roomId, mutedTimeLeft) {
+        setTimeout(function() {
+            var roomName = metahill.helper.getSimpleText($('#channels-list').children("li[data-roomid='"+roomId+"']"));
+            metahill.main.mutedRoomIds.remove(metahill.main.mutedRoomIds.indexOf(roomId));   
+            metahill.main.addVisibleMessage('', roomName, 'You have been unmuted right now :)', new Date());
+            if(roomId === metahill.main.activeRoom.attr('data-roomid')) {
+                $('#submit-message').removeAttr('disabled').focus();
+            }
+        }, mutedTimeLeft);
+    };
+
+
+
+
+    metahill.main.addSystemMessage = function(message) {
+        var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+        message = '<span class="label">system</span>' + message;
+        metahill.main.addVisibleMessage('', roomName, message, new Date());
+    };
+
+
 
 });

@@ -83,12 +83,15 @@ $(function() {
         formData.append('submissionType', type);
         formData.append('userName', metahill.main.userName);
 
+        var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
+        var roomId = metahill.main.activeRoom.attr('data-roomid');
 
-        var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, metahill.main.activeRoom, 'http://www.metahill.com/img/loading.gif', new Date().getTime()));
-        var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
-        chatEntries
-        .append(entry)
-        .animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+
+        // var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, metahill.main.activeRoom, 'http://www.metahill.com/img/loading.gif', new Date().getTime()));
+        // var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
+        // chatEntries
+        // .append(entry)
+        // .animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
 
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'php/image-upload.php');
@@ -97,8 +100,8 @@ $(function() {
             if (xhr.status == 200) {
                 var fileName = xhr.getResponseHeader('Content-Description');
                 var url = 'http://www.metahill.com/' + fileName;
-                console.log('all done: ' + xhr.status + ':' + fileName);
-                metahill.chat.sendImage(fileName, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
+                // console.log('all done: ' + xhr.status + ':' + fileName);
+                metahill.chat.sendImage(fileName, metahill.main.userId, metahill.main.userName, roomId, roomName);
                 
                 addRecentUploadedImageInLounge(url);
             } else {

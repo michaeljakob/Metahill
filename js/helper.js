@@ -12,6 +12,14 @@ Array.prototype.remove = function(from, to) {
 var metahill = metahill || {};
 metahill.helper = {};
 
+/**
+ * Should only be used for getting files in php/
+ * The submit-method always is post.
+ * @param  {[type]} phpFile         [description]
+ * @param  {[type]} json            [description]
+ * @param  {[type]} successCallback [description]
+ * @return {[type]}                 [description]
+ */
 metahill.helper.submitHttpRequest = function(phpFile, json, successCallback) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'php/' + phpFile);
@@ -20,6 +28,42 @@ metahill.helper.submitHttpRequest = function(phpFile, json, successCallback) {
             //console.log('http request: ok. '+ xhr.responseText);
             if(successCallback !== undefined) {
                 successCallback(xhr.getResponseHeader('Content-Description'));
+            }
+        } else {
+            var error = xhr.getResponseHeader('Content-Description');
+            //console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
+        }
+    };
+
+    var formData = new FormData();
+    for(var key in json) {
+        formData.append(key, json[key]);
+    }
+
+    xhr.send(formData);
+};
+
+/**
+ * This method is different from submitHttpRequest in two major ways.
+ * 1) The `file' path may point to anywhere, and is not planted into the php/ folder
+ * 2) The success callback will provide the response text instead of the 'Content-Description' header.
+ * @param  {[type]} file            [description]
+ * @param  {[type]} json            [description]
+ * @param  {[type]} successCallback [description]
+ * @return {[type]}                 [description]
+ */
+metahill.helper.submitHttpRequestGeneral = function(file, json, successCallback, submitMethod) {
+    if(submitMethod === undefined) {
+        submitMethod = 'post';
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open(submitMethod, file);
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            //console.log('http request: ok. '+ xhr.responseText);
+            if(successCallback !== undefined) {
+                successCallback(xhr.responseText);
             }
         } else {
             var error = xhr.getResponseHeader('Content-Description');

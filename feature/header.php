@@ -11,8 +11,7 @@
 
             if(!$user->is_guest) {
                 echo "<div class='menu'>";
-                echo     "<div id='site-status' class='alert'>";
-                echo "</div>";
+                echo     "<div id='site-status' class='alert'></div>";
             }
 
 
@@ -39,6 +38,7 @@
                         echo    "</ul>";
                 echo "</div>"; // #user-name
             echo "</div>"; // #userbar
+            echo "</div>"; // .menu
         } 
     ?>
 

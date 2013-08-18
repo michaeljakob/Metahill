@@ -1,8 +1,12 @@
 metahill.main.command = metahill.main.command || {};
+metahill.main.command.latestWhisperPartner = '';
 
 $(function() {
 
     var ESCAPE_SYMBOL = '/';
+
+    var ERROR_REGISTERED_ONLY_TITLE = 'I feel real sorry, but…';
+    var ERROR_REGISTERED_ONLY_MESSAGE = '…this feature is reserved to registered users.';
 
     /**
      * [ description]
@@ -22,20 +26,65 @@ $(function() {
         var roomId = metahill.main.activeRoom.attr('data-roomid');
 
         var destUserName;
+        var content;
         switch(command) {
             case 'blog':
-                addSystemText('You can find the blog at www.metahill.com/blog');
+                metahill.main.addSystemMessage('You can find the blog at www.metahill.com/blog');
                 break;
             case 'help':
-                addSystemText('You can find the help at www.metahill.com/help');
+                metahill.main.addSystemMessage('You can find the help at www.metahill.com/help');
                 break;
-            case 'invite':
-                break;
+            case 'enter':
             case 'join':
+                var destRoomName = args[1];
+                if(destRoomName === undefined) {
+                    metahill.main.setSubmitStatus('Join what? :)', 'Did you forget to append a room-name?');
+                    return true;
+                }
+                var foundOpenRoom = false;
+                $('#channels-list').children().each(function(_,e) {
+                    var actualRoomName = metahill.helper.getSimpleText($(e));
+                    if(actualRoomName.toLowerCase() === destRoomName.toLowerCase()) {
+                        metahill.main.selectRoom(metahill.main.getRoomFromName(actualRoomName));
+                        foundOpenRoom = true;
+                        return;
+                    }
+                });
+                if(foundOpenRoom) {
+                    return true;
+                }
+                var url = 'dev/rest/getRoomObjectFromName.php';
+                metahill.helper.submitHttpRequestGeneral(url, {room: destRoomName}, function(text) {
+                    if(text !== 'null') {
+                        var room = JSON.parse(text); 
+                        room.topic = metahill.helper.quotesEncode(room.topic);
+                        var newRoom = '<li data-roomid="'+room.id+'" data-topic="'+room.topic+'" data-owner="'+room.owner+'">'+room.name+'</li>';
+                        metahill.main.onNewRoomClicked($(newRoom));
+                    } else {
+                        metahill.main.setSubmitStatus('Sorry, but…', 'Apparently the room "'+ destRoomName +'" does not exist!');
+                    }
+                });
                 break;
-            case 'kick':
+            case 'part':
+            case 'exit':
+            case 'quit':
+                if(args[1] === undefined) {
+                    metahill.main.closeRoom(metahill.helper.getSimpleText(metahill.main.activeRoom));
+                } else {
+                    roomName = args[1];
+                    if(getLowerCaseOpenRoomNames().indexOf(roomName.toLowerCase()) !== -1) {
+                        metahill.main.closeRoom(roomName);
+                    } else {
+                        metahill.main.setSubmitStatus('Sorry, but…', 'You are in no room "' + roomName + '".');
+                    }
+                }
+                break;
             case 'mute':
                 destUserName = args[1];
+                if(args[2] === undefined || args[3] === undefined) {
+                    metahill.main.setSubmitStatus('Missing duration', 'Append one of "20 minutes", "1 hour", "3 hours" or "1 day".');
+                    return true;
+                }
                 var durationString = args[2] + ' ' + args[3];
                 var duration;
                 switch(durationString) {
@@ -52,13 +101,13 @@ $(function() {
                         duration = 1440;
                         break;
                     default:
-                        metahil.main.addVisibleMessage('', roomName,  'You specified an invalid duration.', new Date());
+                        metahill.main.setSubmitStatus('wat', 'You specified an invalid duration.');
                         return true;
                 }
 
                 if(metahill.base.user.that.mayReignOver(destUserName)) {
                     if(destUserName === metahill.main.userName) {
-                        metahil.main.addVisibleMessage('', roomName,  'You want to mute yourself? o__o', new Date());
+                        metahill.main.setSubmitStatus('wat', 'You want to mute yourself? o_o');
                         return true;
                     }
 
@@ -72,43 +121,117 @@ $(function() {
 
                     metahill.chat.connection.send(JSON.stringify(muteMessage));
                 } else {
-                    metahil.main.addVisibleMessage('', roomName,  'Right. Oo', new Date());
+                    metahill.main.addVisibleMessage('', roomName,  'Right. Oo', new Date());
                 }
                 break;
             case 'me':
+                var status = args.splice(1).join(' ');
+                if(status === '') {
+                    metahill.main.setSubmitStatus('What are you doing?', 'Append a status or deed, e.g. "is awesome".');
+                    return true;
+                }
+                content = '' + metahill.main.userName + ' ' + status;
+                metahill.chat.sendMessage(content, 1, '', roomId, roomName);
                 break;
             case 'nick':
+                metahill.main.setSubmitStatus('All names are unique.', 'Contact an admin if you\'d still like to change it.');
                 break;
             case 'whisper':
             case 'msg':
             case 'pmsg':
-                var content = args.splice(2).join(' ');
+                content = args.splice(2).join(' ');
                 destUserName = args[1];
-
-                var currentAttendees = metahill.log.roomAttendees[roomName];
-                if(currentAttendees[destUserName] === undefined) {
-                    metahill.main.addVisibleMessage('', roomName, 'The user "' + destUserName + '" is not in this room.', new Date(), false, 'whispered-message');
+                sendWhisper(destUserName, roomName, content);
+                break;
+            case 'map':
+            case 'maps':
+                if(metahill.main.isGuest) {
+                    metahill.main.setSubmitStatus(ERROR_REGISTERED_ONLY_TITLE, ERROR_REGISTERED_ONLY_MESSAGE);
                     return true;
                 }
 
-                var whisperMessage = { 
-                    intent: 'whisper',
-                    srcUserName: metahill.main.userName, 
-                    destUserName: destUserName,
-                    content: content,
-                    roomName: roomName 
-                };
-                metahill.main.addVisibleMessage(whisperMessage.srcUserName, roomName, text, new Date(), false, 'whispered-message');
-                metahill.chat.connection.send(JSON.stringify(whisperMessage));
+                var location = '';
+                var words = args.splice(1);
+                for(var i=0; i<words.length; ++i) {
+                    words[i] = words[i].replace(/("|')/g, '');
+                    location += words[i][0].toUpperCase() + words[i].slice(1).toLowerCase() + ' ';
+                }
+                if(!(/^[a-zA-Z0-9-_, ]*$/.test(location))) {
+                    metahill.main.setSubmitStatus('Are you sure?', 'This doesn\'t really look like a sensible location :/.');
+                    return true;
+                }
+
+
+                if(location !== '') {
+                    var googleMapsUrl = 'https://maps.google.com/?output=embed&t=h&q=' + encodeURI(location);
+                    metahill.chat.sendMessage('<i>' + location + '</i>on Google Maps: ' + googleMapsUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
+                } else {
+                    metahill.main.setSubmitStatus('No location specified', 'Append a location, such as "New York"!');
+                }
+                break;
+            case 'yt':
+            case 'youtube':
+                if(metahill.main.isGuest) {
+                    metahill.main.setSubmitStatus(ERROR_REGISTERED_ONLY_TITLE, ERROR_REGISTERED_ONLY_MESSAGE);
+                    return true;
+                }
+                if(args[1] !== undefined) {
+                    var youtubeKeyword = args.splice(1).join(' ').replace(/("|')/g, '');
+                    var youtubeKeywordForUrl = encodeURI(youtubeKeyword);
+                    console.log(youtubeKeywordForUrl);
+                    var youtubeUrl = 'https://gdata.youtube.com/feeds/api/videos?max-results=1&alt=json&q='+youtubeKeywordForUrl;
+                    metahill.helper.submitHttpRequestGeneral(youtubeUrl, {}, function(text) {
+                        var video = JSON.parse(text);
+                        if(video.feed.entry !== undefined) {
+                            var videoUrl = video.feed.entry[0].link[0].href;
+                            videoUrl = videoUrl.substring(0, videoUrl.lastIndexOf('&'));
+                            metahill.chat.sendMessage('<i>' + youtubeKeyword + '</i> on YouTube: ' + videoUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
+                        } else {
+                            metahill.main.setSubmitStatus('Sorry, but…', 'There apparently were no matches!');
+                        }
+                    }, 'get');
+                } else {
+                    metahill.main.setSubmitStatus('No search term specified', 'Append a search term, such as "King of Math Android"!');   
+                }
                 break;
             default:
                 return false;
         }
 
-
-
         return true;
     };
+
+    function getLowerCaseOpenRoomNames() {
+        var arr = [];
+        $('#channels-list').children().each(function(_,e) {
+            arr.push(metahill.helper.getSimpleText($(e)).toLowerCase());
+        });
+
+        return arr;
+    }
+
+    function sendWhisper(destUserName, roomName, content) {
+        if(content.trim() === '') {
+            metahill.main.setSubmitStatus('You still need to append the actual message', 'Try the form /whisper <username> <message>.');
+            return;
+        }
+
+        var currentAttendees = metahill.log.roomAttendees[roomName];
+        if(currentAttendees[destUserName] === undefined) {
+            metahill.main.setSubmitStatus('Which ' + destUserName + '?', 'The user "' + destUserName + '" is not currently in this room.');
+            return true;
+        }
+
+        var whisperMessage = { 
+            intent: 'whisper',
+            srcUserName: metahill.main.userName, 
+            destUserName: destUserName,
+            content: content,
+            roomName: roomName 
+        };
+        metahill.main.addVisibleMessage(whisperMessage.srcUserName, roomName, content, new Date(), false, 'whispered-message', 'data-to="'+ destUserName + '"');
+        metahill.chat.connection.send(JSON.stringify(whisperMessage));
+    }
 
     /**
      * This method will try to autocomplete all valid commands.
@@ -118,7 +241,7 @@ $(function() {
      */
     metahill.main.command.tryCompletion = (function() {
         // two words may NOT start with the same character
-        var words = ['blog', 'help', 'invite', 'join', 'mute', 'kick', 'whisper', 'msg'];
+        var words = ['blog', 'help', 'join', 'enter', 'mute', 'whisper', 'respond', 'quit', 'part', 'youtube'];
         var com = {};
         for(var i=0; i<words.length; ++i) {
             var word = words[i];
@@ -134,16 +257,22 @@ $(function() {
 
             text = text.substring(1).rtrim();
             if(com[text] !== undefined) {
-                $('#submit-message').val(ESCAPE_SYMBOL + com[text] + ' ');
+                if(com[text] === 'respond') {
+                    var additionalSpace = (metahill.main.command.latestWhisperPartner==='')?'':' ';
+                    $('#submit-message').val(ESCAPE_SYMBOL + 'whisper ' + metahill.main.command.latestWhisperPartner + additionalSpace);
+                } else {
+                    $('#submit-message').val(ESCAPE_SYMBOL + com[text] + ' ');
+                }
                 return true;
+            } else {
+                if(text === 'yt') {
+                    $('#submit-message').val(ESCAPE_SYMBOL + 'youtube ');
+                    return true;
+                }
             }
             return false;
         };
     })();
 
-    function addSystemText(message) {
-        var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
-        metahill.main.addVisibleMessage('', roomName, message, new Date());
-    }
      
 });

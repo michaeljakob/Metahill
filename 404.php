@@ -19,8 +19,8 @@
             <p class="desc">we can't find the page</p>
             <p class="desc">you're looking for</p>
             <br/><br/>
+            <p>Visit our <a href="http://www.metahill.com/help">help page</a> or the <a href="http://www.metahill.com/blog">blog</a>.</p>
             <p>Do you want to <a href="http://www.metahill.com/login.php">Sign in</a> or <a href="http://www.metahill.com/signup.php">Sign up</a>?</p>
-            <p>If you seek help for using this platform, <a href="http://www.metahill.com/help">go here</a>.</p>
             <footer>
                     <a href="http://www.metahill.com/blog" target="_blank">Blog</a>&nbsp;|&nbsp;
                     <a href="http://www.metahill.com/help" target="_blank">Help</a>

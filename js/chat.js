@@ -96,7 +96,8 @@ $(function(){
                 metahill.roomProposer.handleIncomingSearchResults(json.list, json.inputSource);
                 break;
             case 'whisper':
-                metahill.main.addVisibleMessage(json.srcUserName, json.roomName, json.content, json.time, false, 'whispered-message', 'title="This message was whispered to you. Only you can read it. Answer by typing /w '+json.srcUserName+' <message>"');
+                metahill.main.command.latestWhisperPartner = json.srcUserName;
+                metahill.main.addVisibleMessage(json.srcUserName, json.roomName, json.content, json.time, false, 'whispered-message', 'title="Click to respond."');
                 break;
             case 'mute':
                 onUserMute(json);
@@ -138,13 +139,7 @@ $(function(){
             }
             metahill.main.mutedRoomIds.push(json.roomId);
             content = 'You have been muted for ' + mutedTime + ' within this room.';
-            setTimeout(function() {
-                metahill.main.mutedRoomIds.remove(metahill.main.mutedRoomIds.indexOf(json.roomId));   
-                metahill.main.addVisibleMessage('', json.roomName, 'You have been unmuted right now :)', new Date());
-                if(json.roomId === metahill.main.activeRoom.attr('data-roomid')) {
-                    $('#submit-message').removeAttr('disabled');
-                }
-            }, json.mutedTime * 60 * 1000);
+            metahill.main.unmuteRoomId(json.roomId, json.mutedTime * 60 * 1000);
         } else {
             content = 'The user ' + json.userName + ' has been muted for ' + mutedTime + ' within this room.';
         }
@@ -234,7 +229,7 @@ $(function(){
     ************************************************************************/
     function addJoinQuitMessage(roomName, message) {
         if(metahill.modals.preferences.chat_show_traffic) {
-            metahill.main.addVisibleMessage('', roomName, message, new Date());
+            metahill.main.addSystemMessage(message);
         }
     }
 
@@ -293,6 +288,11 @@ metahill.chat.sendUserJoin = function(roomId, roomName) {
 };
 
 metahill.chat.sendMessage = function(message, userId, userName, roomId, roomName) {
+    var isActiveRoomMuted = metahill.main.mutedRoomIds.indexOf(metahill.main.activeRoom.attr('data-roomid')) !== -1;
+    if(isActiveRoomMuted) {
+        return;
+    }
+
     var messageObject = { 
         content: message, 
         intent: 'tell', 
@@ -306,20 +306,32 @@ metahill.chat.sendMessage = function(message, userId, userName, roomId, roomName
 };
 
 metahill.chat.isImageSubmitAllowed = (function() {
-    var lastSubmissionTime = 0;
 
     return function() {
+        var isActiveRoomMuted = metahill.main.mutedRoomIds.indexOf(metahill.main.activeRoom.attr('data-roomid')) !== -1;
+        if(isActiveRoomMuted) {
+            metahill.main.setSubmitStatus('Well..', 'You have been muted in this room.');
+            return;
+        }
         var now = new Date().getTime();
-        if(now - lastSubmissionTime > 60*1000) {
-            lastSubmissionTime = now;
+        var lastSubmissionTime = $.cookie('chat.lst') || 0;
+        var submitTimeDelta = now - lastSubmissionTime;
+        if(submitTimeDelta > 60*1000) {
+            $.cookie('chat.lst', now);
             return true;
         }
-        metahill.main.setSubmitStatus('Awwr', 'You only may share one image each 60 seconds.');
+        var timeLeftUntilNextSubmit = Math.round((60*1000 - submitTimeDelta)/1000);
+        metahill.main.setSubmitStatus('Awwr', 'You can share one image each 60 seconds. '+timeLeftUntilNextSubmit+' seconds left.');
         return false;
     };
 })();
 
 metahill.chat.sendImage = function(imageUrl, userId, userName, roomId, roomName) {
+    var isActiveRoomMuted = metahill.main.mutedRoomIds.indexOf(metahill.main.activeRoom.attr('data-roomid')) !== -1;
+    if(isActiveRoomMuted) {
+        return;
+    }
+
     var messageObject = { 
         content: imageUrl, 
         intent: 'tell-image', 

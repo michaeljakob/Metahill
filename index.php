@@ -15,14 +15,19 @@
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
+    
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="description" content="Metahill is the easiest way to chat and share images in real time. The ability to exchange a lot of information including diagrams and links real-time makes it a first class business solution.">
+<meta name="author" content="">
+<meta name="keywords" content="instant messager, IM, instant messaging, free chat rooms, free chat, chat, chatrooms, chat-room, realtime, real-time, chat, share-images, share images, image upload, community based, community driven, adfree, free, better irc, enthusiasts, community-based, online meetings, troubi, social network, better facebook, better twitter, better google plus, facebook alternative, twitter alternative, metahill, troubi, fun, enthusiasts, experts, connection, network, community, forum, internet relay chat, usenet newsgroups, knowledge, science, learning, homework, self-helping, users help users">
+
 <base href="http://127.0.0.1/metahill.com/"/>
 <title>Metahill | Chatrooms for enthusiasts</title>
 <link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/base.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/index.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css?v=<?php echo $version; ?>"/>
-
+<link rel="stylesheet" type="text/css" href="css/modals.css?v=<?php echo $version; ?>">
 
 <style id="phpcss">
 <?php
@@ -34,7 +39,7 @@
     if(dbIsIpBanned($_SERVER["REMOTE_ADDR"])) {
         header('Location: banned.php');
         exit();
-    } 
+    }
 
     dbUpdateLastLoginTime($user->name);
 ?>
@@ -52,7 +57,7 @@
     }
 
     if(file_exists("theme/$theme.css")) {
-        echo "<link rel='stylesheet' type='text/css' href='theme/$theme.css?v=<?php echo $version; ?>'/>";
+        echo "<link rel='stylesheet' type='text/css' href='theme/$theme.css'/>";
     } else {
         echo "<link rel='stylesheet' type='text/css' href='$theme'/>";
     }
@@ -62,7 +67,7 @@
 </head>
 <body>
     <div id="drag-and-drop-overlay"><h1>Upload</h1></div>
-    <img id="magnify-image-overlay"/>
+    <img id="magnify-image-overlay" src="img/placeholder.png" alt=""/>
     <div id="data-added-chat-entries-height"></div>
     <?php
         if($user->is_guest) {
@@ -118,7 +123,7 @@
     
     <article id="submit-area">
         <span id="submit-smiley" class="btn" data-toggle="popover" data-placement="top">:)</span>
-        <div id="submit-message-wrapper"><input type="text" maxlength="500" id="submit-message" autofocus autocomplete="off" /></div>
+        <div id="submit-message-wrapper"><input spellcheck="false" type="text" maxlength="500" id="submit-message" autofocus autocomplete="off" /></div>
         <aside id="submit-aside-right">
             <?php
                 $changeThemeName;
@@ -134,10 +139,10 @@
                 echo "<a class='switch-theme btn' href='$changeThemeUrl'>$changeThemeName</a>";
             ?>
             <div class="share">
-                <a target="_blank" href="https://plus.google.com/102169597518297251780/posts"><img src="img/share/google-plus.png"/></a>
-                <a target="_blank" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fmetahill.com&text=Elegantly%20designed%20real-time%20chat.%20Simple%20and%20(ad-)free."><img src="img/share/twitter.png"/></a>
-                <a target="_blank" href="https://www.facebook.com/metahillcommunity"><img src="img/share/facebook.png"/></a>
-                <a target="_blank" href="http://pinterest.com/michaelpoitroae/metahill/"><img src="img/share/pinterest.png"/></a>
+                <a target="_blank" href="https://plus.google.com/102169597518297251780/posts"><img src="img/share/google-plus.png" alt=""/></a>
+                <a target="_blank" href="https://twitter.com/intent/tweet?url=http%3A%2F%2Fmetahill.com&amp;text=Elegantly%20designed%20real-time%20chat.%20Simple%20and%20(ad-)free."><img src="img/share/twitter.png" alt=""/></a>
+                <a target="_blank" href="https://www.facebook.com/metahillcommunity"><img src="img/share/facebook.png" alt=""/></a>
+                <a target="_blank" href="http://pinterest.com/michaelpoitroae/metahill/"><img src="img/share/pinterest.png" alt=""/></a>
             </div>
         </aside>  
         <div id="submit-status"></div>
@@ -150,7 +155,7 @@
                     if(!$user->is_guest) {
                         $files = glob("img/extra-smilies/*");
                         foreach($files as $file) {
-                            echo "<li><img src='$file'/></li>";
+                            echo "<li><img src='$file' alt=''/></li>";
                         }
                     } else {
                         echo "<p>Guests are not allowed to share images.</p>";
@@ -165,14 +170,14 @@
                         echo "<hr class='fade-gray'>";
                         echo "<ul>";
 
-                        usort($files, create_function('$b,$a', 'return fileatime($a) - fileatime($b);'));
+                        usort($files, create_function('$b,$a', 'return filemtime($a) - filemtime($b);'));
                         $i = 0;
                         foreach($files as $file) {
                             if($i >= 10) {
                                 break;
                             }
                             ++$i;
-                            echo "<li><img src='$file'/></li>";
+                            echo "<li><img src='$file' alt=''/></li>";
                         }
 
                         echo "</ul>";
@@ -185,7 +190,7 @@
     <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom; ?></div>
     <div id="data-kick-user-content-container" style="display:none">
         <div id="data-kick-user-content">
-            <p>Mute <i>%s</i> for…</p>
+            <p>Mute <b>%s</b> for…</p>
             <select id="data-kick-user-duration" class="selectpicker">
                 <option value="20 minutes">20 minutes</option>
                 <option value="1 hour">1 hour</option>
@@ -242,9 +247,27 @@
         }
 
     ?>
-    <script async="async" src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css<?php echo ($theme === 'dark') ? ("&skin=sons-of-obsidian") : (""); ?>"></script>
-    
 
+    <script>
+        $(document).ready(
+            setTimeout(function() {
+            <?php
+                // we're on the safe side when using a little timeout, although it should not be an issue
+                $mutedRooms = dbGetMutedRooms($user->id);
+                if($mutedRooms != null) {
+                    for($i=0; $i<count($mutedRooms); ++$i) {
+                        $entry = $mutedRooms[$i];
+                        $roomId = $entry->room_id;
+                        $timeLeft = strtotime($entry->unmute_time) - time();
+                        echo "metahill.main.mutedRoomIds.push('$roomId');";
+                        echo "metahill.main.unmuteRoomId('$roomId', $timeLeft*1000);";
+                        echo "if(metahill.main.activeRoom.attr('data-roomid')==='$roomId'){ $('#submit-message').prop('disabled', true).blur();}";
+                    }
+                }
+            ?>
+        }, 100));
+    </script>
+    <script async="async" src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css<?php echo ($theme === 'dark') ? ("&skin=sons-of-obsidian") : (""); ?>"></script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

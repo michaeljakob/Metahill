@@ -20,21 +20,28 @@
         exit("No room `{$_GET['room']}` found.");
     }
 
+    $version = sha1(date('ddyyyymm'));
+
 
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="description" content="Metahill is the easiest way to chat and share images in real time. The ability to exchange a lot of information including diagrams and links real-time makes it a first class business solution.">
+<meta name="author" content="">
+<meta name="keywords" content="instant messager, IM, instant messaging, free chat rooms, free chat, chat, chatrooms, chat-room, realtime, real-time, chat, share-images, share images, image upload, community based, community driven, adfree, free, better irc, enthusiasts, community-based, online meetings, troubi, social network, better facebook, better twitter, better google plus, facebook alternative, twitter alternative, metahill, troubi, fun, enthusiasts, experts, connection, network, community, forum, internet relay chat, usenet newsgroups, knowledge, science, learning, homework, self-helping, users help users">
+
 <base href="http://127.0.0.1/metahill.com/"/>
 <title>Metahill | Chatrooms for enthusiasts</title>
-<link rel="stylesheet" type="text/css" href="css/base.css"/>
-<link rel="stylesheet" type="text/css" href="css/index.css"/>
-<link rel="stylesheet" type="text/css" href="css/chat.css"/>
-<link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css"/>
-<link rel="stylesheet" type="text/css" href="css/embedded/index.css"/>
+<link rel="stylesheet" type="text/css" href="css/base.css?v=<?php echo $version; ?>"/>
+<link rel="stylesheet" type="text/css" href="css/index.css?v=<?php echo $version; ?>"/>
+<link rel="stylesheet" type="text/css" href="css/chat.css?v=<?php echo $version; ?>"/>
+<link rel="stylesheet" type="text/css" href="css/bootstrap-select.min.css?v=<?php echo $version; ?>"/>
+<link rel="stylesheet" type="text/css" href="css/embedded/index.css?v=<?php echo $version; ?>"/>
+<link rel="stylesheet" type="text/css" href="css/modals.css?v=?v=<?php echo $version; ?>">
 <?php
     if($api_isMini) {
-        echo '<link rel="stylesheet" type="text/css" href="css/embedded/size-mini.css"/>';
+        echo "<link rel='stylesheet' type='text/css' href='css/embedded/size-mini.css?v=$version'/>";
     }
 ?>
 
@@ -107,8 +114,8 @@
             <article id="chat">
                 <div id="chat-header" style="display:none;">
                     <span class='label'>Topic</span>
-                    <button class="btn" id="view-log-button" alt="View Log" title="View Log" >
-                        <img src="img/icon/view_log.png" />View Log
+                    <button class="btn" id="view-log-button" title="View Log" >
+                        <img src="img/icon/view_log.png" alt="View Log" />View Log
                     </button>
                     <span id="chat-header-topic"></span>
                 </div>
@@ -132,7 +139,7 @@
             echo "<a target='_blank' id='submit-metahill' href='http://www.metahill.com/join/$roomNameUrlEncoded' class='btn'>$submitMetahillText</a>";
             echo "<a target='_blank' id='submit-help' href='http://www.metahill.com/help' class='btn'>$submitHelpText</a>";
         ?>
-        <div id="submit-message-wrapper"><input type="text" maxlength="500" id="submit-message" autocomplete="off" /></div>
+        <div id="submit-message-wrapper"><input spellcheck="false" type="text" maxlength="500" id="submit-message" autocomplete="off" /></div>
         <?php
             if(!$api_isMini) {
                 $changeThemeName;
@@ -167,6 +174,25 @@
     <?php 
         require_once('js/index.php.jsinclude.php');
     ?>
+    
+
+    <script>
+        $(function() {
+        <?php
+            $mutedRooms = dbGetMutedRooms($user->id);
+            if($mutedRooms != null) {
+                for($i=0; $i<count($mutedRooms); ++$i) {
+                    $entry = $mutedRooms[$i];
+                    $roomId = $entry->room_id;
+                    $timeLeft = strtotime($entry->unmute_time) - time();
+                    echo "metahill.main.mutedRoomIds.push('$roomId');";
+                    echo "metahill.main.unmuteRoomId('$roomId', $timeLeft*1000);";
+                    echo "$('#submit-message').prop('disabled', true).blur();";
+                }
+            }
+        ?>
+        });
+    </script>
     <script async="async" src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css<?php echo ($theme === 'dark') ? ("&skin=sons-of-obsidian") : (""); ?>"></script>
     
     <script>

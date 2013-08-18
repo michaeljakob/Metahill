@@ -22,5 +22,5 @@ java -jar "$compiler" \
             jquery-ui-1.10.3.custom.min.js \
             jquery.filterList.js \
             debounce.js \
+            jquery.cookie.js \
     > ../vendor.js
-

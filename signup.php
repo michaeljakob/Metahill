@@ -20,6 +20,10 @@
             echo "Please choose a username with not more than 12 characters."; 
             return false;    
         }
+        if(ctype_alnum($name)) {
+            echo "Use only letters and numbers for your name, please."; 
+            return false;
+        }
         if(strpos($name, '@') !== false) {
             echo "Please do not use the @-sign.";
             return false;
@@ -93,9 +97,10 @@
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="description" content="Metahill is the easiest way to chat, text, message and share images in real time with other enthusiasts all across the web. The ability to exchange a lot of information including diagrams and links real-time makes it a first class business solution.">
+
+<meta name="description" content="Metahill is the easiest way to chat and share images in real time. The ability to exchange a lot of information including diagrams and links real-time makes it a first class business solution.">
 <meta name="author" content="">
-<meta name="keywords" content="free chat rooms, free chat, chat, chatrooms, chat-room, realtime, real-time, chat, share-images, share images, image upload, community based, community driven, adfree, free, better irc, enthusiasts, community-based, online meetings, troubi, social network, better facebook, better twitter, better google plus, facebook alternative, twitter alternative, metahill, troubi, fun, enthusiasts, experts, connection, network, community, forum, internet relay chat, usenet newsgroups, knowledge, science, learning, homework, self-helping, users help users">
+<meta name="keywords" content="instant messager, IM, instant messaging, free chat rooms, free chat, chat, chatrooms, chat-room, realtime, real-time, chat, share-images, share images, image upload, community based, community driven, adfree, free, better irc, enthusiasts, community-based, online meetings, troubi, social network, better facebook, better twitter, better google plus, facebook alternative, twitter alternative, metahill, troubi, fun, enthusiasts, experts, connection, network, community, forum, internet relay chat, usenet newsgroups, knowledge, science, learning, homework, self-helping, users help users">
 <link rel="canonical" href="https://www.facebook.com/metahillcommunity"/>
 <link rel="icon" href="http://www.metahill.com/favicon.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="http://www.metahill.com/favicon.ico" type="image/x-icon" />
@@ -130,7 +135,8 @@
             <p>I have an account. <a href="login.php">Sign in</a>.</p>
             <footer>
                 <a href="blog" target="_blank">Blog</a>&nbsp;|
-                <a href="help" target="_blank">Help</a>
+                <a href="help" target="_blank">Help</a>&nbsp;|
+                <a href="log/metahill" target="_blank">Logs</a>
             </footer>
       </article>
     </section>

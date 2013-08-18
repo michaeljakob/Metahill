@@ -4,6 +4,7 @@
 <script src="js/vendor/jquery-ui-1.10.3.custom.min.js" ></script>
 <script src="js/vendor/jquery.filterList.js" ></script>
 <script src="js/vendor/debounce.js" ></script> 
+<script src="js/vendor/jquery.cookie.js"></script>
 
 <script src="js/base.js" ></script>
 <script src="js/helper.js" ></script>
