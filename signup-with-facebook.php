@@ -33,7 +33,7 @@ if($facebookUserProfile !== null) {
     } else {
         if(isset($_POST["username"])) {
             $name = $_POST["username"];
-            $password = $_POST["username"];
+            $password = $_POST["password"];
             $nameLen = strlen($name);
             if($nameLen >= 3 && $nameLen <= 12 && strpos($name, "@") === false) {
                 if(dbAddFacebookAccount($name, $password, $facebookUserProfile["email"], $facebookUserProfile["id"])) {

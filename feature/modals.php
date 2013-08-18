@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="css/modals.css?v=<?php echo $version; ?>">
+
 
 <div id="modal-pref" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-header">
@@ -109,13 +109,13 @@
           <h3>Create new room</h3>
     </div>
     <div class="modal-body">
-        <label class="checkbox">
             <p>Roomname<span class="heading-desc">Use between 3 and 20 characters</span></p>
-            <input id="modals-new-room-name" type="text" required pattern="[a-zA-Z0-9\-_+]{3,20}" placeholder="A short and meaningful name" />
-            <span id="modals-new-room-name-status" class="label label-warning" style="display:none;">This room already exists.</span>
-        </label>
         <label class="checkbox">
+            <input id="modals-new-room-name" type="text" required pattern="[a-zA-Z0-9\-_+]{3,20}" placeholder="A short and meaningful name" />
+        </label>
+            <span id="modals-new-room-name-status" class="label label-warning" style="display:none;">This room already exists.</span>
             <p>Roomtopic<span class="heading-desc">Use between 20 and 400 characters</span></p>
+        <label class="checkbox">
             <textarea id="modals-new-room-topic" maxlength="400" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
         </label>
         

@@ -17,7 +17,6 @@ metahill.formatMessages.replaceTextSmilies = function() {
     smiliesShortcut['=)'] = { img: 'smile.png' };
     smiliesShortcut[':D'] = { img: 'biggrin.png' };
     smiliesShortcut[':-D'] = { img: 'biggrin.png' };
-    smiliesShortcut['=D'] = { img: 'biggrin.png' };
     smiliesShortcut[';)'] = { img: 'wink.png' };
     smiliesShortcut[';D'] = { img: 'wink.png' };
     smiliesShortcut[';-)'] = { img: 'wink.png' };
@@ -29,7 +28,6 @@ metahill.formatMessages.replaceTextSmilies = function() {
     smiliesShortcut[':\'('] = { img: 'crying.png' };
     smiliesShortcut['>.<'] = { img: 'pinch.png' };
     smiliesShortcut['>_<'] = { img: 'pinch.png' };
-    smiliesShortcut['=8-)'] = { img: 'cool.png' };
     smiliesShortcut[':S'] = { img: 'unsure.png' };
     smiliesShortcut[':s'] = { img: 'unsure.png' };
     smiliesShortcut['^^'] = { img: 'squint.png' };
@@ -131,8 +129,8 @@ metahill.formatMessages.boldItalicsCode = function(text) {
 };
 
 metahill.formatMessages.styleMessage = function(text) {
-    text = metahill.formatMessages.makeLinksClickable(text);
     text = metahill.formatMessages.replaceTextSmilies(text);
+    text = metahill.formatMessages.makeLinksClickable(text);
     text = metahill.formatMessages.boldItalicsCode(text);
     return text;
 };
@@ -143,28 +141,29 @@ metahill.formatMessages.styleMessage = function(text) {
  * @return {string} text The parsed text     
  */
 metahill.formatMessages.makeLinksClickable = function(text) {
-    var regex = /((http:\/\/|https:\/\/|www\.)[-A-Z0-9+&@#\/%?=~_|!:,.;\(\)]*[-A-Z0-9+&@#\/%=~_|\(\)])/gi;
+    var linkRegex = /((http:\/\/|https:\/\/|www\.)[-A-Z0-9+&@#\/%?=~_|!:,.;\(\)\*]*[-A-Z0-9+&@#\/%=~_|\(\)])/gi;
 
     function replaceCallback(match) {
-        match = match.replace(/_/g, "%5f");
-
+        match = match.replace(/_/g, '%5f').replace(/\*/g, '%2a');
         var optionalAttributes = '';
         // is it an image?
         if(match.match(/\.(png|jpg|jpeg|gif|svg)$/i)) {
-            optionalAttributes = metahill.main.getMagnifyOnHoverCode(match);
+            optionalAttributes = 'data-magnifyurl="' + match + '"';
         } else if(match.toLowerCase().indexOf('www.youtube.com') !== -1) {
             var lastEqualsSign = match.lastIndexOf('=');
             if(lastEqualsSign !== -1) {
                 var youtubeId = match.substring(lastEqualsSign + 1);
                 var url = 'http://img.youtube.com/vi/'+youtubeId+'/0.jpg';
-                optionalAttributes = metahill.main.getMagnifyOnHoverCode(url);
+                optionalAttributes = 'data-magnifyurl="' + url + '"';
             }
         }
 
+        var displayedMatch = match.replace(/%5f/g, '&#95;').replace(/%2a/g, '&#42;');
+
         if(match.indexOf('http') === 0) {
-            return '<a target="_blank" '+optionalAttributes+' href="'+match+'">'+match+'</a>';
+            return '<a target="_blank" '+optionalAttributes+' href="'+match+'">'+displayedMatch+'</a>';
         } else {
-            return '<a target="_blank" '+optionalAttributes+' href="http://'+match+'">'+match+'</a>';
+            return '<a target="_blank" '+optionalAttributes+' href="http://'+match+'">'+displayedMatch+'</a>';
         }
     }
 
@@ -178,7 +177,7 @@ metahill.formatMessages.makeLinksClickable = function(text) {
             return text;
         }
 
-        return text.replace(regex, replaceCallback);
+        return text.replace(linkRegex, replaceCallback);
     };
 }();
 

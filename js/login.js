@@ -9,27 +9,28 @@ $(function() {
 
     $(window).resize((function() {
         var footer = $('footer');
-        var windowC = $(window);
 
         return function() {
-            var h = windowC.height();
+            // set footer bar
+            var h = $(window).height();
             if(h < 685) {
                 footer.css('bottom', h - 635);
             } else {
                 footer.css('bottom', '50px');
             }
+
+            // set background
+            var headerSize = 100;
+            if(location.pathname.indexOf('embedded') !== -1) {
+                headerSize = 0;
+            }
+            
+            $('#main-container').height($(window).height()-headerSize);
         };
     })());
 
     $(window).ready(function() {
         $(window).resize();
-
-        var headerSize = 100;
-        if(location.pathname.indexOf('embedded') !== -1) {
-            headerSize = 0;
-        }
-        
-        $('#main-container').height($(window).height()-headerSize);
     });
 });
 

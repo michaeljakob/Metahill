@@ -7,6 +7,10 @@
     margin: 0;
 }
 
+#modal-new-room .modal-body label {
+    display: inline;
+}
+
 p.pref-desc {
     margin: 5px 0 10px 0;
     padding: 0;

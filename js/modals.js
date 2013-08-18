@@ -13,7 +13,7 @@ $(document).ready(function() {
     metahill.modals.preferences.chat_show_traffic = $('#modals-pref-chat-show-traffic').prop('checked');
     metahill.modals.preferences.chat_text_size = $('#modals-pref-textsize').val();
     metahill.modals.preferences.chat_text_font = $('#modals-pref-font').val();
-    metahill.modals.preferences.enable_tips = $('#modals-pref-enable-tips').val();
+    metahill.modals.preferences.enable_tips = $('#modals-pref-enable-tips').prop('checked');
     metahill.modals.preferences.user_id = metahill.main.userId;
 
     $('#modals-profile-current-password-info, #modals-room-pref-current-password-info').popover({
@@ -35,14 +35,18 @@ metahill.modals.liveUpdateChatTextSize = function() {
     
     var fontSizeInt = parseInt(fontSize, 10);
     var userWidth;
+    var smileyHeight = 11;
     if(fontSizeInt >= 18) {
-        userWidth = 300;
+        userWidth = 270;
     } else if(fontSizeInt >= 14) {
         userWidth = 210;
-    } else {
+        smileyHeight = 16;
+    } else if(fontSizeInt >= 12){
         userWidth = 150;
+        smileyHeight = 15;
     }
-    var css = '.chat-entry-user { width: '+userWidth+';} #chat-entries-parent > div { font-size:'+fontSize+';}';
+    var css = '.chat-entry-user { width: '+userWidth+'px !important;} #chat-entries-parent { font-size:'+fontSize+' !important;}';
+    css += '#chat .chat-entry > .chat-entry-message > img[src^="img/smilies"]{height: '+smileyHeight+'px !important;}';
     $('#live-update-chat-text-size').empty().append(css);
 
     $(window).resize();
@@ -55,6 +59,7 @@ metahill.modals.liveUpdateChatTextSize = function() {
  */
 $(function() {
     function updatePreferences(json) {
+        console.log(json);
         metahill.helper.submitHttpRequest('update-preferences.php', json);
     }
 
@@ -264,7 +269,7 @@ $(function() {
 
             metahill.main.openRoom(roomId, json.name, json.topic, metahill.main.userId);
             metahill.chat.sendUserJoin(roomId, json.name);
-            metahill.chat.sendMessage('You just created the room <b>'+json.name+'</b>, congratulations!', -1, 'server', roomId, json.name);
+            metahill.main.addVisibleMessage('', json.name, 'You just created the room <b>'+json.name+'</b>, congratulations!', new Date());
             
             (function(userId, roomId) {
                 var message = {};

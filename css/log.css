@@ -36,5 +36,37 @@
 }
 
 #chat .chat-entry > .chat-entry-options {
-    width: 160px;
+    width: 200px;
 }
+
+#chat .chat-entry > .chat-entry-message {
+    margin-left: 355px;
+}
+
+#other-rooms {
+    text-align: center;
+    margin-top: 5px;
+}
+
+#other-rooms > a {
+    margin: 10px;
+    padding: 10px;
+    background: #f7f7f7;
+    border-radius: 20px;
+    transition-duration: 200ms;
+}
+
+#other-rooms > a:hover {
+    text-decoration: none;
+    background: #f0f0f0;
+    transition-duration: 200ms;
+}
+
+
+
+
+
+
+
+
+

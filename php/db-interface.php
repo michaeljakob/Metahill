@@ -126,6 +126,20 @@ function dbGetFavoriteRooms($name) {
     return $rooms;
 }
 
+function dbGetMutedRooms($accountId) {
+    $dbh = getDBH();
+
+    $statement = $dbh->prepare('SELECT room_id, unmute_time 
+                                FROM `mutes` mutes 
+                                WHERE account_id=:account_id AND unmute_time > NOW()');
+    $statement->execute(array(':account_id' => $accountId));
+    if($statement->rowCount() == 0) {
+        return null;
+    }
+    $rooms = $statement->fetchAll(PDO::FETCH_OBJ);
+    return $rooms;
+}
+
 /*
  Get username from userid.
 */
@@ -318,6 +332,19 @@ function dbConfirmPasswordChangeRequest($userId, $newPassword) {
     
 
     return $success;
+}
+
+
+function dbGetFeaturedRooms($num) {
+    $dbh = getDBH();
+    $query =   "SELECT id,name,topic,owner FROM `rooms` 
+                WHERE is_featured=1  
+                ORDER BY RAND() 
+                LIMIT $num"; // will not work via execute, because '$num' will be inserted
+    $statement = $dbh->prepare($query);
+    $statement->execute();
+
+    return $statement->fetchAll(PDO::FETCH_OBJ);
 }
 
 

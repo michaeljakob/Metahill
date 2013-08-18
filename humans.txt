@@ -15,8 +15,8 @@ Dodovogel, Weexe, dot
                         
 /* SITE */
 Last update         : Rolling Release, so probably today.
-Standards           : HTML5, CSS3, ECMAScript, Python, PHP
-Components          : Modernizr, jQuery, Bootstrap
-Software            : Mac OS X, Sublime Text 2, a plethora of terminal commands
+Technologies        : HTML5, CSS3, JavaScript, Python, PHP
+Components          : jQuery, Bootstrap
+Software            : Mac OS X, Ubuntu, Sublime Text 2, a plethora of terminal commands
    
                         

@@ -7,7 +7,7 @@ $(document).ready(function() {
 });
 
 metahill.roomProposer.getOpenRoomNames = function() {
-    var entries  = $('#channels-list').children();
+    var entries  = $('#channels-list').children('li');
 
     var names = [];
     entries.each(function(index) {
@@ -59,7 +59,7 @@ metahill.roomProposer.handleIncomingSearchResults = function(rooms) {
     var addNewRooms = $('#add-new-room-rooms');
     addNewRooms.empty().append(children);
 
-    addNewRooms.children().each(function(_, entry) {
+    addNewRooms.children('li').each(function(_, entry) {
         $(entry).click(function() { metahill.main.onNewRoomClicked(entry); });
     });
 };

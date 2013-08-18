@@ -16,7 +16,7 @@ $(function() {
 
     var originalDocumentTitle = document.title;
 
-    function updateIsFocussedState() {
+    function updateIsFocussedState(_) {
         metahill.base.isWindowFocused = true;
         
         if(metahill.log !== undefined && metahill.log.unseenMessages !== undefined && metahill.log.unseenMessages !== 0) {
@@ -25,7 +25,7 @@ $(function() {
         }
     }
 
-
+    
     $('body').click(updateIsFocussedState);
     $(window).focus(updateIsFocussedState);
 

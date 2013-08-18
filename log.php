@@ -57,17 +57,18 @@
                 $spanInDays = getRequestedTimeSpan();
                 $viewingSpan;
                 if($spanInDays >= 2) {
-                    $viewingSpan = "the last $spanInDays days";
+                    $viewingSpan = "the past $spanInDays days";
                 } else {
-                    $viewingSpan = "the last 24 hours";
+                    $viewingSpan = "the past 24 hours";
                 }
+                $messages = dbGetMessagesObject($room, $spanInDays);
+                $messageCount = count($messages);
 
-                echo    "<h1>Log of <span id='roomname-title'>\"$room\"</span><span class='viewspan'>Viewing $viewingSpan</span></h1>
+                echo    "<h1>Log of <span id='roomname-title'>\"$room\"</span><span class='viewspan'>Viewing $viewingSpan ($messageCount messages)</span></h1>
                         <article id='chat'>
                         <div id='chat-entries'>";
                 
                 
-                $messages = dbGetMessagesObject($room, $spanInDays);
                 $entries = "";
 
                 $imageEntryTemplate =   '<div class="chat-entry">'.
@@ -82,7 +83,7 @@
                                             '<span class="chat-entry-message">%s</span>'.
                                         '</div>';
 
-                for($i=0; $i < count($messages); ++$i) {
+                for($i=0; $i < $messageCount; ++$i) {
                     $msg = $messages[$i];
                     if($msg->is_image) {
                         $entries .= sprintf($imageEntryTemplate, $msg->submitted_time, $msg->account_name, $msg->content, $msg->content);
@@ -97,13 +98,24 @@
             }
         ?>
     </section>
+    <section id="other-rooms">
+        <?php
+            $featured = dbGetFeaturedRooms(10);
+            for($i=0; $i<count($featured); ++$i) {
+                $roomName = $featured[$i]->name;
+                echo "<a href='http://www.metahill.com/log/$roomName'>$roomName</a>";
+            }
+
+
+        ?>
+    </section>
     <script src="js/vendor/jquery-2.0.3.min.js" ></script>
     <script src="js/base.js" ></script>
     <script>
         $(function() {
             var chatEntries = $("#chat-entries");
             $(window).resize(function() {
-                chatEntries.height($(window).height() - 200);
+                chatEntries.height($(window).height() - 238);
                 chatEntries.prop({ scrollTop: chatEntries.prop('scrollHeight')});
             });
             $(window).resize();

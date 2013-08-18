@@ -63,13 +63,12 @@
                                     // must be inverse array to the one in format-messages.js
                                     $smilies = array();
                                     $smilies['smile'] = ':), :-), =)';
-                                    $smilies['biggrin'] = ':D, :-D, =D';
+                                    $smilies['biggrin'] = ':D, :-D';
                                     $smilies['wink'] = ';), ;-), ;D, ;-D';
                                     $smilies['confused'] = ':?, :-?';
                                     $smilies['sad'] = ':(, :-(';
                                     $smilies['crying'] = ':\'(';
                                     $smilies['pinch'] = '>.<, >_<';
-                                    $smilies['cool'] = '=8-)';
                                     $smilies['unsure'] = ':S, :s';
                                     $smilies['squint'] = '^^';
                                     $smilies['love'] = '<3';
