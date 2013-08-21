@@ -26,13 +26,27 @@ $(function() {
         }, 100);
     });
 
-
-    // scroll to bottom right after loading
-    $(function() {
-        if(metahill.main.activeRoom !== undefined) {
-            var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
-            chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 1000}, 0);
+    $(document).ready(function() {
+        // only undefined if no room is open
+        if(metahill.main.activeRoom === undefined) {
+            return;
         }
+        var interval = 50;
+        var passedTime = 0;
+        var retryTime = 200;
+        var intervalId = setInterval(function() {
+            var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
+            try {
+                chatEntries.scrollTop(chatEntries[0].scrollHeight);
+            } catch(e) { }
+
+            if(passedTime > retryTime) {
+                clearInterval(intervalId);
+            } else {
+                passedTime += interval;
+            }
+
+        }, interval);
     });
 
     // scroll to bottom on window resize
@@ -44,18 +58,12 @@ $(function() {
             var scrollDeltaToBottom = 0;
             if(chatEntries[0] !== undefined) {
                 scrollDeltaToBottom = (chatEntries[0].scrollHeight - chatEntries.scrollTop()) - chatEntries.outerHeight();
+                if(scrollDeltaToBottom <= 70) {
+                    chatEntries.scrollTop(chatEntries[0].scrollHeight);
+                }
             }
-            // We only scroll down if it's already (almost) scrolled to bottom
-            if(scrollDeltaToBottom <= 70) {
-                chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 200}, 500);
-            }
-
-            // chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 1000);
         }
     }));
-
-
-
 
     $(window).resize((function() {
         var submitArea = $('#submit-area');
@@ -73,7 +81,9 @@ $(function() {
             var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
 
             if(w !== nw) {
-                chatEntries.animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+                if(chatEntries[0] !== undefined) {
+                    chatEntries.scrollTop(chatEntries[0].scrollHeight);
+                }
                 if(nw <= 800) {
                     submitSwitchTheme.addClass('submit-switch-theme-absolute');
                 } else {
@@ -195,7 +205,3 @@ $(function() {
 
     });
 });
-
-
-
-

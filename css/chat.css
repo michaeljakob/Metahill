@@ -224,8 +224,18 @@
 }
 
 #submit-smiley {
-    margin-left: 165px;
+    margin-left: 10px;
     float: left;
+}
+
+#submit-loading {
+    margin-left: 140px;
+    float: left;
+    visibility: hidden;
+}
+
+#submit-loading > img {
+    margin-top: 7px;
 }
 
 .height-limiter {

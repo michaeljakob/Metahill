@@ -5,6 +5,10 @@ $(function() {
     var dropElement = document.body;
     var isDragging = null;
 
+    var ERROR_REGISTERED_ONLY_TITLE = atob('SSBmZWVsIHJlYWwgc29ycnksIGJ1dC4uLg=='); // I feel real sorry, but...
+    var ERROR_REGISTERED_ONLY_MESSAGE = atob('Li4udGhpcyBmZWF0dXJlIGlzIHJlc2VydmVkIHRvIHJlZ2lzdGVyZWQgdXNlcnMu'); // ...this feature is reserved to registered users.
+
+
     var timerId = 0;
     function doDrag() {
         if(metahill.main.isGuest) {
@@ -42,7 +46,7 @@ $(function() {
         
         if(metahill.main.isGuest) {
             var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
-            metahill.main.setSubmitStatus('Guests cannot share images', 'Guests are not allowed to share images, sorry. :(');
+            metahill.main.setSubmitStatus(ERROR_REGISTERED_ONLY_TITLE, ERROR_REGISTERED_ONLY_MESSAGE);
             return;
         }
 
@@ -87,17 +91,13 @@ $(function() {
         var roomId = metahill.main.activeRoom.attr('data-roomid');
 
 
-        // var entry = $(metahill.main.makeEntryImageText(metahill.main.userName, metahill.main.activeRoom, 'http://www.metahill.com/img/loading.gif', new Date().getTime()));
-        // var chatEntries = $('#chat-entries-' + metahill.main.activeRoom.attr('data-roomid'));
-        // chatEntries
-        // .append(entry)
-        // .animate({ scrollTop: chatEntries.scrollTop() + 700}, 500);
+       $('#submit-loading').visible();
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'php/image-upload.php');
+        xhr.open('post', 'php/image-upload.php');
         xhr.onload = function () {
-            entry.remove();
             if (xhr.status == 200) {
+                $('#submit-loading').invisible();
                 var fileName = xhr.getResponseHeader('Content-Description');
                 var url = 'http://www.metahill.com/' + fileName;
                 // console.log('all done: ' + xhr.status + ':' + fileName);
@@ -130,7 +130,7 @@ $(function() {
         if(item.kind === 'file' ) {
             if(metahill.main.isGuest) {
                 var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
-                metahill.main.setSubmitStatus('Guests cannot share images', 'Guests are not allowed to share images, sorry. :(');
+                metahill.main.setSubmitStatus(ERROR_REGISTERED_ONLY_TITLE, ERROR_REGISTERED_ONLY_MESSAGE);
                 return;
             }
             submitFileForm(item.getAsFile(), 'paste');

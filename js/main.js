@@ -10,8 +10,8 @@ metahill.main.mutedRoomIds = [];
 $(function() {
 
     metahill.main.userName = $('#user-name > button').text().trim();
-    metahill.main.userId = $('#user-id').html();
-    metahill.main.isGuest = $('#is-guest').length > 0;
+    metahill.main.userId = $('#user-id').html(); $('#user-id').remove();
+    metahill.main.isGuest = $('#a45e822f21c15534a6b3dc69210751ec4').length > 0 && $('#a45e822f21c15534a6b3dc69210751ec4').remove();
 
     $(document).ready(function() {
         openFavoriteRooms();
@@ -67,7 +67,7 @@ $(function() {
             onViewChatLogClicked(e);
         });
         
-        submitMessage.keydown(messageProcessor);
+        submitMessage.keydown(submitMessageProcessor);
 
         $('#add-new-room').click(function() {
             $('#add-new-room-rooms').children('li').each(function(_, entry) {
@@ -157,6 +157,66 @@ $(function() {
                     break;
                 default:
                     console.log('Unknown image within `button` hovered');
+            }
+        });
+
+        $(document).bind('keydown', function(event) {
+            if(!event.altKey) {
+                return;
+            }
+
+            var roomNum = -1;
+            if(event.which >= 48 && event.which <= 57) {
+                if(event.which === 48) {
+                    roomNum = 10;
+                } else {
+                    roomNum = event.which - 48;
+                }
+            } else {
+                switch(event.which) {
+                    case 81:
+                        roomNum = 11;
+                        break;
+                    case 87:
+                        roomNum = 12;
+                        break;
+                    case 69:
+                        roomNum = 13;
+                        break;
+                    case 82:
+                        roomNum = 14;
+                        break;
+                    case 84:
+                        roomNum = 15;
+                        break;
+                    case 89:
+                        roomNum = 16;
+                        break;
+                    case 85:
+                        roomNum = 17;
+                        break;
+                    case 73:
+                        roomNum = 18;
+                        break;
+                    case 79:
+                        roomNum = 19;
+                        break;
+                    case 80:
+                        roomNum = 20;
+                        break;
+                    default:
+                        return;
+                }
+            }
+            if(roomNum !== -1) {
+                event.preventDefault();
+            }
+
+            var rooms = $('#channels-list').children();
+            var numRooms = rooms.length;
+            if(numRooms >= roomNum) {
+                var room = rooms.eq(roomNum-1);
+                metahill.main.selectRoom(room);
             }
         });
     }
@@ -260,7 +320,7 @@ $(function() {
      * Processes all input and acts if necessary (e.g. on "ENTER" or "TAB" hit).
      * @param  {KeyboardEvent} e
      */
-    var messageProcessor = (function(e) {
+    var submitMessageProcessor = (function(e) {
         var INPUT_CHARACTER_LIMIT = 512; // a bit more than the actual limit (500) for ` * _
         var submitMessage = $('#submit-message');
         var lastMessages = [];
@@ -273,19 +333,17 @@ $(function() {
                 // ENTER
                 case 13:
                     var message = metahill.helper.htmlEncode(submitMessage.val()).rtrim();
-                    if(metahill.main.isSubmitAllowed(message)) {
-                        if(message.length > 0) {
-                            if(message.length > INPUT_CHARACTER_LIMIT) {
-                                message = message.substr(0, INPUT_CHARACTER_LIMIT);
-                            }
-
-                            if(!metahill.main.command.parse(message)) {
-                                metahill.chat.sendMessage(message, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
-                            }
-                            submitMessage.val('');
-                            lastMessages.unshift(message);
-                            lastMessagesIndex = -1;
+                    if(message.length > 0) {
+                        if(message.length > INPUT_CHARACTER_LIMIT) {
+                            message = message.substr(0, INPUT_CHARACTER_LIMIT);
                         }
+
+                        if(!metahill.main.command.parse(message)) {
+                            metahill.chat.sendMessage(message, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
+                        }
+                        submitMessage.val('');
+                        lastMessages.unshift(message);
+                        lastMessagesIndex = -1;
                     }
                     break;
                 // SPACE
@@ -533,7 +591,9 @@ $(function() {
     };
 
     metahill.main.selectRoom = function(newRoom) {
-        newRoom = $(newRoom);
+        if(!(newRoom instanceof jQuery)) {
+            newRoom = $(newRoom);
+        }
         if(newRoom.attr('id') === 'add-new-room'){
             return;
         }
@@ -608,13 +668,24 @@ $(function() {
         return $('#channels-list').find('li:contains("'+roomName+'")');
     };
 
-    metahill.main.closeRoom = function(roomName) {
-        var $button = metahill.main.getRoomFromName(roomName).find('button');
-        onRoomClosed($button);
-    };
+    metahill.main.closeRoom = (function() {
+        var MIN_QUIT_DELAY = 400;
+        var timeLastRoomClosed = 0;
 
-    function onRoomClosed(obj) {
-        var room = $(obj).parent();
+        return function(roomName) {
+            var now = new Date().getTime();
+            if(now - timeLastRoomClosed < MIN_QUIT_DELAY) {
+                return;
+            }
+            timeLastRoomClosed = now;
+            var $button = metahill.main.getRoomFromName(roomName).find('button');
+            onRoomClosed($button);
+        };
+
+    })();
+
+    function onRoomClosed(closeButton) {
+        var room = $(closeButton).parent();
         var roomId = room.attr('data-roomid');
         var roomName = metahill.helper.getSimpleText(room);
         var roomTopic = room.attr('data-topic');
@@ -654,7 +725,6 @@ $(function() {
         // select another room
         if(wasActiveRoomClosed) {
             var newActiveRoom = room.next();
-            console.log(newActiveRoom);
             if(newActiveRoom.length === 0){
                 newActiveRoom = room.prev();
             }
@@ -694,7 +764,6 @@ $(function() {
         $('#chat-header-topic').html(metahill.formatMessages.styleMessage(roomTopic));
 
         var entry = metahill.main.openRoom(roomId, roomName, roomTopic, roomOwner);
-        
         // animate popover
         var popover = $('#add-new-room').next();
         var popoverLeft = parseInt(popover.css('left'), 10);
@@ -702,7 +771,7 @@ $(function() {
         var paddingLeft = entry.css('padding-left');
         var newRoomWidth = width + 2 * parseInt(paddingLeft, 10) + 6; // width, padding, margin
         var newLeft = popoverLeft + newRoomWidth;
-        popover.animate({'left': newLeft}, 200);
+        popover.animate({'left': 100 + popoverLeft}, 200);
 
         // animate removed entry
         roomInList.animate({'height': 0, 'padding-top':0, 'padding-bottom':0}, 200, function() {
@@ -712,6 +781,7 @@ $(function() {
         });
 
         metahill.main.activeRoom = entry;
+        metahill.main.selectRoom(entry);
         
         if(typeof PR !== 'undefined') {
             PR.prettyPrint();
@@ -761,6 +831,7 @@ $(function() {
         .text(name)
         .click(function() { metahill.main.selectRoom(entry); });
 
+
         var closeButton = $('<button class="close room-close">&times;</button>');
         closeButton.click(function () { onRoomClosed(closeButton[0]); return false; });
         var unseenMessages = $('<span class="unseen-messages"/>');
@@ -768,12 +839,10 @@ $(function() {
         .append(closeButton)
         .append(unseenMessages);
         $('#channels-list').append(entry);
-        metahill.main.selectRoom(entry);
 
         if(metahill.base.support.isAnimated) {
             animateRoomAppearance(entry);
         }
-
         return entry;
     };
 
@@ -832,35 +901,6 @@ $(function() {
         $('#room-settings').hide();
     };
 
-
-    /**
-     * Checks wheter we allow or disallow the to submit the message
-     * @return {bool} isAllowed
-     */
-    metahill.main.isSubmitAllowed = (function(){
-        var MESSAGE_LIMIT = 3;
-        var TIME_SPAN = 3000;
-        var submissionTimes = [];
-
-        return function(message) {
-            if(message.trim().length === 0) {
-                return;
-            }
-
-            submissionTimes.push(new Date().getTime());
-            if(submissionTimes.length > MESSAGE_LIMIT) {
-                submissionTimes.shift();
-                
-                if(submissionTimes[MESSAGE_LIMIT-1] - submissionTimes[0] > TIME_SPAN) {
-                    return true;
-                } else {
-                    metahill.main.setSubmitStatus('Man, calm down!','Your mission is not to spam the room. :P');
-                    return false;
-                }
-            }
-            return true;
-        };
-    })();
 
     /**
      * Show a status message slowly floating in from the bottom.

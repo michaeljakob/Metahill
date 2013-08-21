@@ -5,8 +5,8 @@ $(function() {
 
     var ESCAPE_SYMBOL = '/';
 
-    var ERROR_REGISTERED_ONLY_TITLE = 'I feel real sorry, but…';
-    var ERROR_REGISTERED_ONLY_MESSAGE = '…this feature is reserved to registered users.';
+    var ERROR_REGISTERED_ONLY_TITLE = atob('SSBmZWVsIHJlYWwgc29ycnksIGJ1dC4uLg=='); // I feel real sorry, but...
+    var ERROR_REGISTERED_ONLY_MESSAGE = atob('Li4udGhpcyBmZWF0dXJlIGlzIHJlc2VydmVkIHRvIHJlZ2lzdGVyZWQgdXNlcnMu'); // ...this feature is reserved to registered users.
 
     /**
      * [ description]
@@ -145,8 +145,8 @@ $(function() {
                 break;
             case 'map':
             case 'maps':
+                requiresRegisteredUser();
                 if(metahill.main.isGuest) {
-                    metahill.main.setSubmitStatus(ERROR_REGISTERED_ONLY_TITLE, ERROR_REGISTERED_ONLY_MESSAGE);
                     return true;
                 }
 
@@ -171,8 +171,8 @@ $(function() {
                 break;
             case 'yt':
             case 'youtube':
+                requiresRegisteredUser();
                 if(metahill.main.isGuest) {
-                    metahill.main.setSubmitStatus(ERROR_REGISTERED_ONLY_TITLE, ERROR_REGISTERED_ONLY_MESSAGE);
                     return true;
                 }
                 if(args[1] !== undefined) {
@@ -194,12 +194,21 @@ $(function() {
                     metahill.main.setSubmitStatus('No search term specified', 'Append a search term, such as "King of Math Android"!');   
                 }
                 break;
+            case 'topic':
+                metahill.main.addSystemMessage('Topic: ' + metahill.main.activeRoom.attr('data-topic'));
+                break;
             default:
                 return false;
         }
 
         return true;
     };
+
+    function requiresRegisteredUser() {
+        if(metahill.main.isGuest) {
+            metahill.main.setSubmitStatus(atob(ERROR_REGISTERED_ONLY_TITLE), atob(ERROR_REGISTERED_ONLY_MESSAGE));
+        }
+    }
 
     function getLowerCaseOpenRoomNames() {
         var arr = [];
@@ -212,7 +221,7 @@ $(function() {
 
     function sendWhisper(destUserName, roomName, content) {
         if(content.trim() === '') {
-            metahill.main.setSubmitStatus('You still need to append the actual message', 'Try the form /whisper <username> <message>.');
+            metahill.main.setSubmitStatus('You still need to append the actual message', 'Try the form /whisper &lt;username&gt; &lt;message&gt;.');
             return;
         }
 
@@ -241,7 +250,7 @@ $(function() {
      */
     metahill.main.command.tryCompletion = (function() {
         // two words may NOT start with the same character
-        var words = ['blog', 'help', 'join', 'enter', 'mute', 'whisper', 'respond', 'quit', 'part', 'youtube'];
+        var words = ['blog', 'help', 'join', 'enter', 'me', 'whisper', 'respond', 'quit', 'part', 'youtube'];
         var com = {};
         for(var i=0; i<words.length; ++i) {
             var word = words[i];
@@ -249,6 +258,7 @@ $(function() {
                 com[word.substring(0, k)] = word;
             }
         }
+        
 
         return function(text) {
             if(text[0] !== ESCAPE_SYMBOL) {

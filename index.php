@@ -6,7 +6,8 @@
         !isset($_SESSION['verified']) || !$_SESSION['verified'] || 
         !isset($_SESSION['name']) || !$_SESSION['name']) {
 
-        header('Location: login.php');
+        // do not remove the ../, you'll get issues with /join/<roomname>
+        header("Location: ../login.php?{$_SERVER['QUERY_STRING']}");
         exit();
     }
 
@@ -71,7 +72,8 @@
     <div id="data-added-chat-entries-height"></div>
     <?php
         if($user->is_guest) {
-            echo "<div id='is-guest' style='display:none;'></div>";
+            // giving a BS id enhances security *a tad*
+            echo "<div id='a45e822f21c15534a6b3dc69210751ec4' style='display:none;'></div>";
         }
         require_once('feature/header.php');
     ?>
@@ -122,6 +124,7 @@
     </section>
     
     <article id="submit-area">
+        <span id="submit-loading"><img src="img/loading.gif" alt="" title="Uploading your image..."/></span>
         <span id="submit-smiley" class="btn" data-toggle="popover" data-placement="top">:)</span>
         <div id="submit-message-wrapper"><input spellcheck="false" type="text" maxlength="500" id="submit-message" autofocus autocomplete="off" /></div>
         <aside id="submit-aside-right">
@@ -222,7 +225,7 @@
         require_once('feature/modals.php');
         require_once('js/index.php.jsinclude.php');
         
-        if((!$user->is_guest) && isset($_GET['join']) && strlen(trim($_GET['join'])) > 0) {
+        if(isset($_GET['join']) && strlen(trim($_GET['join'])) > 0) {
             $roomName = $_GET['join'];
             // is it already a favorite?
             foreach($rooms as $room) {

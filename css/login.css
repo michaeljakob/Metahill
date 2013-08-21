@@ -2,17 +2,20 @@
     height: 10000px;
     color: #dfdfdf;
     text-align: center;
+    background: #222;
 }
 
-#main-container.login {
-    background: url('../img/background-login.jpg');
-}
-#main-container.signup {
-    background: url('../img/background-signup.jpg');
-}
-#main-container.not-found {
-    background: url('../img/background-404.jpg');
-    color: #fff;
+@media all and (min-width: 800px) {
+    #main-container.login {
+        background: url('../img/background-login.jpg');
+    }
+    #main-container.signup {
+        background: url('../img/background-signup.jpg');
+    }
+    #main-container.not-found {
+        background: url('../img/background-404.jpg');
+        color: #fff;
+    }
 }
 
 #welcome {
@@ -20,12 +23,21 @@
 }
 
 #login-native {
-    margin-bottom: 15px;
+    width: 200px;
+    margin: auto;
+}
+
+#login-native > input {
+    width: 185px;
+}
+
+#login-native > input[type='submit'] {
+    width: 200px;
 }
 
 #login-native > .alert {
-    margin-top: 5px;
-    width: 250px;
+    margin-top: 10px;
+    width: 150px;
 }
 
 #login-native > * {
@@ -46,10 +58,11 @@
 
 #login-chooser td.content {
     width: 300px;
+    padding: 20px 0;
 }
 
 #login-chooser p.or {
-    margin-top: 30px;
+    margin-top: 50px;
     margin-left: -10px;
     font-size: 20px;
     font-weight: 300;
@@ -152,12 +165,66 @@ h1.desc {
     margin-top: 5px;
 }
 
-img.facebook-login {
-    margin-top: 20px;
-    width: 250px;
-}
-
 .top-hr {
     margin-top: -10px;
     margin-bottom: 12px;
+}
+
+.content > a {
+
+
+}
+
+.content > a:hover {
+    text-decoration: none;
+}
+
+.login-circle {
+    display: block;
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    background: #f0f0f0;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    line-height: 70px;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+
+    -webkit-transition-duration: 500ms;
+    -moz-transition-duration: 500ms;
+    -o-transition-duration: 500ms;
+    transition-duration: 500ms;
+}
+
+.login-circle:hover {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.login-title {
+    font-weight: bold;
+}
+
+.popover-title {
+    color: #333;
+    text-align: center;
+}
+
+#share img {
+    -webkit-transition-duration: 500ms;
+    -moz-transition-duration: 500ms;
+    -o-transition-duration: 500ms;
+    transition-duration: 500ms;
+}
+    
+#share img:hover {
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: scale(1.1);
 }

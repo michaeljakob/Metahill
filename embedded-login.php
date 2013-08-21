@@ -128,15 +128,15 @@
                 <tr>
                     <td class="content">
                         <form method="post" id="login-native">
-                            <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
-                            <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> /><br/>
+                            <input type="text" name="username" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
+                            <input type="password" name="password" placeholder="Password" /><br/>
                             <input type="submit" value="Sign in" class="btn btn-success" />
                             <?php 
                                 login();
                                 if($wasAccountActivationEmailSent) {
                                     echo '<div class="alert alert-success">'.
                                             'We have sent you an email. Please check your inbox (+spam folder).'.
-                                          '</div>';
+                                         '</div>';
                                 }
                             ?>
 
