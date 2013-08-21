@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<?php
+    session_destroy();
+?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -17,7 +19,7 @@
     <article id="welcome">
         <h1>You have been banned.</h1>
         <p class="desc">Your behaviour in the past was neither honorable<br>nor was it kind to other members.</p><br>
-        <p class="desc">We therefore fell the decision to permanently<br> exclude you from metahill.</p>
+        <p class="desc">We therefore fell the decision to permanently<br> exclude you from our community.</p>
         <p class="desc">This decision is final.</p>
     </article>
 </section>

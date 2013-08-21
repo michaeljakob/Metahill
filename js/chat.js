@@ -45,7 +45,7 @@ $(function(){
 
     var connection_onerror = function (error) {
         metahill.chat.isOnline = false;
-        console.log('Sorry, but there\'s some problem with your connection or the server is down.</p>');
+        console.log('Sorry, but there\'s some problem with your connection or the server is down. ' + error);
     };
 
 
@@ -57,7 +57,7 @@ $(function(){
             removeAllChannelAttendees();
             
             metahill.main.isStatusPersistent = true;
-            metahill.main.setCurrentStatus('Awwr. It seems we got a server problem. We got that!', 'alert-error', -1);
+            metahill.main.setCurrentStatus('Awwr. It seems there is a server issue. We got that!', 'alert-error', -1);
         }
         setTimeout(function() {
             setupConnection();
@@ -71,36 +71,39 @@ $(function(){
         var json = JSON.parse(message.data);
         var intent = json.intent;
         switch(intent) {
-            case 'tell':
+            case atob('dGVsbA=='): // tell
                 metahill.main.addVisibleMessage(json.userName, json.roomName, json.content, json.time);
                 break;
-            case 'tell-image':
+            case atob('dGVsbC1pbWFnZQ=='): // tell-image
                 metahill.main.addVisibleImage(json.userName, json.roomName, json.content, json.time);
                 break;
-            case 'attendees-list':
+            case atob('YXR0ZW5kZWVzLWxpc3Q='): // attendees-list
                 metahill.chat.updateAttendeesList(json.attendees, json.roomId, json.roomName);
                 break;
-            case 'quit-room':
+            case atob('cXVpdC1yb29t'): // quit-room
                 onUserQuit(json.userId, json.userName, json.roomName);
                 break;
-            case 'join-room':
+            case atob('am9pbi1yb29t'): // join-room
                 onUserJoin(json.userId, json.userName, json.roomName);
                 break;
-            case 'latest-chat-entries':
+            case atob('bGF0ZXN0LWNoYXQtZW50cmllcw=='): // latest-chat-entries
                 addLatestChatEntries(json.roomId, json.roomName, json.entries);
                 break;
-            case 'room-proposals':
+            case atob('cm9vbS1wcm9wb3NhbHM='): // room-proposals
                 metahill.roomProposer.handleIncomingRoomProposals(json.list);
                 break;
-            case 'search-rooms':
+            case atob('c2VhcmNoLXJvb21z'): // search-rooms
                 metahill.roomProposer.handleIncomingSearchResults(json.list, json.inputSource);
                 break;
-            case 'whisper':
+            case atob('d2hpc3Blcg=='): // whisper
                 metahill.main.command.latestWhisperPartner = json.srcUserName;
                 metahill.main.addVisibleMessage(json.srcUserName, json.roomName, json.content, json.time, false, 'whispered-message', 'title="Click to respond."');
                 break;
-            case 'mute':
+            case atob('bXV0ZQ=='): // mute
                 onUserMute(json);
+                break;
+            case atob('cmVsb2Fk'): // reload
+                location.reload();
                 break;
             default:
                 console.log('Unknown `intent`.');
@@ -174,7 +177,6 @@ $(function(){
         }
 
         metahill.modals.liveUpdateChatTextSize();
-        $('#chat-entries-parent').children('div').scrollTop(10000);
     }
 
     function onUserJoin(userId, userName, roomName) {
@@ -287,26 +289,59 @@ metahill.chat.sendUserJoin = function(roomId, roomName) {
     metahill.chat.connection.send(JSON.stringify(entryMessage));
 };
 
-metahill.chat.sendMessage = function(message, userId, userName, roomId, roomName) {
-    var isActiveRoomMuted = metahill.main.mutedRoomIds.indexOf(metahill.main.activeRoom.attr('data-roomid')) !== -1;
-    if(isActiveRoomMuted) {
-        return;
-    }
 
-    var messageObject = { 
-        content: message, 
-        intent: 'tell', 
-        userId: userId, 
-        userName: userName, 
-        roomId: roomId, 
-        roomName: roomName 
+metahill.chat.sendMessage = (function() {
+    var isSubmitAllowed = (function(){
+        var MESSAGE_LIMIT = 3;
+        var TIME_SPAN = 3000;
+        var submissionTimes = [];
+
+        return function(message) {
+            if(message.trim().length === 0) {
+                return;
+            }
+
+            submissionTimes.push(new Date().getTime());
+            if(submissionTimes.length > MESSAGE_LIMIT) {
+                submissionTimes.shift();
+                
+                if(submissionTimes[MESSAGE_LIMIT-1] - submissionTimes[0] > TIME_SPAN) {
+                    return true;
+                } else {
+                    metahill.main.setSubmitStatus('Man, calm down!', 'Your mission is not to spam the room. :P');
+                    return false;
+                }
+            }
+            return true;
+        };
+    })();
+
+    return function(message, userId, userName, roomId, roomName) {
+        var isActiveRoomMuted = metahill.main.mutedRoomIds.indexOf(metahill.main.activeRoom.attr('data-roomid')) !== -1;
+        if(isActiveRoomMuted) {
+            return;
+        }
+        if(userName !== metahill.main.userName && userName !== '') {
+            return;
+        }
+        if(!isSubmitAllowed(message)) {
+            return;
+        }
+
+        var messageObject = { 
+            content: message, 
+            intent: atob('dGVsbA=='), // tell 
+            userId: userId, 
+            userName: userName, 
+            roomId: roomId, 
+            roomName: roomName 
+        };
+
+        metahill.chat.connection.send(JSON.stringify(messageObject));
     };
-
-    metahill.chat.connection.send(JSON.stringify(messageObject));
-};
+})();
 
 metahill.chat.isImageSubmitAllowed = (function() {
-
     return function() {
         var isActiveRoomMuted = metahill.main.mutedRoomIds.indexOf(metahill.main.activeRoom.attr('data-roomid')) !== -1;
         if(isActiveRoomMuted) {
@@ -334,7 +369,7 @@ metahill.chat.sendImage = function(imageUrl, userId, userName, roomId, roomName)
 
     var messageObject = { 
         content: imageUrl, 
-        intent: 'tell-image', 
+        intent: atob('dGVsbC1pbWFnZQ=='), // tell-image 
         userId: userId, 
         userName: userName, 
         roomId: roomId, 

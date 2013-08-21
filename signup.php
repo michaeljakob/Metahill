@@ -20,7 +20,7 @@
             echo "Please choose a username with not more than 12 characters."; 
             return false;    
         }
-        if(ctype_alnum($name)) {
+        if(1 === preg_match('[^a-zA-Z0-9_-]', $name)) {
             echo "Use only letters and numbers for your name, please."; 
             return false;
         }
@@ -87,6 +87,7 @@
                 echo "<div class=\"alert alert-error\">";
                 echo "This email address is in use.<br><a href='request-new-password.php'>Did you forget your password?</a>";
                 echo "</div>";
+                echo "<div style='display:none;' id='registration-error'></div>";
                 return false;
             }
             

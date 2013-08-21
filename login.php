@@ -3,8 +3,10 @@
     session_regenerate_id(true);
     ob_start();
     
-    if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['verified']) && $_SESSION['verified']) {
-        header('Location: index.php');
+    if( isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && 
+        isset($_SESSION['verified']) && $_SESSION['verified'] &&
+        isset($_SESSION['name'])) {
+        header("Location: index.php");
         exit();
     }
     
@@ -38,16 +40,16 @@
                 $_SESSION['logged_in'] = true;
                 $_SESSION['name'] = htmlspecialchars($name);
                 $_SESSION['verified'] = true;
-                header('Location: index.php');
+                header("Location: index.php?{$_SERVER['QUERY_STRING']}");
             } else {
                 switch($verifyLoginResult) {
                     case -1:
-                        echo '<br><div class="alert alert-error">
+                        echo '<div class="alert alert-error">
                                 This username/password combination is invalid.<br><a href="request-new-password.php">Did you forget your password?</a>
                              </div>';
                         break;
                     case -2:
-                        echo '<br><div class="alert alert-error">
+                        echo '<div class="alert alert-error">
                                 Your account hasn\'t been verified, yet. To do so, <a href="login.php?intent=resend_verification_email&name='.$_POST['username'].'">request a verification email</a>.
                              </div>';
                         break;
@@ -125,39 +127,41 @@
             <h1 class="desc">Simple.</h1>
             <table id="login-chooser">
                 <tr>
-                    <td colspan="3">
+                    <td colspan="5">
                         <h2>Sign in</h2>
                         <hr class="fade-white top-hr">
                     </td>
                 </tr>
                 <tr>
                     <td class="content">
-                        <form method="post" id="login-native">
-                            <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
-                            <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> /><br/>
-                            <input type="submit" value="Sign in" class="btn btn-success" />
-                            <?php 
-                                login();
-                                if($wasAccountActivationEmailSent) {
-                                    echo '<div class="alert alert-success">'.
-                                            'We have sent you an email. Please check your inbox (+spam folder).'.
-                                          '</div>';
-                                }
-                            ?>
-
-                        </form>
+                        <a id="login-native-button">
+                            <span class="login-circle">m</span>
+                        </a>
+                        <span class="login-title">I'm registered</span>
                     </td>
                     <td>
                         <p class="or">or</p>
                     </td>
                     <td class="content">
-                        <a href="#" onclick="fb_login();"><img class="facebook-login" src="img/facebook-login.png" alt="Sign up with facebook"></a>
+                        <a href="#" onclick="fb_login();">
+                            <span class="login-circle">f</span>
+                        </a>
+                        <span class="login-title">I have Facebook</span>
+                    </td>
+                    <td>
+                        <p class="or">or</p>
+                    </td>
+                    <td class="content">
+                        <a href="join-as-guest.php?<?php echo "{$_SERVER['QUERY_STRING']}&skip-verify=true";?>">
+                            <span class="login-circle">g</span>
+                        </a>
+                        <span class="login-title">I am a guest</span>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3">
+                    <td colspan="5">
                         <hr class="fade-white">
-                        <p class="no-account-yet">I don't have an account. <a href="signup.php">Sign up</a> or <a href="join-as-guest.php">join as a guest</a>.</p>
+                        <p class="no-account-yet">I don't have an account. <a href="signup.php">Sign up</a>.</p>
                     </td>
                 </tr>           
             </table>
@@ -170,6 +174,47 @@
 
     </section>
 
+    <!-- data section -->
+    <div id="login-native-title" style="display:none;">
+          Sign in
+    </div>
+    <div id="login-native-content" style="display:none;">
+         <form method="post" id="login-native">
+            <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
+            <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> />
+            <input type="submit" value="Sign in" class="btn btn-success" />
+            <?php 
+                login();
+                if($wasAccountActivationEmailSent) {
+                    echo '<div class="alert alert-success">'.
+                            'We have sent you an email. Please check your inbox (+spam folder).'.
+                          '</div>';
+                }
+            ?>
+
+        </form>
+    </div>
+
+    <!-- data section -->
+    <div id="login-guest-title" style="display:none;">
+          Sign in
+    </div>
+    <div id="login-guest-content" style="display:none;">
+         <form method="post" id="login-guest">
+            <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
+            <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> />
+            <input type="submit" value="Sign in" class="btn btn-success" />
+            <?php 
+                login();
+                if($wasAccountActivationEmailSent) {
+                    echo '<div class="alert alert-success">'.
+                            'We have sent you an email. Please check your inbox (+spam folder).'.
+                          '</div>';
+                }
+            ?>
+
+        </form>
+    </div>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -181,6 +226,7 @@
 
     </script>
     <script src="js/vendor/jquery-2.0.3.min.js"></script>
+    <script src="js/vendor/bootstrap.min.js"></script>
     <script async src="js/base.js" ></script>
     <script async src="js/login.js"></script>
 

@@ -2,6 +2,17 @@
     session_start();
     session_regenerate_id(true);
 
+
+    // generate guest name
+    $guestName = "Guest";
+    for($i = 0; $i < 4; ++$i) {
+        $guestName .= (string) rand(1, 9);
+    }
+
+    if(isset($_GET['skip-verify']) && $_GET['skip-verify'] === 'true') {
+        $_POST['guestname'] = $guestName;
+    }
+
     if(isset($_POST['guestname'])) {
         $_SESSION['logged_in'] = true;
         $_SESSION['verified'] = true;
@@ -10,15 +21,9 @@
         if(isset($_POST["source"])) {
             header("Location: {$_POST['source']}");
         } else {
-            header("Location: index.php");
+            header("Location: index.php?{$_SERVER['QUERY_STRING']}");
         }
         exit();
-    }
-
-    // generate guest name
-    $guestName = "Guest";
-    for($i = 0; $i < 4; ++$i) {
-        $guestName .= (string) rand(1, 9);
     }
 
 ?>
@@ -51,7 +56,7 @@
                         echo "<input style='display:none;' type='text' name='source' value='$source' ></input>";
                     }
                 ?>
-                <input class="btn btn-success" type="submit" value="Okay"></input>
+                <input class="btn btn-success" autofocus="autofocus" type="submit" value="Okay"></input>
             </form>
       </article>
     </section>

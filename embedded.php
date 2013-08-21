@@ -1,8 +1,4 @@
 <?php
-    if(!isset($_GET['room'])) {
-        exit("No room specified. Use the `room` GET parameter.");
-    }
-
     session_start();
     if(isset($_SESSION['logged_in']) && $_SESSION['logged_in'] && isset($_SESSION['verified']) && $_SESSION['verified']) {
         session_regenerate_id(true);
@@ -10,14 +6,22 @@
         header("Location: embedded-login.php?{$_SERVER['QUERY_STRING']}");
         exit();
     }
+    require_once('php/db-interface.php');
     
     $api_isMini = isset($_GET['size']) && $_GET['size'] === 'mini';
     $api_hideAttendeesBar = $api_isMini || isset($_GET['hide-attendees-bar']) && $_GET['hide-attendees-bar'] === 'true';
+    $api_showRoomsBar = isset($_GET['show-rooms-bar']) && $_GET['show-rooms-bar'] === 'true';
+    $api_room = null;
 
-    require_once('php/db-interface.php');
-    $room = dbGetRoomObjectFromName(htmlspecialchars(basename($_GET['room'])));
-    if($room === null) {
-        exit("No room `{$_GET['room']}` found.");
+    if(isset($_GET['room'])) {
+        $api_room = dbGetRoomObjectFromName(htmlspecialchars(basename($_GET['room'])));
+        if($api_room === null) {
+            exit("No room `{$_GET['room']}` found.");
+        }
+    }
+
+    if($api_room === null && !$api_showRoomsBar) {
+        exit('Specify either `room` or set `show-rooms-bar=true`.');
     }
 
     $version = sha1(date('ddyyyymm'));
@@ -76,7 +80,8 @@
     <div id="data-added-chat-entries-height"></div>
     <?php
         if($user->is_guest) {
-            echo "<div id='is-guest' style='display:none;'></div>";
+            // giving a BS id enhances security *a tad*
+            echo "<div id='a45e822f21c15534a6b3dc69210751ec4' style='display:none;'></div>";
         }
         $userId = $user->id;
         $userName = $user->name;
@@ -90,16 +95,42 @@
     ?>
     
     <section id="main-container">
-        <div id="channels" style="display:none">
+        <div id="channels" <?php if(!$api_showRoomsBar) { echo 'style="display:none;"'; } ?>>
             <ul id="channels-list">
                 <?php
-                    $roomName = $room->name;
-                    $roomId = $room->id;
-                    $roomOwner = $room->owner;
-                    echo  "<li class='btn room-favorite' data-owner='$roomOwner' data-roomid='$roomId'>".
-                            "$roomName<button class='close room-close'>&times;</button>".
-                            "<span class='unseen-messages'></span>".
-                          "</li>";
+                    if($api_showRoomsBar) {
+                        $rooms;
+                        if($user->is_guest) {
+                            $rooms = array(dbGetRoomObjectFromName('metahill'));
+                        } else {
+                            $rooms = dbGetFavoriteRooms($_SESSION['name']);
+                        }
+
+                        $addedSpecifiedRoom = false;
+                        foreach($rooms as $room) {
+                            printRoom($room);
+                            if($api_room !== null && $room->name === $api_room->name) {
+                                $addedSpecifiedRoom = true;
+                            }
+                        }
+                        if($api_room !== null && !$addedSpecifiedRoom) {
+                            printRoom($api_room);
+                        }
+                    } else {                        
+                        printRoom($api_room);
+                    }
+
+                    function printRoom($room) {
+                        $roomTopic = str_replace("'", "&#39;", $room->topic);
+                        $roomName = $room->name;
+                        $roomId = $room->id;
+                        $roomOwner = $room->owner;
+                        
+                        echo  "<li class='btn room-favorite' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$roomTopic'>".
+                                "$roomName<button class='close room-close'>&times;</button>".
+                                "<span class='unseen-messages'></span>".
+                              "</li>";
+                    }
                 ?>
             </ul>
             <span id="add-new-room" class="btn btn-inverse" data-toggle="popover" data-placement="bottom">+</span>
@@ -126,8 +157,6 @@
     
     <article id="submit-area">
         <?php
-            $roomNameUrlEncoded = rawurlencode($roomName);
-
             $submitMetahillText = "Metahill";
             $submitHelpText = "Help";
 
@@ -136,7 +165,7 @@
                 $submitHelpText = "?";
             }
 
-            echo "<a target='_blank' id='submit-metahill' href='http://www.metahill.com/join/$roomNameUrlEncoded' class='btn'>$submitMetahillText</a>";
+            echo "<a target='_blank' id='submit-metahill' href='http://www.metahill.com/' class='btn'>$submitMetahillText</a>";
             echo "<a target='_blank' id='submit-help' href='http://www.metahill.com/help' class='btn'>$submitHelpText</a>";
         ?>
         <div id="submit-message-wrapper"><input spellcheck="false" type="text" maxlength="500" id="submit-message" autocomplete="off" /></div>
@@ -158,6 +187,7 @@
         <div id="submit-status"></div>
     </article>
     <!-- data section -->
+    <div id="data-activeroomid" style="display:none;"><?php echo $user->activeRoom; ?></div>
     <div id="add-new-room-popover" style="display:none">
         <div id="add-new-room-title">Join new room<button type="button" class="close" onClick="$('#add-new-room').popover('hide');" data-dismiss="modal" aria-hidden="true">×</button></div>
         <div id="add-new-room-content">

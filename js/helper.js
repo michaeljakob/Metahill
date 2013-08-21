@@ -1,6 +1,6 @@
-String.prototype.trim=function(){return this.replace(/^\s+|\s+$/g, '');};
-String.prototype.ltrim=function(){return this.replace(/^\s+/,'');};
-String.prototype.rtrim=function(){return this.replace(/\s+$/,'');};
+String.prototype.trim=function(){return this.replace(/^[\s  ​]+|[\s  ​]+$/g, '');};
+String.prototype.ltrim=function(){return this.replace(/^[\s  ​]+/,'');};
+String.prototype.rtrim=function(){return this.replace(/[\s  ​]+$/,'');};
 
 Array.prototype.remove = function(from, to) {
     var rest = this.slice((to || from) + 1 || this.length);
@@ -8,6 +8,13 @@ Array.prototype.remove = function(from, to) {
     return this.push.apply(this, rest);
 };
 
+jQuery.fn.visible = function() {
+    return this.css('visibility', 'visible');
+};
+
+jQuery.fn.invisible = function() {
+    return this.css('visibility', 'hidden');
+};
 
 var metahill = metahill || {};
 metahill.helper = {};
@@ -22,7 +29,7 @@ metahill.helper = {};
  */
 metahill.helper.submitHttpRequest = function(phpFile, json, successCallback) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'php/' + phpFile);
+    xhr.open('post', 'php/' + phpFile);
     xhr.onload = function () {
         if (xhr.status === 200) {
             //console.log('http request: ok. '+ xhr.responseText);
