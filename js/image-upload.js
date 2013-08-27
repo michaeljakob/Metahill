@@ -16,9 +16,9 @@ $(function() {
         }
         timerId = setInterval(function() {
             if(isDragging) {
-                $('#drag-and-drop-overlay').fadeIn(500);
+                $('#drag-and-drop-overlay').fadeIn(200);
             } else {
-                $('#drag-and-drop-overlay').fadeOut(500);
+                $('#drag-and-drop-overlay').fadeOut(200);
                 isDragging = null;
                 clearInterval(timerId);
             }

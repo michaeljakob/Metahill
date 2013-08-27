@@ -63,8 +63,14 @@
                 }
                 $messages = dbGetMessagesObject($room, $spanInDays);
                 $messageCount = count($messages);
+                $bracketText = "";
+                if($messageCount === 1) {
+                    $bracketText = "1 message";
+                } else {
+                    $bracketText = $messageCount . " messages";
+                }
 
-                echo    "<h1>Log of <span id='roomname-title'>\"$room\"</span><span class='viewspan'>Viewing $viewingSpan ($messageCount messages)</span></h1>
+                echo    "<h1>Log of <span id='roomname-title'>\"$room\"</span><span class='viewspan'>Viewing $viewingSpan ($bracketText)</span></h1>
                         <article id='chat'>
                         <div id='chat-entries'>";
                 
@@ -73,22 +79,29 @@
 
                 $imageEntryTemplate =   '<div class="chat-entry">'.
                                             '<span class="chat-entry-options">%s</span>'.
-                                            '<span class="chat-entry-user">%s:</span>'.
+                                            '<span class="chat-entry-user">%s</span>'.
                                             '<span class="chat-entry-message"><a href="%s"><img class="image-message" src="%s"/></a></span>'.
                                         '</div>';
 
                 $textEntryTemplate =    '<div class="chat-entry">'.
                                             '<span class="chat-entry-options">%s</span>'.
-                                            '<span class="chat-entry-user">%s:</span>'.
+                                            '<span class="chat-entry-user">%s</span>'.
                                             '<span class="chat-entry-message">%s</span>'.
                                         '</div>';
 
                 for($i=0; $i < $messageCount; ++$i) {
                     $msg = $messages[$i];
-                    if($msg->is_image) {
-                        $entries .= sprintf($imageEntryTemplate, $msg->submitted_time, $msg->account_name, $msg->content, $msg->content);
+                    $accountName = $msg->account_name;
+                    $content = $msg->content;
+                    if($accountName !== "") {
+                        $accountName .= ":";
                     } else {
-                        $entries .= sprintf($textEntryTemplate, $msg->submitted_time, $msg->account_name, makeLinksClickable($msg->content));
+                        $content = "<em>$content</em>";
+                    }
+                    if($msg->is_image) {
+                        $entries .= sprintf($imageEntryTemplate, $msg->submitted_time, $accountName, $content, $content);
+                    } else {
+                        $entries .= sprintf($textEntryTemplate, $msg->submitted_time, $accountName, makeLinksClickable($content));
                     }
                 }
                 echo $entries;
@@ -112,6 +125,7 @@
     <script src="js/vendor/jquery-2.0.3.min.js" ></script>
     <script src="js/base.js" ></script>
     <script>
+        // scroll to bottom
         $(function() {
             var chatEntries = $("#chat-entries");
             $(window).resize(function() {
@@ -119,9 +133,26 @@
                 chatEntries.prop({ scrollTop: chatEntries.prop('scrollHeight')});
             });
             $(window).resize();
-            setTimeout(function() { $(window).resize()}, 100);
-            setTimeout(function() { $(window).resize()}, 200);
-            setTimeout(function() { $(window).resize()}, 300);
+            setTimeout(function() { $(window).resize(); }, 100);
+            setTimeout(function() { $(window).resize(); }, 200);
+            setTimeout(function() { $(window).resize(); }, 300);
+        });
+
+        // pop up the links to the other rooms
+        $(function() {
+            function quadraticEaseInOut(t, b, c, d) {
+                t /= d/2;
+                if (t < 1)
+                    return c/2*t*t + b;
+                t--;
+                return -c/2 * (t*(t-2) - 1) + b;
+            };
+
+            $('#other-rooms').children().each(function(index, link) {
+                setTimeout(function() {
+                    $(link).animate({'margin-top': 0});
+                }, (index+1) * 50);
+            });
         });
     </script>
     <script>

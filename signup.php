@@ -6,7 +6,7 @@
 
     $isEmailAddressInUse = false;
 
-    //submitAccountActivationEmailPear('Michael', 'michael@jakob.tv');
+    // submitAccountActivationEmailPear('Michael', 'michael@jakob.tv', '');
     function verifyInput($name, $password, $email) {
         $lenName = strlen($name);
         $lenPassword = strlen($password);

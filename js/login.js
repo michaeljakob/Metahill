@@ -1,17 +1,4 @@
 $(function() {
-
-    $('#login-native-button').popover({ 
-        trigger: 'click',
-        html: true,
-        placement: 'top',
-        title: function() {
-            return $('#login-native-title').html();
-        },
-        content: function() {
-            return $('#login-native-content').html();
-        }
-    });
-
     // remove "add-new-room"-popover if you click anywhere
     $('body').on('click', function (e) {
         $('#login-native-button').each(function() {

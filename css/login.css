@@ -44,6 +44,10 @@
     margin-bottom: 5px;
 }
 
+#login-native-content {
+    padding: 0 0 12px 0 !important;
+}
+
 #login-chooser {
     margin-left: auto;
     margin-right: auto;
@@ -58,7 +62,15 @@
 
 #login-chooser td.content {
     width: 300px;
+}
+
+#login-chooser td.content > a span {
+    margin-top: 12px;
+}
+
+#login-chooser td.content > div {
     padding: 20px 0;
+
 }
 
 #login-chooser p.or {

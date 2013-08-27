@@ -15,7 +15,7 @@
                 <td>
                     <select id="modals-pref-textsize" class="selectpicker">
                         <?php
-                            $fontSizes = array(10, 11, 12, 13, 14, 18);
+                            $fontSizes = array(10, 11, 12, 13, 14, 18, 21, 24);
                             $userChatTextSize = $user->chat_text_size;
                             $text = '';
                             for($i = 0; $i < count($fontSizes); ++$i) {

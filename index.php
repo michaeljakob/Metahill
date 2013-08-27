@@ -95,7 +95,7 @@
                         $roomOwner = $room->owner;
                         echo  "<li class='btn room-favorite' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$topic'>".
                                 "$roomName<button class='close room-close'>&times;</button>".
-                                "<span class='unseen-messages'></span>".
+                                "<span class='unseen-messages'>0</span>".
                               "</li>";
                     }
                 ?>
@@ -106,8 +106,8 @@
             <aside id="channel-attendees">
                 <form>
                     <input type="text" id="filter-search-user" autocomplete="off" placeholder="Search user">
-                    <ul id="channel-attendees-entries"></ul>
                 </form>
+                <ul id="channel-attendees-entries"></ul>
             </aside>
             <article id="chat">
                 <div id="chat-header">

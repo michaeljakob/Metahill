@@ -22,7 +22,7 @@ $(function(){
     var RETRY_DELAY = 30000;
     var mConnectionFailedFirstTime = true;
 
-    var connection_onopen = function () {
+    var connection_onopen = function() {
         metahill.chat.isOnline = true;
         mConnectionFailedFirstTime = true;
 

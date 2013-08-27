@@ -163,7 +163,8 @@
 }
 
 #channel-attendees > form {
-    padding: 5px 5px 5px 0;
+    padding: 5px 5px 0 0;
+    margin-bottom: 0;
 }
 
 #chat-header {
@@ -176,8 +177,7 @@
 }
 
 #channel-attendees-entries {
-    padding: 5px;
-    padding-bottom: 0px;
+    padding: 0 5px;
     list-style: none;
     height: 440px;
     margin: 0 -5px -5px 0;
