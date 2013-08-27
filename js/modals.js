@@ -36,7 +36,9 @@ metahill.modals.liveUpdateChatTextSize = function() {
     var fontSizeInt = parseInt(fontSize, 10);
     var userWidth;
     var smileyHeight = 11;
-    if(fontSizeInt >= 18) {
+    if(fontSizeInt >= 21) {
+        userWidth = 370;
+    } else if(fontSizeInt >= 18) {
         userWidth = 270;
     } else if(fontSizeInt >= 14) {
         userWidth = 210;
@@ -45,8 +47,10 @@ metahill.modals.liveUpdateChatTextSize = function() {
         userWidth = 150;
         smileyHeight = 15;
     }
-    var css = '.chat-entry-user { width: '+userWidth+'px !important;} #chat-entries-parent { font-size:'+fontSize+' !important;}';
-    css += '#chat .chat-entry > .chat-entry-message > img[src^="img/smilies"]{height: '+smileyHeight+'px !important;}';
+    var css =   '.chat-entry-user { width: '+userWidth+'px !important;}' +
+                '#chat-entries-parent { font-size:'+fontSize+' !important;}' +
+                '#chat .chat-entry > .chat-entry-message { margin-left:'+(userWidth+65)+'px !important;}'+
+                '#chat .chat-entry > .chat-entry-message > img[src^="img/smilies"]{height: '+smileyHeight+'px !important;}';
     $('#live-update-chat-text-size').empty().append(css);
 
     $(window).resize();
@@ -59,7 +63,6 @@ metahill.modals.liveUpdateChatTextSize = function() {
  */
 $(function() {
     function updatePreferences(json) {
-        console.log(json);
         metahill.helper.submitHttpRequest('update-preferences.php', json);
     }
 

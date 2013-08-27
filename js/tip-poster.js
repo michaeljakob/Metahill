@@ -17,6 +17,13 @@ $(function() {
     tips.push('We visualize over 25 smilies. <a href="help/index.php?tab=messages&anchor=smilies" target="_blank">View the list</a>.');
     tips.push('Hold and drag rooms to change their order.');
     tips.push('Try to use up- and down-arrows at the input field.');
+    tips.push('Use <b>/r</b> to quickly respond to a whisper.');
+    tips.push('Use ALT+1, ALT+2 to join the first, second room and so on.');
+    tips.push('Have you already tried <b>/youtube</b>?');
+    tips.push('Oh gosh, I love to use <b>/map</b>!');
+    tips.push('What are you doing right now? Tell us with <b>/me</b>.');
+    tips.push('Leave the current room by typing <b>/quit</b>.');
+    tips.push('Join a room by typing <b>/join <name></b>.');
 
     // motivational, jokes
     tips.push('Be nice to your mates. :)');

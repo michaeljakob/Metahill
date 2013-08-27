@@ -97,7 +97,7 @@ $(function() {
                 // min-height
                 if(!metahill.base.support.isEmbedded && nh < 500) {
                     submitArea.addClass('height-limiter');
-                    chatEntries.height(190 + addedChatEntriesHeight);
+                    chatEntries.height(Math.max(160, 190 + addedChatEntriesHeight));
                     return;
                 } else {
                     submitArea.removeClass('height-limiter');
@@ -106,13 +106,19 @@ $(function() {
             }
 
             // we always check for scrollability - it is the most important thing
-            var attendeesBarHeight = $(this).height() - header.height() - submitArea.height() - 90;
-            channelAttendeesEntries.height(attendeesBarHeight + 50 + addedChatEntriesHeight);
+            var generalHeight = $(this).height() - header.height() - submitArea.height() - 90;
+            var attendeesBarHeight = generalHeight;
+            if(metahill.base.support.isEmbedded) {
+                attendeesBarHeight += 51;
+            } else {
+                attendeesBarHeight -= 50;
+            }
+            channelAttendeesEntries.height(attendeesBarHeight);
 
             if(!metahill.base.support.isEmbedded) {
-                chatEntries.height(attendeesBarHeight - 50 + addedChatEntriesHeight);
+                chatEntries.height(generalHeight - 50 + addedChatEntriesHeight);
             } else {
-                chatEntries.height(attendeesBarHeight + 80 + addedChatEntriesHeight);
+                chatEntries.height(Math.max(160, generalHeight + 84 + addedChatEntriesHeight));
             }
         };
     })()); // window.resize
@@ -131,10 +137,6 @@ $(function() {
         if(!metahill.base.support.isEmbedded) {
             $('#add-new-room-search').focus();
         }
-    });
-
-    $('input[type="text"], input[type="password"], textarea').hover(function() {
-        $(this).focus();
     });
 
     // remove "add-new-room"-popover if you click anywhere

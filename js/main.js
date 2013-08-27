@@ -172,41 +172,6 @@ $(function() {
                 } else {
                     roomNum = event.which - 48;
                 }
-            } else {
-                switch(event.which) {
-                    case 81:
-                        roomNum = 11;
-                        break;
-                    case 87:
-                        roomNum = 12;
-                        break;
-                    case 69:
-                        roomNum = 13;
-                        break;
-                    case 82:
-                        roomNum = 14;
-                        break;
-                    case 84:
-                        roomNum = 15;
-                        break;
-                    case 89:
-                        roomNum = 16;
-                        break;
-                    case 85:
-                        roomNum = 17;
-                        break;
-                    case 73:
-                        roomNum = 18;
-                        break;
-                    case 79:
-                        roomNum = 19;
-                        break;
-                    case 80:
-                        roomNum = 20;
-                        break;
-                    default:
-                        return;
-                }
             }
             if(roomNum !== -1) {
                 event.preventDefault();
@@ -500,12 +465,13 @@ $(function() {
         }
 
         if(roomName !== metahill.helper.getSimpleText(metahill.main.activeRoom) && userName !== '') {
-            var unseenMessages = room.children('.unseen-messages');
-            var msgCount = parseInt(unseenMessages.text(), 10);
+            var unseenMessages = room.children('.unseen-messages').eq(0);
+            var msgCount = unseenMessages.html() === ''? 0 : parseInt(unseenMessages.html(), 10);
             if(msgCount === 0) {
                 unseenMessages.show('slow');
             }
-            unseenMessages.text(msgCount + 1);
+            unseenMessages.html(msgCount + 1);
+
             var activeRoomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
             if(roomName !== activeRoomName && userName !== metahill.main.userName && isThisUserAddressed(message)) {
                 highlightUser();
@@ -641,7 +607,7 @@ $(function() {
             // reset "unseen message" counter
             var unseenMessages = newRoom.children('.unseen-messages');
             unseenMessages.hide(metahill.base.support.isAnimated && 'slow');
-            unseenMessages.text('0');
+            unseenMessages.html('0');
 
             // set scrollbars accordingly
             $(window).resize();
@@ -789,6 +755,7 @@ $(function() {
     };
 
     function animateRoomAppearance(entry) {
+        console.log('anim:', entry);
         var paddingLeft = entry.css('padding-left');
         var width = entry.width();
 
@@ -797,7 +764,7 @@ $(function() {
         .css('padding-left', 0)
         .css('padding-right', 0)
         .show()
-        .animate({'width': width, 'padding-left': paddingLeft, 'padding-right': paddingLeft}, 200, function() {
+        .animate({'width': width, 'padding-left': paddingLeft, 'padding-right': paddingLeft}, 250, function() {
             entry.removeAttr('style');
         });
     }
@@ -834,7 +801,7 @@ $(function() {
 
         var closeButton = $('<button class="close room-close">&times;</button>');
         closeButton.click(function () { onRoomClosed(closeButton[0]); return false; });
-        var unseenMessages = $('<span class="unseen-messages"/>');
+        var unseenMessages = $(document.createElement('span')).addClass('unseen-messages');
         entry
         .append(closeButton)
         .append(unseenMessages);

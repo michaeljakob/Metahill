@@ -1,10 +1,10 @@
 #main-container {
-
+    padding-bottom: 15px;
 }
 
 #chat {
     right: 0;
-    padding: 20px;
+    padding: 0 20px;
     padding-top: 0;
     min-width: 500px;
 }
@@ -45,15 +45,15 @@
 
 #other-rooms {
     text-align: center;
-    margin-top: 5px;
 }
 
 #other-rooms > a {
-    margin: 10px;
+    margin: 50px 10px 10px 10px;
     padding: 10px;
     background: #f7f7f7;
     border-radius: 20px;
     transition-duration: 200ms;
+    display: inline-table;
 }
 
 #other-rooms > a:hover {

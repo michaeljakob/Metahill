@@ -63,6 +63,7 @@
     dbUpdateLastLoginTime($user->name);
 ?>
 </style>
+<style id="live-update-chat-text-size"></style>
 <?php
     $theme = 'default';
     if(isset($_GET['theme']) && trim($_GET['theme']) != '') {
@@ -139,8 +140,8 @@
             <aside id="channel-attendees" <?php if($api_hideAttendeesBar) {echo "style='display:none';"; }?>>
                 <form>
                     <input type="text" id="filter-search-user" autocomplete="off" placeholder="Search user">
-                    <ul id="channel-attendees-entries"></ul>
                 </form>
+                <ul id="channel-attendees-entries"></ul>
             </aside>
             <article id="chat">
                 <div id="chat-header" style="display:none;">
@@ -202,6 +203,9 @@
         </div>
     </div>
     <?php 
+        echo "<div style='display:none;'>";
+        require_once('feature/modals.php');
+        echo "</div>";
         require_once('js/index.php.jsinclude.php');
     ?>
     

@@ -197,6 +197,19 @@ $(function() {
             case 'topic':
                 metahill.main.addSystemMessage('Topic: ' + metahill.main.activeRoom.attr('data-topic'));
                 break;
+            case 'names':
+            case 'attendees':
+                var numAttendees = metahill.log.roomAttendees[roomName].length;
+                var attendees = '';
+                for(var attendeeName in metahill.log.roomAttendees['metahill']) { 
+                    attendees += attendeeName + ', ';
+                }
+                attendees = attendees.slice(0, -2);
+                metahill.main.addSystemMessage('The following users are in this room: ' + attendees + '.');
+                break;
+            case 'commands':
+                metahill.main.addSystemMessage('The following commands exist: blog, help, join, quit, youtube (yt), map, whisper, me, topic, attendees. To be continued...');
+                break;
             default:
                 return false;
         }

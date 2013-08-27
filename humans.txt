@@ -16,7 +16,7 @@ Dodovogel, Weexe, dot
 /* SITE */
 Last update         : Rolling Release, so probably today.
 Technologies        : HTML5, CSS3, JavaScript, Python, PHP
-Components          : jQuery, Bootstrap
+Components          : jQuery, Bootstrap, Node.js
 Software            : Mac OS X, Ubuntu, Sublime Text 2, a plethora of terminal commands
    
                         

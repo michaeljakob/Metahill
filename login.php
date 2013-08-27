@@ -14,8 +14,8 @@
     $wasAccountActivationEmailSent = false;
 
     // check the intent
-    if( isset($_GET['intent'])  && strlen(trim($_GET['intent']))>0 && 
-        isset($_GET['name'])    && strlen(trim($_GET['name']))>0) {
+    if( isset($_GET['intent']) && strlen(trim($_GET['intent']))>0 && 
+        isset($_GET['name'])   && strlen(trim($_GET['name']))>0) {
 
         $intent = $_GET['intent'];
         $name = $_GET['name'];
@@ -25,7 +25,7 @@
             submitAccountActivationEmailPear($name, $user->email);
             $wasAccountActivationEmailSent = true;
         }
-    } 
+    }
 
     function login() {    
         if( isset($_POST['username']) &&
@@ -134,10 +134,22 @@
                 </tr>
                 <tr>
                     <td class="content">
-                        <a id="login-native-button">
-                            <span class="login-circle">m</span>
-                        </a>
-                        <span class="login-title">I'm registered</span>
+                        <div id="login-native-content">
+                             <form method="post" id="login-native">
+                                <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
+                                <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> />
+                                <input type="submit" value="Sign in" class="btn btn-success" />
+                                <?php 
+                                    login();
+                                    if($wasAccountActivationEmailSent) {
+                                        echo '<div class="alert alert-success">'.
+                                                'We have sent you an email. Please check your inbox (+spam folder).'.
+                                              '</div>';
+                                    }
+                                ?>
+
+                            </form>
+                        </div>
                     </td>
                     <td>
                         <p class="or">or</p>
@@ -173,48 +185,6 @@
         </footer>
 
     </section>
-
-    <!-- data section -->
-    <div id="login-native-title" style="display:none;">
-          Sign in
-    </div>
-    <div id="login-native-content" style="display:none;">
-         <form method="post" id="login-native">
-            <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
-            <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> />
-            <input type="submit" value="Sign in" class="btn btn-success" />
-            <?php 
-                login();
-                if($wasAccountActivationEmailSent) {
-                    echo '<div class="alert alert-success">'.
-                            'We have sent you an email. Please check your inbox (+spam folder).'.
-                          '</div>';
-                }
-            ?>
-
-        </form>
-    </div>
-
-    <!-- data section -->
-    <div id="login-guest-title" style="display:none;">
-          Sign in
-    </div>
-    <div id="login-guest-content" style="display:none;">
-         <form method="post" id="login-guest">
-            <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
-            <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> />
-            <input type="submit" value="Sign in" class="btn btn-success" />
-            <?php 
-                login();
-                if($wasAccountActivationEmailSent) {
-                    echo '<div class="alert alert-success">'.
-                            'We have sent you an email. Please check your inbox (+spam folder).'.
-                          '</div>';
-                }
-            ?>
-
-        </form>
-    </div>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
