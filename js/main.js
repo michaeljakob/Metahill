@@ -288,8 +288,8 @@ $(function() {
     var submitMessageProcessor = (function(e) {
         var INPUT_CHARACTER_LIMIT = 512; // a bit more than the actual limit (500) for ` * _
         var submitMessage = $('#submit-message');
-        var lastMessages = [];
-        var lastMessagesIndex = -1;
+        var latestMessages = [];
+        var latestMessagesIndex = -1;
         var scrollInputValue; // if you scroll through other messages, we store the current input
 
         return function(e) {
@@ -297,18 +297,22 @@ $(function() {
             switch(keyCode) {
                 // ENTER
                 case 13:
-                    var message = metahill.helper.htmlEncode(submitMessage.val()).rtrim();
+                    var message = submitMessage.val().rtrim();
                     if(message.length > 0) {
                         if(message.length > INPUT_CHARACTER_LIMIT) {
                             message = message.substr(0, INPUT_CHARACTER_LIMIT);
                         }
 
                         if(!metahill.main.command.parse(message)) {
-                            metahill.chat.sendMessage(message, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
+                            var escapedMessage = metahill.helper.htmlEncode(message);
+                            var success = metahill.chat.sendMessage(escapedMessage, metahill.main.userId, metahill.main.userName, metahill.main.activeRoom.attr('data-roomid'), metahill.helper.getSimpleText(metahill.main.activeRoom));
+                            if(success)
+                                submitMessage.val('');
+                        } else {
+                            submitMessage.val('');
                         }
-                        submitMessage.val('');
-                        lastMessages.unshift(message);
-                        lastMessagesIndex = -1;
+                        latestMessages.unshift(message);
+                        latestMessagesIndex = -1;
                     }
                     break;
                 // SPACE
@@ -330,25 +334,24 @@ $(function() {
                 // UP ARROW
                 case 38:
                     e.preventDefault();
-                    if(lastMessagesIndex === -1) {
+                    if(latestMessagesIndex === -1) {
                         scrollInputValue = submitMessage.val();
                     }
-                    if(lastMessagesIndex < lastMessages.length-1) {
-                        lastMessagesIndex++;
+                    if(latestMessagesIndex < latestMessages.length-1) {
+                        latestMessagesIndex++;
 
-                        submitMessage.val(lastMessages[lastMessagesIndex]);
+                        submitMessage.val(latestMessages[latestMessagesIndex]);
                     }
                     break;
                 // DOWN ARROW
                 case 40:
-                    lastMessagesIndex--;
-                    if(lastMessagesIndex <= -1) {
+                    latestMessagesIndex--;
+                    if(latestMessagesIndex <= -1) {
                         submitMessage.val(scrollInputValue);
-                        lastMessagesIndex = -1;
+                        latestMessagesIndex = -1;
                     } else {
-                        submitMessage.val(lastMessages[lastMessagesIndex]);
+                        submitMessage.val(latestMessages[latestMessagesIndex]);
                     }
-
                     break;
                 default:
             }
@@ -657,6 +660,8 @@ $(function() {
         var roomTopic = room.attr('data-topic');
         var roomOwner = room.attr('data-owner');
 
+        $('#add-new-room').popover('hide');
+
         if(!metahill.main.isGuest) {
             metahill.helper.submitHttpRequest('remove-favorite.php', 
                 {   
@@ -729,15 +734,21 @@ $(function() {
 
         $('#chat-header-topic').html(metahill.formatMessages.styleMessage(roomTopic));
 
-        var entry = metahill.main.openRoom(roomId, roomName, roomTopic, roomOwner);
+        var entryAndWidth = metahill.main.openRoom(roomId, roomName, roomTopic, roomOwner);
+        var entry = entryAndWidth.entry;
         // animate popover
-        var popover = $('#add-new-room').next();
+        var addNewRoom = $('#add-new-room');
+        var popover = addNewRoom.next();
         var popoverLeft = parseInt(popover.css('left'), 10);
-        var width = entry.width();
-        var paddingLeft = entry.css('padding-left');
-        var newRoomWidth = width + 2 * parseInt(paddingLeft, 10) + 6; // width, padding, margin
-        var newLeft = popoverLeft + newRoomWidth;
-        popover.animate({'left': 100 + popoverLeft}, 200);
+        var newRoomWidth = entryAndWidth.width;
+        var newLeft;
+        if(popoverLeft !== 0) {
+            newLeft = popoverLeft + newRoomWidth + 2; // 2 px margin between rooms
+        } else {
+            // don't let it drop negative
+            newLeft = Math.max(0, addNewRoom.position().left + newRoomWidth - 128 + 2);
+        }
+        popover.animate({'left': newLeft}, 200);
 
         // animate removed entry
         roomInList.animate({'height': 0, 'padding-top':0, 'padding-bottom':0}, 200, function() {
@@ -807,10 +818,11 @@ $(function() {
         .append(unseenMessages);
         $('#channels-list').append(entry);
 
+        var entryWidth = entry.width() + parseInt(entry.css('padding-left'), 10) * 2 + parseInt(entry.css('margin-left'), 10) * 2;
         if(metahill.base.support.isAnimated) {
             animateRoomAppearance(entry);
         }
-        return entry;
+        return { entry: entry, width: entryWidth };
     };
 
     /*

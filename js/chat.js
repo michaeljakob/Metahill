@@ -290,6 +290,10 @@ metahill.chat.sendUserJoin = function(roomId, roomName) {
 };
 
 
+/**
+ * Send a message to the chat server.
+ * @return {bool} true on success, false on failure
+ */
 metahill.chat.sendMessage = (function() {
     var isSubmitAllowed = (function(){
         var MESSAGE_LIMIT = 3;
@@ -298,7 +302,7 @@ metahill.chat.sendMessage = (function() {
 
         return function(message) {
             if(message.trim().length === 0) {
-                return;
+                return false;
             }
 
             submissionTimes.push(new Date().getTime());
@@ -319,13 +323,13 @@ metahill.chat.sendMessage = (function() {
     return function(message, userId, userName, roomId, roomName) {
         var isActiveRoomMuted = metahill.main.mutedRoomIds.indexOf(metahill.main.activeRoom.attr('data-roomid')) !== -1;
         if(isActiveRoomMuted) {
-            return;
+            return false;
         }
         if(userName !== metahill.main.userName && userName !== '') {
-            return;
+            return false;
         }
         if(!isSubmitAllowed(message)) {
-            return;
+            return false;
         }
 
         var messageObject = { 
@@ -338,6 +342,7 @@ metahill.chat.sendMessage = (function() {
         };
 
         metahill.chat.connection.send(JSON.stringify(messageObject));
+        return true;
     };
 })();
 

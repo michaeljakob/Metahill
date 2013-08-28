@@ -99,11 +99,10 @@ $(function() {
             if (xhr.status == 200) {
                 $('#submit-loading').invisible();
                 var fileName = xhr.getResponseHeader('Content-Description');
-                var url = 'http://www.metahill.com/' + fileName;
                 // console.log('all done: ' + xhr.status + ':' + fileName);
                 metahill.chat.sendImage(fileName, metahill.main.userId, metahill.main.userName, roomId, roomName);
                 
-                addRecentUploadedImageInLounge(url);
+                addRecentUploadedImageInLounge(fileName);
             } else {
                 //console.log('Something went terribly wrong...' + xhr.status  + ': ' + xhr.statusText);
                 console.log('Nope');

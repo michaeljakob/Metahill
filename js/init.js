@@ -134,6 +134,7 @@ $(function() {
             return $('#add-new-room-content').html();
         }
     }).click(function() {
+        $(this).next().css('top', '136px');
         if(!metahill.base.support.isEmbedded) {
             $('#add-new-room-search').focus();
         }
@@ -185,6 +186,10 @@ $(function() {
 
 // channels-list Sortable (dragging room positions)
 $(function() {
+    if(metahill.main.isGuest) {
+        return;
+    }
+
     var startIndex = -1;
     $('#channels-list').sortable({
         start: function(event, ui) {
@@ -199,10 +204,9 @@ $(function() {
             json.roomId = ui.item.attr('data-roomid');
             json.userId = metahill.main.userId;
 
-            if(!metahill.main.isGuest) {
-                metahill.helper.submitHttpRequest('update-room-positions.php', json);
-                metahill.helper.submitHttpRequest('update-activeroom.php', { userId: metahill.main.userId, activeRoom: metahill.main.activeRoom.index()});
-            }
+            metahill.helper.submitHttpRequest('update-room-positions.php', json);
+            metahill.helper.submitHttpRequest('update-activeroom.php', { userId: metahill.main.userId, activeRoom: metahill.main.activeRoom.index()});
+            
         }
 
     });

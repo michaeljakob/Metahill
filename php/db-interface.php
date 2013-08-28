@@ -234,8 +234,8 @@ function dbAddFacebookAccount($name, $password, $email, $facebookId) {
     $dbh = getDBH();
                 
     $statement = $dbh->prepare(    
-                    'INSERT INTO `accounts`(`name`, `password`, `email`, `facebook_id`)'.
-                    'VALUES (:name, :password, :email, :facebook_id)' );
+                    'INSERT INTO `accounts`(`name`, `password`, `email`, `is_verified`, `facebook_id`)'.
+                    'VALUES (:name, :password, :email, 1, :facebook_id)');
                 
     $ret = $statement->execute(array(':name' => $name, ':password' => $password, ':email' => $email, ':facebook_id' => $facebookId));
                 
