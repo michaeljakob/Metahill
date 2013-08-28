@@ -164,7 +164,7 @@ $(function() {
 
                 if(location !== '') {
                     var googleMapsUrl = 'https://maps.google.com/?output=embed&t=h&q=' + encodeURI(location);
-                    metahill.chat.sendMessage('<i>' + location + '</i>on Google Maps: ' + googleMapsUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
+                    metahill.chat.sendMessage('_' + location + '_ on Google Maps: ' + googleMapsUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
                 } else {
                     metahill.main.setSubmitStatus('No location specified', 'Append a location, such as "New York"!');
                 }
@@ -185,7 +185,7 @@ $(function() {
                         if(video.feed.entry !== undefined) {
                             var videoUrl = video.feed.entry[0].link[0].href;
                             videoUrl = videoUrl.substring(0, videoUrl.lastIndexOf('&'));
-                            metahill.chat.sendMessage('<i>' + youtubeKeyword + '</i> on YouTube: ' + videoUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
+                            metahill.chat.sendMessage('_' + youtubeKeyword + '_ on YouTube: ' + videoUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
                         } else {
                             metahill.main.setSubmitStatus('Sorry, but…', 'There apparently were no matches!');
                         }

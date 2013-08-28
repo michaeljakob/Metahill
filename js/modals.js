@@ -270,7 +270,8 @@ $(function() {
             $('#modals-new-room-name').val('');
             $('#modals-new-room-topic').val('');
 
-            metahill.main.openRoom(roomId, json.name, json.topic, metahill.main.userId);
+            var entry = metahill.main.openRoom(roomId, json.name, json.topic, metahill.main.userId).entry;
+            metahill.main.selectRoom(entry);
             metahill.chat.sendUserJoin(roomId, json.name);
             metahill.main.addVisibleMessage('', json.name, 'You just created the room <b>'+json.name+'</b>, congratulations!', new Date());
             
