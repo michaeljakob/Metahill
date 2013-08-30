@@ -167,7 +167,6 @@ $(function() {
                 var imageUrl = 'http://www.metahill.com/' + $(this).attr('src');
                 var roomId = metahill.main.activeRoom.attr('data-roomid');
                 var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);
-                metahill.helper.submitHttpRequest('touch-image.php', {image: imageUrl});
                 metahill.chat.sendImage(imageUrl, metahill.main.userId, metahill.main.userName, roomId, roomName);
             }
         });

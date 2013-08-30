@@ -766,7 +766,6 @@ $(function() {
     };
 
     function animateRoomAppearance(entry) {
-        console.log('anim:', entry);
         var paddingLeft = entry.css('padding-left');
         var width = entry.width();
 
@@ -957,16 +956,6 @@ $(function() {
             }
         }
 
-        // bold username
-        // var messageParts = message.split(' ');
-        // var lowerCaseUserName = metahill.main.userName.toLowerCase();
-        // for(var i=0; i<messageParts.length; ++i) {
-        //     if(messageParts[i].toLowerCase() === lowerCaseUserName) {
-        //         messageParts[i] = '<b>' + messageParts[i] + '</b>';
-        //     }
-        // }
-        // message = messageParts.join(' ');
-
         var entryText =
                 '<div '+optionalAttributes+' class="chat-entry '+ classes +'">' +
                     '<span class="chat-entry-options">'+metahill.helper.toHHMMSS(time)+'&nbsp;</span>' +
@@ -987,9 +976,6 @@ $(function() {
             }
         }, mutedTimeLeft);
     };
-
-
-
 
     metahill.main.addSystemMessage = function(message) {
         var roomName = metahill.helper.getSimpleText(metahill.main.activeRoom);

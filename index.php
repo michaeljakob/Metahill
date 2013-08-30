@@ -200,6 +200,7 @@
                 <option value="3 hours">3 hours</option>
                 <option value="1 day">1 day</option>
             </select>
+            <div class="alert alert-warning">You can't prematurely unmute him.</div>
             <span id="data-kick-user-content-send" class="btn">Mute</span>
         </div>
     </div>

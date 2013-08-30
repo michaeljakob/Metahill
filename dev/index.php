@@ -13,7 +13,7 @@
 
 <link rel="stylesheet" type="text/css" href="../css/base.css">
 <link rel="stylesheet" type="text/css" href="css/help.css">
-<title>Metahill | Help</title>
+<title>Metahill | Developer</title>
 
 </head>
 <body>
