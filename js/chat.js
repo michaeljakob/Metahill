@@ -97,7 +97,7 @@ $(function(){
                 break;
             case atob('d2hpc3Blcg=='): // whisper
                 metahill.main.command.latestWhisperPartner = json.srcUserName;
-                metahill.main.addVisibleMessage(json.srcUserName, json.roomName, json.content, json.time, false, 'whispered-message', 'title="Click or type /r· to respond."');
+                metahill.main.addVisibleMessage(json.srcUserName, json.roomName, json.content, json.time, false, 'whispered-message', 'title="Click or type \'/r your_message\' respond."');
                 break;
             case atob('bXV0ZQ=='): // mute
                 onUserMute(json);
