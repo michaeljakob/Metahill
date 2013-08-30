@@ -109,16 +109,31 @@
           <h3>Create new room</h3>
     </div>
     <div class="modal-body">
-            <p>Roomname<span class="heading-desc">Use between 3 and 20 characters</span></p>
-        <label class="checkbox">
+        <p>Roomname<span class="heading-desc">Use between 3 and 20 characters</span></p>
+        <label id="modals-new-room-name-parent">
             <input id="modals-new-room-name" type="text" required pattern="[a-zA-Z0-9\-_+]{3,20}" placeholder="A short and meaningful name" />
         </label>
-            <span id="modals-new-room-name-status" class="label label-warning" style="display:none;">This room already exists.</span>
-            <p>Roomtopic<span class="heading-desc">Use between 20 and 400 characters</span></p>
-        <label class="checkbox">
+        <span id="modals-new-room-name-status" class="label label-warning" style="display:none;">This room already exists.</span>
+
+        <p>Roomtopic<span class="heading-desc">Use between 20 and 400 characters</span></p>
+        <label>
             <textarea id="modals-new-room-topic" maxlength="400" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
         </label>
-        
+
+        <label class="checkbox">
+            <input id="modals-new-room-private" type="checkbox" />Private
+        </label>
+        <!-- This container ensures a smooth opening/closing-animation. 
+             Animating requires a 'display:block' element, but the <label>
+             requiren 'display:inline' lest the "password-status" is displayed 
+             in the next line. -->
+        <div id="modals-new-room-password-animator">
+            <label>
+                <input type="password" id="modals-new-room-password" placeholder="Password" />
+            </label>
+            <span id="modals-new-room-password-status" class="label label-warning" style="display:none;">Use at most 64 symbols.</span>
+        </div>
+
     </div><!-- end body -->
     <div class="modal-footer">
         <button id="modal-new-room-submit" class="btn btn-info" disabled>Create room</button>

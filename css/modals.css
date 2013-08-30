@@ -7,10 +7,6 @@
     margin: 0;
 }
 
-#modal-new-room .modal-body label {
-    display: inline;
-}
-
 p.pref-desc {
     margin: 5px 0 10px 0;
     padding: 0;
@@ -67,11 +63,28 @@ span.heading-desc-large {
     max-height: 200px;
 }
 
-#modals-new-room-name-status {
+#modals-new-room-name-parent, #modals-new-room-password-parent {
+    display: inline-block;
+}
+
+#modals-new-room-name-status, #modals-new-room-name-password-status {
     position: relative;
     bottom: 5px;
 }
 
 #modals-profile-new-password, .modals-current-password {
     width: 150px !important;
+}
+
+#modals-new-room-password {
+    margin: 0;
+}
+
+#modals-new-room-password-animator label {
+    margin: 0;
+    display: inline;
+}
+
+#modals-new-room-password-animator {
+    display: none;
 }

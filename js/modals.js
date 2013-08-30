@@ -216,9 +216,10 @@ $(function() {
     verificaton.isNameAvailable = false;
     verificaton.isNameLengthOk = false;
     verificaton.isTopicLengthOk = false;
+    verificaton.isPasswordLengthOk = true;
 
     function verifyNewRoomInput() {
-        if(verificaton.isNameLengthOk && verificaton.isTopicLengthOk && verificaton.isNameAvailable) {
+        if(verificaton.isNameLengthOk && verificaton.isTopicLengthOk && verificaton.isNameAvailable && verificaton.isPasswordLengthOk) {
             $('#modal-new-room-submit').removeAttr('disabled');
         } else {
             $('#modal-new-room-submit').prop('disabled', true);
@@ -254,6 +255,24 @@ $(function() {
         verifyNewRoomInput();
     });
 
+    $('#modals-new-room-password').bind('propertychange keyup input paste', function() {
+        verificaton.isPasswordLengthOk = $(this).val().trim().length <= 64;
+        if(!verificaton.isPasswordLengthOk) {
+            $('#modals-new-room-password-status').show();
+        } else {
+            $('#modals-new-room-password-status').hide();
+        }
+        verifyNewRoomInput();
+    });
+
+    $('#modals-new-room-private').change(function() {
+        if($(this).prop('checked')) {
+            $('#modals-new-room-password-animator').show('fast');
+        } else {
+            $('#modals-new-room-password-animator').hide('fast');
+        }
+    });
+
 
     $('#modal-new-room-submit').click(function(_) {
         $('#modal-new-room').modal('hide');
@@ -262,13 +281,16 @@ $(function() {
         var json = {};
         json.name  = $('#modals-new-room-name').val().trim();
         json.owner = metahill.main.userId;
-        json.topic = ($('#modals-new-room-topic').val().trim());
-        // not wrapped in htmlEncode. For the db, we do it below. For the UI, openRoom will do it for us
-
+        json.topic = $('#modals-new-room-topic').val().trim();
+        json.password = $('#modals-new-room-private').prop('checked')?$('#modals-new-room-password').val().trim():'';
 
         updateNewRoom(json, function(roomId) {
             $('#modals-new-room-name').val('');
             $('#modals-new-room-topic').val('');
+            $('#modals-new-room-password').val('');
+            $('#modals-new-room-password-parent').hide();
+            $('#modals-new-room-private').prop('checked', false);
+
 
             var entry = metahill.main.openRoom(roomId, json.name, json.topic, metahill.main.userId).entry;
             metahill.main.selectRoom(entry);
@@ -282,6 +304,8 @@ $(function() {
                 message.position = $('#channels-list').children().length + 1;
                 metahill.helper.submitHttpRequest('add-favorite.php', message);
             })(json.owner, roomId);
+
+
         });
 
     });
