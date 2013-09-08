@@ -6,6 +6,12 @@ html {
     height: 100%;
 }
 
+@media all and (min-width: 800px) {
+    html {
+        overflow: hidden;
+    }
+}
+
 body { 
     min-height: 100%;
     margin:0;
@@ -29,7 +35,7 @@ header img {
 
 header > a > img {
     height: 50px;
-    width: 100px;
+    width: 50px; /* Necessary for FF, other browsers will "auto" this */
     margin-top: 14px;
     margin-left: 5px;
 }

@@ -14,7 +14,9 @@
 <script src="js/tip-poster.js"></script>
 <script src="js/main.js" ></script>
 <script src="js/modals.js" ></script>
-<script src="js/init.js" ></script>
 <script src="js/room-proposer.js" ></script>
 <script src="js/chat.js"></script>
 <script src="js/command-interpreter.js"></script>
+<script src="js/html.js"></script>
+<script src="js/database.js"></script>
+<script src="js/init.js" ></script>

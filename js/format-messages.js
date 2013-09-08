@@ -79,7 +79,7 @@ metahill.formatMessages.replaceTextSmilies = function() {
 
     function replace(text, smilies) {
         Object.keys(smilies).forEach(function(entry) {
-            var image = '<img src="img/smilies/' + smilies[entry].img + '"/>';
+            var image = '<img alt="'+entry+'" src="img/smilies/' + smilies[entry].img + '"/>';
 
             if (text.indexOf(entry) !== -1) {
                 text = text.replace(smilies[entry].regex, image);

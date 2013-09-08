@@ -215,14 +215,21 @@ $(function() {
     var verificaton = {};
     verificaton.isNameAvailable = false;
     verificaton.isNameLengthOk = false;
+    verificaton.isNameValid = false;
     verificaton.isTopicLengthOk = false;
     verificaton.isPasswordLengthOk = true;
 
     function verifyNewRoomInput() {
-        if(verificaton.isNameLengthOk && verificaton.isTopicLengthOk && verificaton.isNameAvailable && verificaton.isPasswordLengthOk) {
+        if(verificaton.isNameLengthOk && verificaton.isTopicLengthOk && verificaton.isNameAvailable && verificaton.isNameValid && verificaton.isPasswordLengthOk) {
             $('#modal-new-room-submit').removeAttr('disabled');
         } else {
             $('#modal-new-room-submit').prop('disabled', true);
+        }
+
+        if(verificaton.isNameValid) {
+            $('#modals-new-room-name-status').hide();
+        } else {
+            $('#modals-new-room-name-status').html('Only use alphanumeric symbols plus -,_,#').show();
         }
     }
 
@@ -230,6 +237,7 @@ $(function() {
         var roomName = metahill.helper.htmlEncode($(this).val().trim());
         var len = roomName.length;
         verificaton.isNameLengthOk = len >= 3 && len <= 20;
+        verificaton.isNameValid = /^[a-zA-Z0-9\-_#]{3,20}$/.test(roomName); 
 
         if(verificaton.isNameLengthOk) {
             var json = {};
@@ -238,7 +246,7 @@ $(function() {
                 if(parseInt(resultCode, 10) === 1) {
                     // already exists
                     verificaton.isNameAvailable = false;
-                    $('#modals-new-room-name-status').show();
+                    $('#modals-new-room-name-status').html('This room already exists.').show();
                 } else {
                     verificaton.isNameAvailable = true;
                     $('#modals-new-room-name-status').hide();
@@ -268,6 +276,7 @@ $(function() {
     $('#modals-new-room-private').change(function() {
         if($(this).prop('checked')) {
             $('#modals-new-room-password-animator').show('fast');
+            $('#modals-new-room-password').focus();
         } else {
             $('#modals-new-room-password-animator').hide('fast');
         }
@@ -276,13 +285,12 @@ $(function() {
 
     $('#modal-new-room-submit').click(function(_) {
         $('#modal-new-room').modal('hide');
-        
 
         var json = {};
         json.name  = $('#modals-new-room-name').val().trim();
         json.owner = metahill.main.userId;
         json.topic = $('#modals-new-room-topic').val().trim();
-        json.password = $('#modals-new-room-private').prop('checked')?$('#modals-new-room-password').val().trim():'';
+        json.password = $('#modals-new-room-password').val();
 
         updateNewRoom(json, function(roomId) {
             $('#modals-new-room-name').val('');
@@ -292,7 +300,8 @@ $(function() {
             $('#modals-new-room-private').prop('checked', false);
 
 
-            var entry = metahill.main.openRoom(roomId, json.name, json.topic, metahill.main.userId).entry;
+            var isRoomPrivate = json.password !== '';
+            var entry = metahill.main.openRoom(roomId, json.name, json.topic, metahill.main.userId, isRoomPrivate).entry;
             metahill.main.selectRoom(entry);
             metahill.chat.sendUserJoin(roomId, json.name);
             metahill.main.addVisibleMessage('', json.name, 'You just created the room <b>'+json.name+'</b>, congratulations!', new Date());
@@ -408,7 +417,48 @@ $(function() {
     }
 });
 
+// modal-verify-room-password
+$(function() {
+    
+    $('#modal-verify-room-password-value').bind('propertychange keyup input paste', function() {
+        var $submit = $('#modal-verify-room-password-submit');
+        if($('#modal-verify-room-password-value').val().length >= 1) {
+            $submit.removeAttr('disabled');
+        } else {
+            $submit.prop('disabled', true);
+        }
 
+    }).keyup(function(event){
+        if(event.keyCode == 13){
+            $('#modal-verify-room-password-submit').click();
+        }
+    });
+
+    $('#modal-verify-room-password').on('shown', function() {
+        $('#modal-verify-room-password-value').focus();
+    }).on('hidden', function() {
+        $('#submit-message').focus();
+        var $password = $('#modal-verify-room-password-value');
+        $password.val('');
+    });
+
+});
+
+$(function() {
+    $('#modal-info-submit').click(function() {
+        $('#modal-info').modal('hide');
+    });
+
+    metahill.modals.showInfo = function(title, message) {
+        $('#modal-info-title').html(title);
+        $('#modal-info-message').html(message);
+        $('#modal-info').modal('show');
+    };
+
+    metahill.modals.dismissInfo = function() {
+        $('#modal-info').modal('hide');
+    };
+});
 
 
 

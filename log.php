@@ -2,13 +2,9 @@
     require_once('php/db-interface.php');
 
     $room = NULL;
-    $roomExists = false;
-    
     if(isset($_GET['room']) && strlen(trim($_GET['room'])) > 0) {
-        $room = $_GET['room'];
-        $roomExists = dbRoomExists($room);
+        $room = dbGetRoomObjectFromName($_GET['room']);
     }
-
 
     /**
      * Parses the GET parameters and returns the requested time span in days
@@ -30,7 +26,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
 <base href="../" >
-<title>Metahill | Log <?php if($room != NULL && $roomExists) { echo "of $room"; } ?></title>
+<title>Metahill | Log <?php if($room != NULL) { echo "of {$room->name}"; } ?></title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/chat.css">
 <link rel="stylesheet" type="text/css" href="css/log.css">
@@ -45,13 +41,19 @@
     
         <?php
             function makeLinksClickable($text){
-                return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>', $text);
+                return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.,~#?&;//=]+)!i', '<a href="$1">$1</a>', $text);
             }
 
-            if($room == NULL || !$roomExists) {
+            if($room == NULL) {
                 echo    "<div class='alert alert-error'>
-                            <h4>#?$1%(*&^%$#@</h4>
-                            The requested room <i>$room</i> does not exist!
+                            <h4>Room not found</h4>
+                            The room <i>$room</i> does not exist!<br>
+                            Please verify that the link is correct.
+                        </div>";
+            } else if($room->password != NULL) {
+                echo    "<div class='alert alert-error'>
+                            <h4>This room is not logged</h4>
+                            The owner of this room made it private. Hence you cannot view the public logs.
                         </div>";
             } else {
                 $spanInDays = getRequestedTimeSpan();
@@ -61,7 +63,7 @@
                 } else {
                     $viewingSpan = "the past 24 hours";
                 }
-                $messages = dbGetMessagesObject($room, $spanInDays);
+                $messages = dbGetMessagesObject($room->name, $spanInDays);
                 $messageCount = count($messages);
                 $bracketText = "";
                 if($messageCount === 1) {
@@ -70,7 +72,7 @@
                     $bracketText = $messageCount . " messages";
                 }
 
-                echo    "<h1>Log of <span id='roomname-title'>\"$room\"</span><span class='viewspan'>Viewing $viewingSpan ($bracketText)</span></h1>
+                echo    "<h1>Log of <span id='roomname-title'>\"{$room->name}\"</span><span class='viewspan'>Viewing $viewingSpan ($bracketText)</span></h1>
                         <article id='chat'>
                         <div id='chat-entries'>";
                 

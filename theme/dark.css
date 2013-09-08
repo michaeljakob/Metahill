@@ -64,10 +64,6 @@ button.close:hover {
     display: none;
 }
 
-.btn.room-favorite:hover{
-    background: #222222;
-}
-
 #chat-entries {
     color: #999;
 }
