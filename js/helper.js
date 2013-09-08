@@ -38,7 +38,7 @@ metahill.helper.submitHttpRequest = function(phpFile, json, successCallback) {
             }
         } else {
             var error = xhr.getResponseHeader('Content-Description');
-            //console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.statusText);
+            console.log('http request: something went terribly wrong('+error+'), ' + xhr.status  + ':' + xhr.responseText);
         }
     };
 

@@ -142,6 +142,7 @@
 }
 
 #add-new-room-rooms > li {
+    position: relative;
     width: 180px;
 }
 
@@ -184,11 +185,15 @@
     overflow-y: scroll;
 }
 
-#channel-attendees-entries img {
+img.whisper, img.kick, img.is-private {
     width: 20px;
     margin-left: 5px;
     cursor: pointer;
     float: right;
+}
+
+img.is-private {
+    position: absolute
 }
 
 #channel-attendees-entries > li {
@@ -239,8 +244,8 @@
 }
 
 .height-limiter {
-    top:380px;
-    height:auto;
+    top: 380px;
+    height: auto;
 }
 
 #submit-message {
@@ -389,11 +394,6 @@ img.image-message {
 .popover-title {
     text-align: center;
 }
-
-.room-favorite:not(.btn-primary):not(.btn-inverse), .btn {
-    background-image: none;
-}
-
 
 .alert {
     border-color: transparent;

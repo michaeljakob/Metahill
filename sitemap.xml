@@ -4,8 +4,6 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
-
 <url>
   <loc>http://metahill.com/login.php</loc>
   <changefreq>daily</changefreq>
@@ -23,6 +21,11 @@
 </url>
 <url>
   <loc>http://metahill.com/help/</loc>
+  <changefreq>daily</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://metahill.com/log/</loc>
   <changefreq>daily</changefreq>
   <priority>0.80</priority>
 </url>

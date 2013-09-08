@@ -181,7 +181,8 @@
         <footer>
             <a href="blog" target="_blank">Blog</a>&nbsp;|
             <a href="help" target="_blank">Help</a>&nbsp;|
-            <a href="log/metahill" target="_blank">Logs</a>
+            <a href="log/metahill" target="_blank">Logs</a>&nbsp;|
+            <a href="dev" target="_blank">Developer</a>
         </footer>
 
     </section>

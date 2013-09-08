@@ -16,16 +16,32 @@ metahill.roomProposer.getOpenRoomNames = function() {
     return names;
 };
 
-
 metahill.roomProposer.createHtmlChildren = function(rooms) {
+    function createHtmlChild(room) {
+        var attributes = '';
+        attributes += "data-owner='"+room.owner+"' ";
+        attributes += "data-roomid='"+room.id+"' ";
+        attributes += "data-is-private='"+room.is_private+"' ";
+
+        var content = room.name;
+        if(room.is_private === 1) {
+            content += metahill.html.getPrivateRoomImage();
+        }
+
+        var html = "<li class='ui-bootstrap-list-item btn' " +
+                   attributes + 
+                   "data-topic='"+(room.topic)+"'>"+content+"</li>";
+
+        return html;
+    }
+
     var alreadyListedRoomNames = metahill.roomProposer.getOpenRoomNames();
 
     var children = '';
     for(var i=0; i<rooms.length; i++) {
         var room = rooms[i];
         if($.inArray(room.name, alreadyListedRoomNames) === -1) {
-            children += "<li class='ui-bootstrap-list-item btn' data-owner='"+room.owner+"' data-roomid='"+room.id+
-                                          "' data-topic='"+(room.topic)+"'>"+room.name+"</li>";
+            children += createHtmlChild(room);
         }
     }
 

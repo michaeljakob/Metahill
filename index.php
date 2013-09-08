@@ -93,7 +93,13 @@
                         $roomName = $room->name;
                         $roomId = $room->id;
                         $roomOwner = $room->owner;
-                        echo  "<li class='btn room-favorite' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$topic'>".
+
+                        $privateString = "";
+                        if($room->password !== null) {
+                            $privateString = " data-is-private='1' ";
+                        }
+
+                        echo  "<li $privateString class='btn' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$topic'>".
                                 "$roomName<button class='close room-close'>&times;</button>".
                                 "<span class='unseen-messages'>0</span>".
                               "</li>";
@@ -234,43 +240,49 @@
                     return;
                 }
             }
+            echo "<script>";
+            echo "$(document).ready(function(){setTimeout(function() {";
             if(dbRoomExists($roomName)) {
                 $room = dbGetRoomObjectFromName($roomName);
                 $roomName = $room->name; // we want the original room name
                 $roomId = $room->id;
                 $roomTopic = str_replace('"', "&#34;", $room->topic);
                 $roomOwner = $room->owner;
+                $roomIsPrivate = $room->password !== null;
 
-                $out = "<script>$(document).ready(function(){setTimeout(function() {";
-                $out .= "var newRoom = '<li data-roomid=\"$roomId\" data-topic=\"$roomTopic\" data-owner=\"$roomOwner\">$roomName</li>';";
-                $out .= "metahill.main.onNewRoomClicked($(newRoom));";
-                $out .= "}, 800)});</script>";
-
-                echo $out;
+                echo "var newRoom = '<li data-roomid=\"$roomId\" data-topic=\"$roomTopic\" data-is-private=\"$roomIsPrivate\" data-owner=\"$roomOwner\">$roomName</li>';";
+                echo "metahill.main.onNewRoomClicked($(newRoom));";
+            } else {
+                echo "metahill.modals.showInfo('I couldn\'t find that room', 'Sorry, friend. I couldn\'t find this room anywhere. And I searched a lot. :P')";
             }
+            echo "}, 800)});";
+            echo "</script>";
         }
 
     ?>
 
-    <script>
-        $(document).ready(
-            setTimeout(function() {
-            <?php
-                // we're on the safe side when using a little timeout, although it should not be an issue
-                $mutedRooms = dbGetMutedRooms($user->id);
-                if($mutedRooms != null) {
-                    for($i=0; $i<count($mutedRooms); ++$i) {
-                        $entry = $mutedRooms[$i];
-                        $roomId = $entry->room_id;
-                        $timeLeft = strtotime($entry->unmute_time) - time();
-                        echo "metahill.main.mutedRoomIds.push('$roomId');";
-                        echo "metahill.main.unmuteRoomId('$roomId', $timeLeft*1000);";
-                        echo "if(metahill.main.activeRoom.attr('data-roomid')==='$roomId'){ $('#submit-message').prop('disabled', true).blur();}";
-                    }
-                }
-            ?>
-        }, 100));
-    </script>
+    <?php
+        // we're on the safe side when using a little timeout, although it should not be an issue
+        $mutedRooms = dbGetMutedRooms($user->id);
+        if($mutedRooms != null) {
+
+            echo "<script>";
+            echo "$(document).ready(";
+            echo "setTimeout(function() {";
+
+            for($i=0; $i<count($mutedRooms); ++$i) {
+                $entry = $mutedRooms[$i];
+                $roomId = $entry->room_id;
+                $timeLeft = strtotime($entry->unmute_time) - time();
+                echo "metahill.main.mutedRoomIds.push('$roomId');";
+                echo "metahill.main.unmuteRoomId('$roomId', $timeLeft*1000);";
+                echo "if(metahill.main.activeRoom.attr('data-roomid')==='$roomId'){ $('#submit-message').prop('disabled', true).blur();}";
+            }
+            
+            echo "}, 300));";
+            echo "</script>";
+        }
+    ?>
     <script async="async" src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css<?php echo ($theme === 'dark') ? ("&skin=sons-of-obsidian") : (""); ?>"></script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

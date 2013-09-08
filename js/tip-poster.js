@@ -4,8 +4,12 @@
 $(function() {
     var interval = 1000 * 60 * 10; // all ten minutes
 
+    /*
+        Variables, that will be replaced:
+        :room
+     */
+    
     var tips = [];
-
     // metahill tips & tricks
     tips.push('<b>Share images</b> by dragging them in the chat.');
     tips.push('Don\'t want to miss anything? View the chat logs.');
@@ -24,6 +28,7 @@ $(function() {
     tips.push('What are you doing right now? Tell us with <b>/me</b>.');
     tips.push('Leave the current room by typing <b>/quit</b>.');
     tips.push('Join a room by typing <b>/join <name></b>.');
+    tips.push('Need more space? Try our <a href="http://www.metahill.com/embedded.php?room=:room">embedded version</a>.');
 
     // motivational, jokes
     tips.push('Be nice to your mates. :)');
@@ -47,6 +52,7 @@ $(function() {
         setInterval(function() {
             if(metahill.modals.preferences.enable_tips && metahill.chat.isOnline) {
                 var tip = tips[Math.floor(Math.random()*tips.length)];
+                tip = tip.replace(':room', metahill.helper.getSimpleText(metahill.main.activeRoom));
                 metahill.main.setCurrentStatus(tip, 'alert-info', 10000);
             }
 

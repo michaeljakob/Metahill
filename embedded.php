@@ -18,6 +18,9 @@
         if($api_room === null) {
             exit("No room `{$_GET['room']}` found.");
         }
+        if($api_room->password !== null) {
+            exit("This room is password protected. You cannot enter it using the embedded interface.");
+        }
     }
 
     if($api_room === null && !$api_showRoomsBar) {
@@ -127,7 +130,12 @@
                         $roomId = $room->id;
                         $roomOwner = $room->owner;
                         
-                        echo  "<li class='btn room-favorite' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$roomTopic'>".
+                        $privateString = "";
+                        if($room->password !== null) {
+                            $privateString = " data-is-private='1' ";
+                        }
+
+                        echo  "<li $privateString class='btn' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$roomTopic'>".
                                 "$roomName<button class='close room-close'>&times;</button>".
                                 "<span class='unseen-messages'></span>".
                               "</li>";

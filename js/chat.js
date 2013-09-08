@@ -105,6 +105,9 @@ $(function(){
             case atob('cmVsb2Fk'): // reload
                 location.reload();
                 break;
+            case 'join-room--invalid-password':
+                
+                break;
             default:
                 console.log('Unknown `intent`.');
         }

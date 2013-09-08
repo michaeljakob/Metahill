@@ -113,7 +113,7 @@
         <label id="modals-new-room-name-parent">
             <input id="modals-new-room-name" type="text" required pattern="[a-zA-Z0-9\-_+]{3,20}" placeholder="A short and meaningful name" />
         </label>
-        <span id="modals-new-room-name-status" class="label label-warning" style="display:none;">This room already exists.</span>
+        <span id="modals-new-room-name-status" class="label label-warning" style="display:none;"></span>
 
         <p>Roomtopic<span class="heading-desc">Use between 20 and 400 characters</span></p>
         <label>
@@ -121,7 +121,7 @@
         </label>
 
         <label class="checkbox">
-            <input id="modals-new-room-private" type="checkbox" />Private
+            <input id="modals-new-room-private" type="checkbox" />Private<span class="heading-desc">Only privileged persons may enter this room</span>
         </label>
         <!-- This container ensures a smooth opening/closing-animation. 
              Animating requires a 'display:block' element, but the <label>
@@ -129,7 +129,7 @@
              in the next line. -->
         <div id="modals-new-room-password-animator">
             <label>
-                <input type="password" id="modals-new-room-password" placeholder="Password" />
+                <input type="password" id="modals-new-room-password" pattern=".{3,}" placeholder="Password" />
             </label>
             <span id="modals-new-room-password-status" class="label label-warning" style="display:none;">Use at most 64 symbols.</span>
         </div>
@@ -156,33 +156,40 @@
         
         <h3>Delete room</h3>
             We got this! Unused rooms are automatically deleted after a while.
+            If you need a room to be quickly removed, ask in the <code>metahill</code> room.
     </div><!-- end body -->
     <div class="modal-footer">
         <button id="modals-room-pref-current-password-info" class="btn">?</button>
         <input id="modals-room-pref-current-password" class="modals-current-password" required type="password" pattern=".{8,30}" placeholder="Your current password" />
         <button id="modal-room-pref-submit" class="btn btn-info" disabled>Save</button>
     </div>
-</div><!-- end new room -->
+</div><!-- end room pref -->
 
 
+<div id="modal-verify-room-password" class="modal modal-small hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+        <h3>Enter the room password</h3>
+    </div>
+    <div class="modal-body">
+        <input type="password" id="modal-verify-room-password-value" pattern=".+" placeholder="Password"/>
+    </div>
+    <div class="modal-footer">
+        <button id="modal-verify-room-password-submit" class="btn btn-info" disabled>Join</button>
+    </div>
+</div><!-- end verify room password -->
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<div id="modal-info" class="modal modal-small hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-header">
+        <h3 id="modal-info-title">Info</h3>
+    </div>
+    <div class="modal-body">
+        <p id="modal-info-message"></p>
+    </div>
+    <div class="modal-footer">
+        <button id="modal-info-submit" class="btn btn-info">Got it</button>
+    </div>
+</div><!-- end info -->
 
 
 

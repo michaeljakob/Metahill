@@ -15,6 +15,10 @@ $(function() {
             css = '<link rel="stylesheet" type="text/css" href="css/windows-fixes.css"/>';
             $(css).appendTo('head');
         }
+        if(metahill.main.isGuest) {
+            css = '<link rel="stylesheet" type="text/css" href="css/guest.css"/>';
+            $(css).appendTo('head');   
+        }
     });
 
     $(function() {
@@ -71,6 +75,8 @@ $(function() {
         var header = $('header');
         var submitSwitchTheme = $('#submit-switch-theme');
         var addedChatEntriesHeight = parseInt($('#data-added-chat-entries-height').css('margin-top'), 10);
+        var html = $('html');
+        var submitAsideRight = $('#submit-aside-right');
 
         var h = -1;
         var w = -1;
@@ -86,7 +92,11 @@ $(function() {
                 }
                 if(nw <= 800) {
                     submitSwitchTheme.addClass('submit-switch-theme-absolute');
+                    html.css('overflow', 'scroll');
+                    submitAsideRight.css({'position': 'absolute', 'left': '605px'});
                 } else {
+                    html.css('overflow', 'hidden');
+                    submitAsideRight.removeAttr('style');
                     submitSwitchTheme.removeClass('submit-switch-theme-absolute');
                 }
 

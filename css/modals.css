@@ -88,3 +88,15 @@ span.heading-desc-large {
 #modals-new-room-password-animator {
     display: none;
 }
+
+.modal-small {
+    width: 300px;
+    margin-left: -150px;
+    left: 50%;
+}
+
+.modal-small .modal-body, .modal-small .modal-footer {
+    text-align: center;
+}
+
+
