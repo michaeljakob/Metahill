@@ -9,13 +9,9 @@
             strpos($_SERVER['PHP_SELF'], 'index.php') !== false) {
 
 
-            if(!$user->is_guest) {
-                echo "<div class='menu'>";
-                echo     "<div id='site-status' class='alert'></div>";
-            }
-
-
-            echo "<div id='user-id' style='display:none;'>{$user->id}</div>";
+            echo "<div class='menu'>";
+            echo    "<div id='site-status' class='alert'></div>";
+            echo    "<div id='user-id' style='display:none;'>{$user->id}</div>";
 
             // user
             $name = $user->name;
