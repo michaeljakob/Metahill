@@ -32,7 +32,6 @@ metahill.helper.submitHttpRequest = function(phpFile, json, successCallback) {
     xhr.open('post', 'php/' + phpFile);
     xhr.onload = function () {
         if (xhr.status === 200) {
-            //console.log('http request: ok. '+ xhr.responseText);
             if(successCallback !== undefined) {
                 successCallback(xhr.getResponseHeader('Content-Description'));
             }

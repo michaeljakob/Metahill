@@ -180,6 +180,10 @@ $(function(){
         }
 
         metahill.modals.liveUpdateChatTextSize();
+
+        if(typeof(metahill__newMessageAdded) === 'function') {
+            metahill__newMessageAdded();
+        }
     }
 
     function onUserJoin(userId, userName, roomName) {

@@ -17,9 +17,9 @@ function getDBH() {
 }
 
 /*
- Check if the given name-pass tuple exists.
+ Check if the given name-pass tuple exists. 
  @returns 
-  1 -> success
+ [string] userName -> success
  -1 -> name/password combination does not exist
  -2 -> not verified
 */
@@ -39,6 +39,38 @@ function dbVerifyLogin($name, $pass) {
     } else {
         return -2;
     }
+}
+
+function dbGetOwnedRooms($userId) {
+    $dbh = getDBH();
+
+    $query = "SELECT id FROM `rooms` WHERE owner=:user_id";            
+    $statement = $dbh->prepare($query);
+    $statement->execute(array(':user_id' => $userId));
+    
+    return $statement->fetchAll(PDO::FETCH_COLUMN);
+}
+
+/**
+ * Returns all room admins including the room owner.
+ * @param  int   $roomId The destination room id
+ * @return array         Room admin ids
+ */
+function dbGetRoomAdmins($roomId, $includeOwner=true) {
+    $dbh = getDBH();
+
+    $includeOwnerQuery = '';
+    if($includeOwner) {
+        $includeOwnerQuery = 'UNION SELECT owner FROM `rooms` WHERE id=:room_id';
+    }
+
+    $statement = $dbh->prepare('SELECT account_id
+                                FROM `room_admins` 
+                                WHERE room_id=:room_id ' . $includeOwnerQuery);
+    $statement->execute(array(':room_id' => $roomId));
+    
+    
+    return $statement->fetchAll(PDO::FETCH_COLUMN); 
 }
 
 function dbUpdateLastLoginTime($name) {
@@ -258,18 +290,13 @@ function dbGetNumberOfRooms() {
 }
 
 
-function dbGetUserObject($name) {
-    if(isset($GLOBALS['user_object'])) {
-        return $GLOBALS['user_object']; 
-    }
-    
+function dbGetUserObject($name) {    
     $dbh = getDBH();
                 
     $statement = $dbh->prepare('SELECT * FROM accounts WHERE name=:name');
     $statement->execute(array(':name' => $name));
     $user = $statement->fetch(PDO::FETCH_OBJ);
     
-    $GLOBALS['user_object'] = $user;
     return $user;
 }
 

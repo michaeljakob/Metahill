@@ -4,39 +4,74 @@ require_once('db-interface.php');
 $dbh = getDBH();
 $success = false;
 
-$isDeletingRoomRequested = $_POST['deleteRoom'];
 $roomTopic = $_POST['roomTopic'];
 $roomId = $_POST['roomId'];
+$roomNewPassword = $_POST['roomNewPassword'];
+$roomAdmins = explode(',', $_POST['roomAdmins']); // room admins without owner
 $userId = $_POST['userId'];
+$userName = $_POST['userName'];
 $userPassword = $_POST['userPassword'];
 
-
-if($isDeletingRoomRequested) {
-  $query =   'DELETE FROM `rooms`
-                WHERE id=:room_id AND owner=:user_id AND (SELECT true FROM `accounts` WHERE id=:user_id and password=:user_password)';
-
-
-    $statement = $dbh->prepare($query);
-    $success = $statement->execute(array(':room_id' => $roomId, ':user_id' => $userId, ':user_password' => $userPassword));
-
-} else {
-
-    $query =   'UPDATE `rooms`
-                SET topic=:room_topic
-                WHERE id=:room_id AND owner=:user_id AND (SELECT true FROM `accounts` WHERE id=:user_id and password=:user_password)';
+$sqlParameters = array(
+    ':room_topic' => $roomTopic, 
+    ':room_id' => $roomId, 
+    ':user_id' => $userId, 
+    ':user_password' => $userPassword,
+    ':room_password' => $roomNewPassword);
 
 
-    $statement = $dbh->prepare($query);
-    $success = $statement->execute(array(':room_topic' => $roomTopic, ':room_id' => $roomId, ':user_id' => $userId, ':user_password' => $userPassword));
+// dbGetRoomObjectFromId($roomId)->owner != $userId
+$room = dbGetRoomObjectFromId($roomId);
+header('Status: 200 OK');
+if(gettype(dbVerifyLogin($userName, $userPassword)) !== "string" || $room == null || $room->owner != $userId) {
+    header('Content-Description: 0');
+    exit();
 }
 
-if($success) {
-    header('Status: 200 OK');
-    header('Content-Description: ' . $statement->rowCount());
-} else {
-    header('Status: 400 Bad Request', true, 400);
-    header('Content-Description: ' . var_dump($statement->errorInfo()));
+$updatePassword = $roomNewPassword != '';
+
+// update topic & pass
+$query =   'UPDATE `rooms`
+            SET topic=:room_topic ';
+
+if($updatePassword) {
+    $query .= ',password=:room_password ';
 }
+
+$query .=   'WHERE id=:room_id AND
+            (owner=:user_id OR (SELECT true FROM `room_admins` WHERE account_id=:user_id AND room_id=:room_id));';
+
+
+$statement = $dbh->prepare($query);
+$statement->execute($sqlParameters);
+
+// update admins 
+$userNotFound = null;
+if(count($roomAdmins) >= 1) {
+    $query .=    'DELETE FROM `room_admins` WHERE room_id=:room_id;';
+
+    foreach($roomAdmins as &$admin) {
+        $user = dbGetUserObject(trim($admin));
+        if($user != null) {
+            $userId = $user->id;
+            $query .= 'INSERT INTO `room_admins`(`account_id`, `room_id`) VALUES ('.$userId.', :room_id);';
+        } else {
+            $userNotFound = $admin;
+        }
+    }
+}
+
+$statement = $dbh->prepare($query);
+$statement->execute($sqlParameters);
+
+if($userNotFound !== null) {
+    header('Content-Description: ' . $userNotFound);
+} else {
+    header('Content-Description: 1');
+}
+
+
+
 
 
 

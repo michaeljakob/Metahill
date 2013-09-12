@@ -4,7 +4,7 @@
 
     if( !isset($_SESSION['logged_in']) || !$_SESSION['logged_in'] || 
         !isset($_SESSION['verified']) || !$_SESSION['verified'] || 
-        !isset($_SESSION['name']) || !$_SESSION['name']) {
+        !isset($_SESSION['name'])) {
 
         // do not remove the ../, you'll get issues with /join/<roomname>
         header("Location: ../login.php?{$_SERVER['QUERY_STRING']}");
@@ -32,13 +32,13 @@
 
 <style id="phpcss">
 <?php
-    require_once('php/db-interface.php');
-    $user = dbGetUserObject($_SESSION['name']);
+    require_once("php/db-interface.php");
+    $user = dbGetUserObject($_SESSION["name"]);
     $font = $user->chat_text_font;
     echo "body, body *{font-family:'$font';}";
 
     if(dbIsIpBanned($_SERVER["REMOTE_ADDR"])) {
-        header('Location: banned.php');
+        header("Location: banned.php");
         exit();
     }
 
@@ -94,12 +94,14 @@
                         $roomId = $room->id;
                         $roomOwner = $room->owner;
 
+                        $roomAdmins = implode(",", dbGetRoomAdmins($roomId));
+
                         $privateString = "";
                         if($room->password !== null) {
                             $privateString = " data-is-private='1' ";
                         }
 
-                        echo  "<li $privateString class='btn' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$topic'>".
+                        echo  "<li $privateString class='btn' data-owner='$roomAdmins' data-roomid='$roomId' data-topic='$topic'>".
                                 "$roomName<button class='close room-close'>&times;</button>".
                                 "<span class='unseen-messages'>0</span>".
                               "</li>";
@@ -232,6 +234,8 @@
         require_once('feature/modals.php');
         require_once('js/index.php.jsinclude.php');
         
+        echo "<script>";
+        echo "$(document).ready(function(){setTimeout(function() {";
         if(isset($_GET['join']) && strlen(trim($_GET['join'])) > 0) {
             $roomName = $_GET['join'];
             // is it already a favorite?
@@ -240,25 +244,32 @@
                     return;
                 }
             }
-            echo "<script>";
-            echo "$(document).ready(function(){setTimeout(function() {";
             if(dbRoomExists($roomName)) {
                 $room = dbGetRoomObjectFromName($roomName);
                 $roomName = $room->name; // we want the original room name
                 $roomId = $room->id;
                 $roomTopic = str_replace('"', "&#34;", $room->topic);
-                $roomOwner = $room->owner;
+                $roomAdmins = implode(",", dbGetRoomAdmins($roomId));
                 $roomIsPrivate = $room->password !== null;
 
-                echo "var newRoom = '<li data-roomid=\"$roomId\" data-topic=\"$roomTopic\" data-is-private=\"$roomIsPrivate\" data-owner=\"$roomOwner\">$roomName</li>';";
+
+
+                echo "var newRoom = '<li data-roomid=\"$roomId\" data-topic=\"$roomTopic\" data-is-private=\"$roomIsPrivate\" data-owner=\"$roomAdmins\">$roomName</li>';";
                 echo "metahill.main.onNewRoomClicked($(newRoom));";
+                // show "room settings" button if required
+                echo "if(metahill.base.user.that.isRoomAdmin(metahill.main.activeRoom)){if($('#room-settings').length === 0){var code=metahill.html.getSettingsButton();$('#view-log-button').after(code);}}";
             } else {
                 echo "metahill.modals.showInfo('I couldn\'t find that room', 'Sorry, friend. I couldn\'t find this room anywhere. And I searched a lot. :P')";
             }
-            echo "}, 800)});";
-            echo "</script>";
         }
 
+        // print ownedRooms
+        echo "metahill.base.user.that.ownedRooms = [";
+        echo implode(',', dbGetOwnedRooms($user->id));
+        echo "];";
+
+        echo "}, 800)});";
+        echo "</script>";
     ?>
 
     <?php

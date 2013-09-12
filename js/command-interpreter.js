@@ -37,13 +37,12 @@ $(function() {
             case 'enter':
             case 'join':
                 var destRoomName = args[1];
-                var destRoomPassword = args[2];
                 if(destRoomName === undefined) {
                     metahill.main.setSubmitStatus('Join what? :)', 'Did you forget to append a room-name?');
                     return true;
                 }
                 var foundOpenRoom = false;
-                $('#channels-list').children().each(function(_,e) {
+                $('#channels-list').children().each(function(_, e) {
                     var actualRoomName = metahill.helper.getSimpleText($(e));
                     if(actualRoomName.toLowerCase() === destRoomName.toLowerCase()) {
                         metahill.main.selectRoom(metahill.main.getRoomFromName(actualRoomName));
@@ -59,23 +58,9 @@ $(function() {
                     if(text !== 'null') {
                         var room = JSON.parse(text); 
                         room.topic = metahill.helper.quotesEncode(room.topic);
-                        if((room.password === null) || (destRoomPassword === room.password)) {
-                            var newRoom = '<li data-roomid="'+room.id+'" data-topic="'+room.topic+'" data-owner="'+room.owner+'">'+room.name+'</li>';
-                            metahill.main.onNewRoomClicked($(newRoom));
-                        } else {
-                            if(destRoomPassword === undefined || parseInt($.cookie('join.tries'),10) > 20) {
-                                metahill.main.setSubmitStatus('Sorry, but…', 'The room "'+ destRoomName +'" is password-protected!');
-                            } else {
-                                var tries = parseInt($.cookie('join.tries'),10);
-                                if(isNaN(tries)) {
-                                    tries = 0;
-                                }
-                                var expirationDate = new Date();
-                                expirationDate.setHours(expirationDate.getHours() + 1);
-                                $.cookie('join.tries', tries + 1, {expires: expirationDate });
-                                metahill.main.setSubmitStatus('Nice try', 'You entered an invalid password :}');
-                            }
-                        }
+                        var isPrivate = (room.password === null)?'0':'1';
+                        var newRoom = '<li data-roomid="'+room.id+'" data-topic="'+room.topic+'" data-is-private="'+isPrivate+'" data-owner="'+room.admins+'">'+room.name+'</li>';
+                        metahill.main.onNewRoomClicked($(newRoom));
                     } else {
                         metahill.main.setSubmitStatus('Sorry, but…', 'Apparently the room "'+ destRoomName +'" does not exist!');
                     }

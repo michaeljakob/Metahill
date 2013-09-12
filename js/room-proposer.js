@@ -1,10 +1,10 @@
 metahill.roomProposer = {};
 
-$(document).ready(function() {
-    $('#add-new-room').click(function() {
-        metahill.roomProposer.addRoomSearcher($('#add-new-room-search'));
-    });
-});
+// $(document).ready(function() {
+//     $('#add-new-room').click(function() {
+//         metahill.roomProposer.addRoomSearcher($('#add-new-room-search'));
+//     });
+// });
 
 metahill.roomProposer.getOpenRoomNames = function() {
     var entries  = $('#channels-list').children('li');
@@ -56,7 +56,7 @@ metahill.roomProposer.createHtmlChildren = function(rooms) {
 
 metahill.roomProposer.addRoomSearcher = function(inputBox) {
    inputBox.bind('propertychange keyup input paste', function() {
-        var search = inputBox.val();
+        var search = $(this).val();
         metahill.roomProposer.requestRoomsFromSearchTerm(search);
     });
 };

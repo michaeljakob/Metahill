@@ -503,6 +503,7 @@ pre.prettyprint {
 #data-kick-user-content .alert {
     margin-bottom: 10px;
     padding: 5px;
+    text-align: center;
 }
 
 #data-kick-user-content-send {

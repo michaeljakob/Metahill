@@ -77,8 +77,12 @@ $(function() {
     /*
         Checks whether this user is the owner of the active room.
      */
-    metahill.base.user.that.isActiveRoomOwner = function() {
-        return metahill.main.userId === metahill.main.activeRoom.attr('data-owner');
+    metahill.base.user.that.isActiveRoomAdmin = function() {
+        return metahill.base.user.that.isRoomAdmin(metahill.main.activeRoom);
+    };
+
+    metahill.base.user.that.isRoomAdmin = function($room) {
+        return $room.attr('data-owner').split(',').indexOf(metahill.main.userId) > -1;
     };
 
     /**
@@ -112,7 +116,7 @@ $(function() {
         if(metahill.base.user.isMod(other))
             return false;
 
-        if(metahill.base.user.that.isActiveRoomOwner())
+        if(metahill.base.user.that.isActiveRoomAdmin())
             return true;
 
         return false;
