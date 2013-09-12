@@ -128,14 +128,14 @@
                         $roomTopic = str_replace("'", "&#39;", $room->topic);
                         $roomName = $room->name;
                         $roomId = $room->id;
-                        $roomOwner = $room->owner;
+                        $roomAdmins = implode(",", dbGetRoomAdmins($roomId));
                         
                         $privateString = "";
                         if($room->password !== null) {
                             $privateString = " data-is-private='1' ";
                         }
 
-                        echo  "<li $privateString class='btn' data-owner='$roomOwner' data-roomid='$roomId' data-topic='$roomTopic'>".
+                        echo  "<li $privateString class='btn' data-owner='$roomAdmins' data-roomid='$roomId' data-topic='$roomTopic'>".
                                 "$roomName<button class='close room-close'>&times;</button>".
                                 "<span class='unseen-messages'></span>".
                               "</li>";

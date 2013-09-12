@@ -36,12 +36,12 @@ header img {
 header > a > img {
     height: 50px;
     width: 50px; /* Necessary for FF, other browsers will "auto" this */
-    margin-top: 14px;
-    margin-left: 5px;
 }
 
 header > a {    
     float: left;
+    margin-top: 14px;
+    margin-left: 5px;
 }
 
 h1 {

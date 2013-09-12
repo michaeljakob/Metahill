@@ -1,25 +1,23 @@
-.modal-header > h3, .modal-body > h3 {
+.modal-header h3, .modal-body h3 {
     font-size: 1.2em;
     line-height: inherit;
 }
 
-.modal-body > h3 {
+.modal-body {
+    max-height: 420px;
+}
+
+.modal-body h3 {
     margin: 0;
+}
+
+.modal-body p {
+    margin-bottom: 0;
 }
 
 p.pref-desc {
     margin: 5px 0 10px 0;
     padding: 0;
-}
-
-span.heading-desc {
-    padding-left: 5px;
-    font-size: 80%;
-    color: #265f97;
-}
-
-span.heading-desc-large {
-    color: #265f97;
 }
 
 .bootstrap-select .btn:focus {
@@ -99,4 +97,10 @@ span.heading-desc-large {
     text-align: center;
 }
 
+#modals-room-pref-room-password {
+    margin-top: 3px;
+}
 
+#modals-room-pref-admins {
+    width: 475px;
+}

@@ -36,8 +36,7 @@
                 
             $name = htmlspecialchars($_POST['username']);
             $password = $_POST['password'];
-            $verifyLoginResult = dbVerifyLogin($name, $password);
-            if(gettype($verifyLoginResult) === "string") {
+            if(gettype(dbVerifyLogin($name, $password)) === "string") {
                 // login succeeded
                 $name = $verifyLoginResult;
                 $_SESSION['logged_in'] = true;

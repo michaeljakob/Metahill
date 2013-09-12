@@ -103,6 +103,16 @@
                             </td>
                         </tr>
                     </table>
+                    <h1>Customize your chat [beta]</h1>
+                    <p>
+                        If you want to give some users a specific color, you can do it with the snippet below.
+                        Just insert it anywhere on your webpage and customize it.
+                        All you have to do is modifying the <code>highlights</code> variable, which defines which
+                        usernames are colored with which color.
+                        This is just a simple demonstration with what you can actually do with the <code>metahill__newMessageAdded</code> 
+                        function callback.
+                    </p><br>
+                    <pre><code>&lt;script&gt;<br/>function metahill__newMessageAdded() {<br/>   $('.chat-entry-user').each(function(i, e) {<br/>        var highlights = {};<br/>        highlights['red'] = ['bunt'];<br/>        highlights['#369'] = ['User1', 'User2'];<br/><br/>        var $e = $(e);<br/>        var userName = $e.text().slice(0, -1);<br/>        $.each(highlights, function(key, element) {<br/>            if(element.indexOf(userName) !== -1) {<br/>                $e.css('color', key);<br/>            }<br/>        });<br/>    });<br/>}<br/>&lt;/script&gt;</code></pre>
                 </p>
             </div>
             <div class="tab-pane" id="chat-api">

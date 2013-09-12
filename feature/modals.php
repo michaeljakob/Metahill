@@ -84,12 +84,12 @@
     </div>
     <div class="modal-body">
         <h3>Change your password</h3>
-        <p class="heading-desc">Use between 8 and 30 characters.</p>
+        <p>Use between 8 and 30 characters.</p>
         <label>
             <input id="modals-profile-new-password" type="password" pattern=".{8,30}" placeholder="Your new password" />
         </label>
         <h3>I forgot my password</h3>
-        <p>No worries, you can request a new password <a href="request-new-password.php">here</a>.</p>
+        <p>No worries, you can request a new password <a target="_blank" href="request-new-password.php">here</a>.</p>
         <h3>Delete account</h3>
         <label class="checkbox">
             Delete your account and all associated information.
@@ -109,19 +109,21 @@
           <h3>Create new room</h3>
     </div>
     <div class="modal-body">
-        <p>Roomname<span class="heading-desc">Use between 3 and 20 characters</span></p>
+        <h3>Roomname</h3>
+        <span>Use between 3 and 20 characters</span><br>
         <label id="modals-new-room-name-parent">
             <input id="modals-new-room-name" type="text" required pattern="[a-zA-Z0-9\-_+]{3,20}" placeholder="A short and meaningful name" />
         </label>
         <span id="modals-new-room-name-status" class="label label-warning" style="display:none;"></span>
 
-        <p>Roomtopic<span class="heading-desc">Use between 20 and 400 characters</span></p>
+        <h3>Roomtopic</h3>
+        <span>Use between 20 and 400 characters</span>
         <label>
             <textarea id="modals-new-room-topic" maxlength="400" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
         </label>
 
         <label class="checkbox">
-            <input id="modals-new-room-private" type="checkbox" />Private<span class="heading-desc">Only privileged persons may enter this room</span>
+            <input id="modals-new-room-private" type="checkbox" /><strong>Private</strong><span> &mdash; Only privileged people may enter this room</span>
         </label>
         <!-- This container ensures a smooth opening/closing-animation. 
              Animating requires a 'display:block' element, but the <label>
@@ -148,15 +150,23 @@
     </div>
     <div class="modal-body">
         <h3>Change topic</h3>
-        <p>Describe in easy and clear words what this room is about. You can add links to FAQs or other references.</p>
-        <label class="checkbox">
-            <span class="heading-desc-large">Use between 20 and 400 characters</span>
-            <textarea id="modals-room-pref-topic" maxlength="400" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
-        </label>
+        <p>
+            Describe in easy and clear words what this room is about. You can add links to FAQs or other references.
+            Use between 20 and 400 characters.
+        </p>
+        <textarea id="modals-room-pref-topic" maxlength="400" spellcheck placeholder="A short description of what this room is about. Try to be expressive and use strong keywords."></textarea>
+
         
+        <h3>Change password</h3>
+        <p> 
+            Entering nothing will leave the password as it is now. If you want to make this room public, please contact
+            a metahill administrator.
+        </p>
+        <input id="modals-room-pref-room-password" type="password" placeholder="New room password" pattern=".+" />
+
         <h3>Delete room</h3>
             We got this! Unused rooms are automatically deleted after a while.
-            If you need a room to be quickly removed, ask in the <code>metahill</code> room.
+            If you need a room to be quickly removed, ask in the <i>metahill</i> room.
     </div><!-- end body -->
     <div class="modal-footer">
         <button id="modals-room-pref-current-password-info" class="btn">?</button>

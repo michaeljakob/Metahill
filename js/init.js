@@ -121,7 +121,7 @@ $(function() {
             if(metahill.base.support.isEmbedded) {
                 attendeesBarHeight += 51;
             } else {
-                attendeesBarHeight -= 50;
+                attendeesBarHeight -= 50 - 4;
             }
             channelAttendeesEntries.height(attendeesBarHeight);
 
@@ -148,6 +148,7 @@ $(function() {
         if(!metahill.base.support.isEmbedded) {
             $('#add-new-room-search').focus();
         }
+        metahill.roomProposer.addRoomSearcher($('#add-new-room-search'));
     });
 
     // remove "add-new-room"-popover if you click anywhere

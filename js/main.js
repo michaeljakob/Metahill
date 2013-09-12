@@ -493,6 +493,11 @@ $(function() {
                 PR.prettyPrint();
             }
         }
+
+        // api callback
+        if(typeof(metahill__newMessageAdded) === 'function') {
+            metahill__newMessageAdded();
+        }
     };
 
     $(function() {
@@ -567,6 +572,10 @@ $(function() {
         attendeesList.append(cache);
     };
 
+    function isRoomAdmin($room) {
+
+    }
+
     metahill.main.selectRoom = function(newRoom) {
         if(!(newRoom instanceof jQuery)) {
             newRoom = $(newRoom);
@@ -583,7 +592,6 @@ $(function() {
         var newRoomName = metahill.helper.getSimpleText(newRoom);
 
         if(newRoomName !== oldRoomName) {
-
             metahill.log.roomAttendees[newRoomName] = metahill.log.roomAttendees[newRoomName] || {};
 
             metahill.db.setActiveRoom(newRoom);
@@ -593,11 +601,9 @@ $(function() {
             newRoom.addClass('btn-primary');
             
 
-            if(newRoom.attr('data-owner') === metahill.main.userId) {
+            if(metahill.base.user.that.isRoomAdmin(newRoom)) {
                 if($('#room-settings').length === 0) {
-                    var code = '<button class="btn" id="room-settings" alt="Room Settings" title="Room Settings" href="#modal-room-pref" data-toggle="modal">'+
-                                    '<img alt="" src="img/icon/room_settings.png"/>Room Settings'+
-                                '</button>';
+                    var code = metahill.html.getSettingsButton();
                     $('#view-log-button').after(code);
                 }
             } else {
@@ -724,6 +730,9 @@ $(function() {
         if(roomIsPrivate) {
             $('#modal-verify-room-password').modal('show');
             $('#modal-verify-room-password-submit').click(function() {
+                if($(this).is(':disabled'))
+                    return;
+                
                 $('#modal-verify-room-password').modal('hide');
                 var $password = $('#modal-verify-room-password-value');
                 var enteredPassword = $password.val();
@@ -781,10 +790,12 @@ $(function() {
 
             metahill.main.activeRoom = entry;
             metahill.main.selectRoom(entry);
-            
-            if(typeof PR !== 'undefined') {
-                PR.prettyPrint();
-            }
+
+            setTimeout(function() {            
+                if(typeof PR !== 'undefined') {
+                    PR.prettyPrint();
+                }
+            }, 100);
         }
     };
 
@@ -948,12 +959,12 @@ $(function() {
         return makeEntryText(userName, room, message, time, optionalClasses, optionalAttributes);
     };
 
-    metahill.main.makeEntryImageText = function(userName, room, message, time, optionalClasses, optionalAttributes) {
+    metahill.main.makeEntryImageText = function(userName, $room, message, time, optionalClasses, optionalAttributes) {
         // message isn't styled up
-        return makeEntryText(userName, room, metahill.main.makeImageTagFromUrl(message), time, optionalClasses, optionalAttributes);
+        return makeEntryText(userName, $room, metahill.main.makeImageTagFromUrl(message), time, optionalClasses, optionalAttributes);
     };
 
-    function makeEntryText(userName, room, message, time, optionalClasses, optionalAttributes) {
+    function makeEntryText(userName, $room, message, time, optionalClasses, optionalAttributes) {
         var classes = '';
         if(optionalAttributes === undefined) {
             optionalAttributes = '';
@@ -962,13 +973,16 @@ $(function() {
             classes += optionalClasses + ' ';
         }
 
+        /**
+         * roles: server, (global) admin, (global) mod, room admin [, normal]
+         */
         if(userName === '') {
             classes += 'message-role-server';
         } else if(metahill.base.user.isAdmin(userName)) {
             classes += 'message-role-admin ';
         } else if(metahill.base.user.isMod(userName)) {
             classes += 'message-role-mod ';
-        } else if($('#channel-attendees-'+room.attr('data-owner')).text() === metahill.main.userId) {
+        } else if(metahill.base.user.that.isRoomAdmin($room)) {
             classes += 'message-role-room-owner ';
         }
 

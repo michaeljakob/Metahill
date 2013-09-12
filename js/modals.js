@@ -4,7 +4,7 @@
 
 metahill.modals = {};
 
-
+var popoverInModalHelper = false;
 $(document).ready(function() {
     metahill.modals.preferences = {};
     metahill.modals.preferences.enable_smilies = $('#modals-pref-enable-smilies').prop('checked');
@@ -16,11 +16,18 @@ $(document).ready(function() {
     metahill.modals.preferences.enable_tips = $('#modals-pref-enable-tips').prop('checked');
     metahill.modals.preferences.user_id = metahill.main.userId;
 
+
     $('#modals-profile-current-password-info, #modals-room-pref-current-password-info').popover({
-        trigger: 'hover',
+        trigger: 'manual',
         placement: 'left',
         title: 'Why do you want my password?',
         content: 'Security. It is all about confidential information which we try to keep as secure as possible.'
+    }).hover(function() {
+        popoverInModalHelper = true;
+        $(this).popover('show');
+    }, function() {
+        popoverInModalHelper = false;
+        $(this).popover('hide');
     });
 });
 
@@ -335,19 +342,50 @@ $(function() {
     verificaton.isRoomNameToTitleAdded = false;
     verificaton.isPasswordLengthOk = false;
     verificaton.isTopicLengthOk = false;
-    verificaton.currentTopic = '';
+    verificaton.originalTitle = '';
+    verificaton.originalAdmins = '';
 
     $('#modal-room-pref')
     .on('show', function() {
+        if(popoverInModalHelper) {
+            return;
+        }
         if(!verificaton.isRoomNameToTitleAdded) {
             verificaton.isRoomNameToTitleAdded = true;
-            var title =$('#modal-room-pref h3:first');
+            var title = $('#modal-room-pref h3:first');
             title.html('"' + metahill.helper.getSimpleText(metahill.main.activeRoom) +'"' + title.html());
         }
 
-        verificaton.currentTopic = metahill.helper.htmlEncode(metahill.main.activeRoom.attr('data-topic'));
+        verificaton.originalTitle = metahill.helper.htmlEncode(metahill.main.activeRoom.attr('data-topic'));
         $('#modals-room-pref-topic').val(metahill.main.activeRoom.attr('data-topic'));
         $('#modals-room-pref-topic').keyup();
+
+        var isPrivateRoom = metahill.main.activeRoom.attr('data-is-private') === '1';
+        if(!isPrivateRoom) {
+            $('#modals-room-pref-room-password').hide().prev().hide().prev().hide();
+        } else {
+            $('#modals-room-pref-room-password').show().prev().show().prev().show();
+        }
+
+        var roomId = metahill.main.activeRoom.attr('data-roomid');
+        // load room admins
+        var urlGetRoomAdmins = 'dev/rest/get-room-admins.php';
+        metahill.helper.submitHttpRequestGeneral(urlGetRoomAdmins, {roomId: roomId, includeOwner: false}, function(text) {
+            if(text !== 'null') {
+                verificaton.originalAdmins = text;
+                var names = text.replace(/,/g, ', ');
+                $('#modals-room-pref-admins').val(names);
+            }
+        });
+
+        if(metahill.base.user.that.ownedRooms.indexOf(parseInt(roomId,10)) !== -1) {
+            if($('#modals-room-pref-admins-box').length === 0) {
+                $('#modals-room-pref-topic').after(metahill.html.getSettingsOwnerMenu());
+            }
+        } else {
+            $('#modals-room-pref-admins-box').remove();
+        }
+
     })
     .on('hidden', function() {
         $('#submit-message').focus();
@@ -358,38 +396,47 @@ $(function() {
         var topicBox = $('#modals-room-pref-topic');
         var topic = topicBox.val();
         topicBox.val('').focus().val(topic);
+
+        $('#modals-room-pref-current-password').attr('placeholder', 'Your current password');
     });
 
     $('#modal-room-pref-submit').click(function() {
+        if($(this).is(':disabled'))
+            return;
+        
         var currentPasswordBox = $('#modals-room-pref-current-password');
         var submitButton = $(this);
 
         var json = {};
         json.roomTopic = metahill.helper.htmlEncode($('#modals-room-pref-topic').val().trim());
         json.roomId = metahill.main.activeRoom.attr('data-roomid');
+        json.roomNewPassword = $('#modals-room-pref-room-password').val();
+        json.roomAdmins = $('#modals-room-pref-admins').val().replace(/ /g, '');
         json.userId = metahill.main.userId;
+        json.userName = metahill.main.userName;
         json.userPassword = currentPasswordBox.val();
 
-        console.log(json.roomTopic);
-        console.log(verificaton.currentTopic);
-
-        if(json.roomTopic === verificaton.currentTopic) {
-            $('#modal-room-pref').modal('hide');
-            currentPasswordBox.attr('placeholder', 'Your current password');
-            currentPasswordBox.val('');
-            return;
+        if(json.roomNewPassword === '') {
+            json.roomNewPassword = null;
         }
 
         updateRoomPreferences(json, function(returnCode) {
             currentPasswordBox.val('');
-            if(parseInt(returnCode, 10) >= 1) {
-                metahill.main.activeRoom.attr('data-topic', json.roomTopic);
-                $('#chat-header-topic').html(metahill.formatMessages.styleMessage(json.roomTopic));
-                $('#modal-room-pref').modal('hide');
-                currentPasswordBox.attr('placeholder', 'Your current password');
-            } else {
-                currentPasswordBox.attr('placeholder', 'Wrong pass :(');
-                currentPasswordBox.focus();
+            switch(returnCode) {
+                case '0': // wrong pass
+                    currentPasswordBox.attr('placeholder', 'Wrong pass :(');
+                    currentPasswordBox.focus();
+                    break;
+                case '1': // success
+                    metahill.main.activeRoom.attr('data-topic', json.roomTopic);
+                    $('#chat-header-topic').html(metahill.formatMessages.styleMessage(json.roomTopic));
+                    $('#modal-room-pref').modal('hide');
+                    currentPasswordBox.attr('placeholder', 'Your current password');
+                    break;
+                default: // unknown room admin given
+                    $('#modal-room-pref').modal('hide');
+                    currentPasswordBox.attr('placeholder', 'Your current password');
+                    metahill.main.setCurrentStatus('Unknown room-admin "'+returnCode+'"');
             }
             submitButton.prop('disabled', true);
         });
@@ -400,6 +447,12 @@ $(function() {
         var len = $(this).val().trim().length;
         verificaton.isPasswordLengthOk = len >= 8 && len <= 30;
         verifyRoomPreferencesInput();
+    });
+
+    $('#modals-room-pref-current-password').keyup(function(event){
+        if(event.keyCode == 13){
+            $('#modal-room-pref-submit').click();
+        }
     });
 
     $('#modals-room-pref-topic').bind('propertychange keyup input paste', function() {
