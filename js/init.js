@@ -3,6 +3,18 @@
 
 
 $(function() {
+
+    $(function() {
+
+        window.onmessage = function(e) {
+            metahill.main.embeddedApiData = JSON.parse(e.data);
+            metahill.main.newMessageAdded();
+        };
+
+        var readyObject = { action: 'loaded' };
+        window.top.postMessage(JSON.stringify(readyObject), '*');
+    });
+
     $(document).ready(function() {
         var css;
         if(metahill.base.support.isMac) {

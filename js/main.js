@@ -7,6 +7,7 @@ metahill.log.unseenMessages = 0;
 
 metahill.main = {};
 metahill.main.mutedRoomIds = [];
+metahill.main.embeddedApiData = null;
 $(function() {
 
     metahill.main.userName = $('#user-name > button').text().trim();
@@ -494,10 +495,26 @@ $(function() {
             }
         }
 
-        // api callback
-        if(typeof(metahill__newMessageAdded) === 'function') {
-            metahill__newMessageAdded();
+        metahill.main.newMessageAdded();
+    };
+
+    metahill.main.newMessageAdded = function() {
+        if( metahill.main.embeddedApiData === null || 
+            metahill.main.embeddedApiData['user_highlight_colors'] === undefined || 
+            metahill.main.embeddedApiData['user_highlight_colors'] === null) {
+            return;
         }
+
+        var highlights = metahill.main.embeddedApiData['user_highlight_colors'];
+        $('.chat-entry-user').each(function(i, e) {
+            var $e = $(e);
+            var userName = $e.text().slice(0, -1);
+            $.each(highlights, function(key, element) {
+                if(element.indexOf(userName) !== -1) {
+                    $e.css('color', key);
+                }
+            });
+        });
     };
 
     $(function() {
@@ -960,9 +977,23 @@ $(function() {
     };
 
     metahill.main.makeEntryImageText = function(userName, $room, message, time, optionalClasses, optionalAttributes) {
-        // message isn't styled up
-        return makeEntryText(userName, $room, metahill.main.makeImageTagFromUrl(message), time, optionalClasses, optionalAttributes);
+        message = metahill.main.makeImageTagFromUrl(message);
+        return makeEntryText(userName, $room, message, time, optionalClasses, optionalAttributes);
     };
+
+    function getRoleClass($room, userName) {
+        if(userName === '') {
+            return 'message-role-server';
+        } else if(metahill.base.user.isAdmin(userName)) {
+            return 'message-role-admin';
+        } else if(metahill.base.user.isMod(userName)) {
+            return 'message-role-mod';
+        } else if(metahill.base.user.isRoomAdmin($room, userName)) {
+            return 'message-role-room-owner';
+        } else {
+            return '';
+        }
+    }
 
     function makeEntryText(userName, $room, message, time, optionalClasses, optionalAttributes) {
         var classes = '';
@@ -972,19 +1003,7 @@ $(function() {
         if((typeof optionalClasses) === 'string') {
             classes += optionalClasses + ' ';
         }
-
-        /**
-         * roles: server, (global) admin, (global) mod, room admin [, normal]
-         */
-        if(userName === '') {
-            classes += 'message-role-server';
-        } else if(metahill.base.user.isAdmin(userName)) {
-            classes += 'message-role-admin ';
-        } else if(metahill.base.user.isMod(userName)) {
-            classes += 'message-role-mod ';
-        } else if(metahill.base.user.that.isRoomAdmin($room)) {
-            classes += 'message-role-room-owner ';
-        }
+        classes += getRoleClass($room, userName);
 
         if(userName === metahill.main.userName) {
             userName = '<b>' + userName + '</b>:';

@@ -64,7 +64,7 @@ $(function() {
 
 $(function() {
     var adminNames = ['Michael'];
-    var modNames = ['Weexe', 'Dodovogel'];
+    var modNames = [''];
 
     metahill.base.user.isAdmin = function(userName) {
         return adminNames.indexOf(userName) !== -1;
@@ -72,6 +72,23 @@ $(function() {
 
     metahill.base.user.isMod = function(userName) {
         return modNames.indexOf(userName) !== -1;
+    };
+
+    /**
+     * Checks if a given user is an admin of the given room.
+     * @param  {[type]}  $room    [description]
+     * @param  {[type]}  userName [description]
+     * @return {Boolean}          [description]
+     */
+    metahill.base.user.isRoomAdmin = function($room, userName) {
+        var attendeeId = $('#channel-attendees-entries li:contains("'+userName+'")').attr('id');
+        if(attendeeId === undefined) {
+            return false;
+        }
+        
+        var userId = attendeeId.substring(attendeeId.lastIndexOf('-') + 1);
+
+        return $room.attr('data-owner').split(',').indexOf(userId) > -1;
     };
 
     /*

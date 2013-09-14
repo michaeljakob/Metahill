@@ -16,7 +16,6 @@
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
-    
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <meta name="description" content="Metahill is the easiest way to chat and share images in real time. The ability to exchange a lot of information including diagrams and links real-time makes it a first class business solution.">
 <meta name="author" content="">
@@ -208,7 +207,7 @@
                 <option value="3 hours">3 hours</option>
                 <option value="1 day">1 day</option>
             </select>
-            <div class="alert alert-warning">You can't prematurely unmute him.</div>
+            <div class="alert alert-warning">You cannot prematurely unmute.</div>
             <span id="data-kick-user-content-send" class="btn">Mute</span>
         </div>
     </div>
