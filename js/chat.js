@@ -96,8 +96,9 @@ $(function(){
                 metahill.roomProposer.handleIncomingSearchResults(json.list, json.inputSource);
                 break;
             case atob('d2hpc3Blcg=='): // whisper
+                var optionalAttribute = 'title="Click or type \'/r your_message\' to respond."';
                 metahill.main.command.latestWhisperPartner = json.srcUserName;
-                metahill.main.addVisibleMessage(json.srcUserName, json.roomName, json.content, json.time, false, 'whispered-message', 'title="Click or type \'/r your_message\' respond."');
+                metahill.main.addVisibleMessage(json.srcUserName, json.roomName, json.content, json.time, false, 'whispered-message', optionalAttribute);
                 break;
             case atob('bXV0ZQ=='): // mute
                 onUserMute(json);
@@ -181,9 +182,7 @@ $(function(){
 
         metahill.modals.liveUpdateChatTextSize();
 
-        if(typeof(metahill__newMessageAdded) === 'function') {
-            metahill__newMessageAdded();
-        }
+        metahill.main.newMessageAdded();
     }
 
     function onUserJoin(userId, userName, roomName) {
