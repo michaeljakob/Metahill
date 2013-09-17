@@ -50,7 +50,7 @@
                     Embedding is done by using an <code>iframe</code>. You can freely insert the following
                     snippet to your page:
                     <p>
-                        <pre>&lt;iframe src="http://www.metahill.com/embedded.php?room=metahill&amp;amp;size=mini" width="600" height="300" scrolling="no" frameborder="0"&gt;&lt;/iframe&gt;</pre>
+                        <pre>&lt;iframe id="metahill-client" src="http://www.metahill.com/embedded.php?room=metahill&amp;amp;size=mini" width="600" height="300" scrolling="no" frameborder="0"&gt;&lt;/iframe&gt;</pre>
                     </p>
                     This snippet will add the standard client linking to the metahill room. It should much look like this:
                 </p>
@@ -112,7 +112,7 @@ usernames are colored with which color.
 This is just a simple demonstration with what you can actually do with the <code>metahill__newMessageAdded</code>
 function callback.
 </p><br>
-<pre><code>&lt;script&gt;<br/>$(document).ready(function () {<br/>  window.addEventListener('message', function (e) {<br/>    var args = JSON.parse(e.data) || {};<br/>    if(args.action == 'loaded') {<br/>      $('#metahill-client').load(function() {<br/>        var data = {};<br/>        data['user_highlight_colors'] = {};<br/>        data['user_highlight_colors']['red'] = ['Michael'];<br/>        data['user_highlight_colors']['#369'] = ['User1', 'User2'];<br/><br/>        var frameWindow = $('#metahill-client')[0].contentWindow;<br/>        frameWindow.postMessage(JSON.stringify(data), '*');<br/>      });<br/>    }<br/>  }, false);<br/>});<br/>&lt;/script&gt;</code></pre>
+<pre><code>&lt;script src=&quot;http://www.metahill.com/js/vendor/jquery-2.0.3.min.js&quot; &gt;&lt;/script&gt;<br>&lt;script&gt;<br/>$(document).ready(function () {<br/>  window.addEventListener('message', function (e) {<br/>    var args = JSON.parse(e.data) || {};<br/>    if(args.action == 'loaded') {<br/>      $('#metahill-client').load(function() {<br/>        <strong> var data = {};<br/>        data['user_highlight_colors'] = {};<br/>        data['user_highlight_colors']['red'] = ['Michael'];<br/>        data['user_highlight_colors']['#369'] = ['User1', 'User2'];</strong><br/><br/>        var frameWindow = $('#metahill-client')[0].contentWindow;<br/>        frameWindow.postMessage(JSON.stringify(data), '*');<br/>      });<br/>    }<br/>  }, false);<br/>});<br/>&lt;/script&gt;</code></pre>
                 </p>
             </div>
             <div class="tab-pane" id="chat-api">

@@ -194,16 +194,6 @@ $(function() {
             }
         });
     });
-        
-    // filter
-    $('#filter-search-user')
-    .filterList()
-    .keydown(function(e) {
-        // disable ENTER
-        if(e.keyCode === 13) {
-            e.preventDefault();
-        }
-    });
 });
 
 // channels-list Sortable (dragging room positions)

@@ -146,7 +146,7 @@ var isEmailValid = function() {
   function containsBannedEmailString(email) {
       var banned = [  '@trash-mail', '@10minutemail', '@cjpeg', '@rmqkr', '@zehnminutenmail', 
       '@meltmail', '@mailinator', 'spam4', '@guerillamail', '@sharklasers', 
-      'mailexpire', '@tempemail'];
+      'mailexpire', '@tempemail', '@drdrb.com'];
 
       email = email.toLowerCase();
       for(var i=0; i<banned.length; ++i) {

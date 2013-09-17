@@ -42,7 +42,6 @@ $(function() {
             }
         });
 
-
         if(!isAnyRoomSelected) {
             metahill.main.selectRoom(favorites[0]);
         }
@@ -353,11 +352,15 @@ $(function() {
                 // DOWN ARROW
                 case 40:
                     latestMessagesIndex--;
-                    if(latestMessagesIndex <= -1) {
-                        submitMessage.val(scrollInputValue);
+                    console.log(latestMessagesIndex, JSON.stringify(latestMessages));
+                    if(latestMessagesIndex < -1) {
                         latestMessagesIndex = -1;
                     } else {
-                        submitMessage.val(latestMessages[latestMessagesIndex]);
+                        if(latestMessagesIndex === -1) {
+                            submitMessage.val(scrollInputValue);
+                        } else {
+                            submitMessage.val(latestMessages[latestMessagesIndex]);
+                        }
                     }
                     break;
                 default:
@@ -895,7 +898,7 @@ $(function() {
         .attr('data-roomid', roomId)
         .attr('data-topic', roomTopic)
         .attr('data-owner', roomOwner)
-        .attr('data-is-private', isPrivate)
+        .attr('data-is-private', isPrivate?'1':'0')
         .text(roomName);
 
         if(isPrivate) {
