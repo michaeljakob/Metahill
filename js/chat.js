@@ -208,6 +208,7 @@ $(function(){
         } else {
             ++metahill.log.roomAttendees[roomName][userName].numLogins;
         }
+        $('#filter-search-user').fastLiveFilter('#channel-attendees-entries');
     }
     
     function onUserQuit(userId, userName, roomName) {    
@@ -271,6 +272,9 @@ metahill.chat.updateAttendeesList = function(userList, roomId, roomName) {
         }
         channelAttendeesEntries.append(cache);
     }
+
+    // enable filtering
+    $('#filter-search-user').fastLiveFilter('#channel-attendees-entries');
 };
 
 metahill.chat.sendUserQuit = function(roomId, roomName) { 

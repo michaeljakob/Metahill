@@ -230,6 +230,12 @@
                     You surely are better off if you try asking in <code>metahill</code>, since you're
                     likely to get a reliable answer within a few seconds.
                 </p>
+                <h1>Logal notice</h1>
+                <p>
+                    Michael Jakob<br>
+                    94577 Winzer, Bavaria, Germany<br>
+                    Am Sand 4</br>
+                </p>
             </div>
         </div>
     </section>

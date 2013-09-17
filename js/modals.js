@@ -473,9 +473,10 @@ $(function() {
 // modal-verify-room-password
 $(function() {
     
-    $('#modal-verify-room-password-value').bind('propertychange keyup input paste', function() {
-        var $submit = $('#modal-verify-room-password-submit');
-        if($('#modal-verify-room-password-value').val().length >= 1) {
+    var $password = $('#modal-verify-room-password-value');
+    var $submit = $('#modal-verify-room-password-submit');
+    $password.bind('propertychange keyup input paste', function() {
+        if($password.val().length >= 1) {
             $submit.removeAttr('disabled');
         } else {
             $submit.prop('disabled', true);
@@ -483,15 +484,18 @@ $(function() {
 
     }).keyup(function(event){
         if(event.keyCode == 13){
-            $('#modal-verify-room-password-submit').click();
+            $submit.click();
         }
     });
 
+    $('#modal-verify-room-password').on('show', function() {
+        $submit.prop('disabled', true);
+    });
+
     $('#modal-verify-room-password').on('shown', function() {
-        $('#modal-verify-room-password-value').focus();
+        $password.focus();
     }).on('hidden', function() {
         $('#submit-message').focus();
-        var $password = $('#modal-verify-room-password-value');
         $password.val('');
     });
 

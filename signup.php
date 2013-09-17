@@ -6,7 +6,7 @@
 
     $isEmailAddressInUse = false;
 
-    // submitAccountActivationEmailPear('Michael', 'michael@jakob.tv', '');
+    //submitAccountActivationEmailPear('Michael', 'michael@jakob.tv', '');
     function verifyInput($name, $password, $email) {
         $lenName = strlen($name);
         $lenPassword = strlen($password);
@@ -117,14 +117,14 @@
     <section id="main-container" class="signup">
         <article id="welcome">
             <h1>Join metahill today!</h1>
-            <form method="post" id="action-chooser">
+            <form method="post" id="action-chooser" autocomplete="off">
                 <h2 class="desc">Sign up using email</h2>
                 
-                <input type="text" placeholder="Username" pattern="[^@]*" name="username" id="reg_name" value="<?php if(isset($_POST["username"])) echo htmlspecialchars($_POST["username"]); ?>" />
+                <input type="text" autocomplete="off" placeholder="Username" pattern="[^@]*" name="username" id="reg_name" value="<?php if(isset($_POST["username"])) echo htmlspecialchars($_POST["username"]); ?>" />
                 <span class="label"></span>
-                <input type="text" placeholder="Email" name="email" id="reg_email" value="<?php if(isset($_POST["email"])) echo htmlspecialchars($_POST["email"]); ?>" />
+                <input type="text" autocomplete="off" placeholder="Email" name="email" id="reg_email" value="<?php if(isset($_POST["email"])) echo htmlspecialchars($_POST["email"]); ?>" />
                 <span class="label"></span>
-                <input type="password" placeholder="Password" name="password" id="reg_password" />
+                <input type="password" autocomplete="off" placeholder="Password" name="password" id="reg_password" />
                 <span class="label"></span>
                 
 
@@ -166,7 +166,10 @@
 
             // verify username
             echo "$('#reg_name').keyup();";
-            echo "$('#reg_email').val('').focus();";
+            echo "var regEmail = $('#reg_email');";
+            echo "if(regEmail.val() !== '') {";
+            echo "regEmail.val('').focus();";
+            echo "}";
 
             echo "</script>";
         }
