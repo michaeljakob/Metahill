@@ -58,17 +58,23 @@
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 
+<style>
+#feedback-box {
+    width: 400px;
+    height: 100px;
+}
+</style>
 </head>
 <body>
     <?php require_once('feature/header.php'); ?>
     
     <section id="main-container" class="login">
         <article id="welcome">
-            <p class="desc">Your account has successfully been deleted.</p>
-            <p class="desc">Please wait just one more second and tell us:</p>
+            <p class="desc shaded">Your account has successfully been deleted.</br>
+            Please wait just one more second and tell us...</p>
             <form method="post">
-                <h2><strong>Why did you delete your account?</strong></h2>
-                <textarea id="feedback-box" name="feedback-box" maxlength="500" ></textarea>
+                <h2 class="shaded"><strong>Why did you delete your account?</strong></h2><br>
+                <textarea id="feedback-box" autofocus="autofocus" name="feedback-box" maxlength="500"  ></textarea>
                 <input type="submit" disabled id="submit-feedback" value="Submit feedback" class="btn btn-success" />
             </form>
         </article>
@@ -83,6 +89,7 @@
     
     <script src="js/vendor/jquery-2.0.3.min.js"></script>
     <script async src="js/base.js" ></script>
+    <script async src="js/login.js" ></script>
     <script>
         $('#feedback-box').bind('propertychange keyup input paste', function() {
             var len = $(this).val().length;

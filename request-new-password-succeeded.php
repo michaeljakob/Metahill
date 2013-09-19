@@ -12,10 +12,10 @@
     
     <section id="main-container" class="signup">
         <article id="welcome">
-            <h1>You requested a new password!</h1>
+            <h1 class="shaded">You requested a new password!</h1><br>
             <form method="post" id="action-chooser">
-                <p class="desc">We have sent you an email.</p>
-                <p class="desc">Please check your inbox (+spam folder).</p>
+                <p class="desc shaded">We have sent you an email.
+                Please check your inbox (+spam folder).</p>
             </form>
             <footer>
                 <a href="blog" target="_blank">Blog</a>&nbsp;|
@@ -27,7 +27,7 @@
     <script src="js/vendor/jquery-2.0.3.min.js" ></script>
     <script src="js/vendor/jquery-ui-1.10.2.custom.min.js" ></script>
     <script src="js/base.js" ></script>
-    <script src="js/signup.js" ></script>
+    <script async src="js/login.js"></script>
     
     <script async="async">
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

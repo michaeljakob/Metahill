@@ -17,14 +17,11 @@
     
     <section id="main-container" class="signup">
         <article id="welcome">
-            <h1>Your account has been created!</h1>
+            <h1 class="shaded">Your account has been created!</h1>
             <form method="post" id="action-chooser">
-                <p class="desc">We have sent you an email.</p>
-                <p class="desc">Please check your inbox (+spam folder).</p>
+                <p class="desc shaded">We have sent you an email.<br>
+                Please check your inbox (+spam folder).</p>
             </form>
-            <p>To activate your account, you need to click<br> the link within the mail
-                we sent you.</p>
-            <p>Afterwards, you can <a href="login.php">sign in</a>.</p>
             <footer>
                 <a href="blog" target="_blank">Blog</a>&nbsp;|
                 <a href="help" target="_blank">Help</a>
@@ -34,6 +31,7 @@
     
     <script src="js/vendor/jquery-2.0.3.min.js" ></script>
     <script src="js/base.js" ></script>
+    <script src="js/login.js" ></script>
     
     <script async="async">
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
