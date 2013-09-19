@@ -3,6 +3,10 @@
     color: #282828;
 }
 
+#main-container {
+    background: #fff;
+}
+
 #welcome h1 {
     margin-bottom: 90px;
 }
@@ -63,6 +67,7 @@
     color: #282828;
     margin-top: 15px;
 }
+
 
 
 

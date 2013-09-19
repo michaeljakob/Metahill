@@ -122,21 +122,22 @@
 
 
             </aside>
-            <h1 class="desc">At metahill, you can meet other enthusiasts and chat with them in real-time.</h1>
-            <h1 class="desc">It is entirely free, ad-free and community-driven.</h1>
-            <h1 class="desc">Simple.</h1>
+            <div id="welcome-statement">
+                <h1 class="desc">At metahill, you can meet other enthusiasts and chat with them in real-time.</h1>
+                <h1 class="desc">It is entirely free, ad-free and community-driven.</h1>
+                <h1 class="desc">Simple.</h1>
+            </div>
             <table id="login-chooser">
                 <tr>
                     <td colspan="5">
-                        <h2>Sign in</h2>
-                        <hr class="fade-white top-hr">
+                        <h2 id="sign-in-text">Sign in or <a href="signup.php">Sign up</a></h2>
                     </td>
                 </tr>
                 <tr>
                     <td class="content">
                         <div id="login-native-content">
                              <form method="post" id="login-native">
-                                <input type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
+                                <input id="login-native-username" type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
                                 <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> />
                                 <input type="submit" value="Sign in" class="btn btn-success" />
                                 <?php 
@@ -151,31 +152,31 @@
                             </form>
                         </div>
                     </td>
-                    <td>
-                        <p class="or">or</p>
+                    <td class="content">
+                        <span>
+                            <a href="#" onclick="fb_login();">
+                                <span class="login-circle">f</span>
+                            </a>
+                        </span>
+                        <span>
+                            <a href="#" onclick="fb_login();">
+                                <span class="login-title">I have Facebook</span>
+                            </a>
+                        </span>
                     </td>
                     <td class="content">
-                        <a href="#" onclick="fb_login();">
-                            <span class="login-circle">f</span>
-                        </a>
-                        <span class="login-title">I have Facebook</span>
+                        <span>
+                            <a href="join-as-guest.php?<?php echo "{$_SERVER['QUERY_STRING']}&skip-verify=true";?>">
+                                <span class="login-circle">g</span>
+                            </a>
+                        </span>
+                        <span>
+                            <a href="join-as-guest.php?<?php echo "{$_SERVER['QUERY_STRING']}&skip-verify=true";?>">
+                                <span class="login-title">I am a guest</span>
+                            </a>
+                        </span>
                     </td>
-                    <td>
-                        <p class="or">or</p>
-                    </td>
-                    <td class="content">
-                        <a href="join-as-guest.php?<?php echo "{$_SERVER['QUERY_STRING']}&skip-verify=true";?>">
-                            <span class="login-circle">g</span>
-                        </a>
-                        <span class="login-title">I am a guest</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="5">
-                        <hr class="fade-white">
-                        <p class="no-account-yet">I don't have an account. <a href="signup.php">Sign up</a>.</p>
-                    </td>
-                </tr>           
+                </tr>         
             </table>
         </article>
         <footer>

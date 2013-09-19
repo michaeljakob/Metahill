@@ -54,8 +54,8 @@
     
     <section id="main-container" class="login">
         <article id="welcome">
-            <p class="desc">Enter your new password below.</p>
-            <p class="desc">For best security, use 8 or more characters.</p>
+            <p class="desc shaded">Enter your new password below.<br>
+            For best security, use 8 or more characters.</p>
             <form method="post">
                 <h2></h2><br>
                 <input type="text" id="verification_id" name="verification_id" value="<?php echo $verificationId; ?>" style="display:none;" />
@@ -75,6 +75,7 @@
     
     <script src="js/vendor/jquery-2.0.3.min.js"></script>
     <script async src="js/base.js" ></script>
+    <script async src="js/login.js"></script>
     <script>
         $(function() {
             var storage = {};
@@ -100,7 +101,7 @@
             });
         });
     </script>
-    
+
     <script async="async">
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

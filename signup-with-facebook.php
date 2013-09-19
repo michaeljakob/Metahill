@@ -76,9 +76,9 @@ if($facebookUserProfile !== null) {
     <?php require_once("feature/header.php"); ?>
     <section id="main-container" class="signup">
         <article id="welcome">
-            <h1>Just two more things...</h1>
+            <h1 class="shaded">Just two more things...</h1><br>
             <form method="post" id="action-chooser">
-                <h2 class="desc">Pick a nickname</h2>
+                <h2 class="desc shaded">Pick a nickname</h2><br>
                 
                 <input type="text" placeholder="Username" autofocus="true" pattern="[^@]*" name="username" id="reg_name" value="<?php echo $nickNameSuggestion; ?>" />
                 <span class="label"></span>
@@ -101,6 +101,8 @@ if($facebookUserProfile !== null) {
     <script src="js/base.js"></script>
     <script src="js/helper.js"></script>
     <script src="js/signup.js"></script>
+    <script src="js/login.js"></script>
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

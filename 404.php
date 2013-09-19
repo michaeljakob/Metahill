@@ -4,31 +4,34 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 <title>Metahill | Error 404: Not found!!1</title>
-<link rel="stylesheet" type="text/css" href="http://www.metahill.com/css/base.css">
-<link rel="stylesheet" type="text/css" href="http://www.metahill.com/css/login.css">
+<link rel="stylesheet" type="text/css" href="//www.metahill.com/css/base.css">
+<link rel="stylesheet" type="text/css" href="//www.metahill.com/css/login.css">
 
 </head>
 <body>
     <header>
-        <a href="../../../../../../../../"><img id="company-icon" alt="metahill icon" src="http://www.metahill.com/img/metahill.png" /></a>
+        <a href="../../../../../../../../"><img id="company-icon" alt="metahill icon" src="//www.metahill.com/img/metahill.png" /></a>
     </header>
 
     <section id="main-container" class="not-found">
         <article id="welcome">
-            <h1>Hm...</h1>
-            <p class="desc">we can't find the page</p>
-            <p class="desc">you're looking for</p>
+            <h1 class="shaded">Hm...</h1><br>
+            <p class="desc shaded">we can't find the page<br>
+            you're looking for</p>
             <br/><br/>
-            <p>Visit our <a href="http://www.metahill.com/help">help page</a> or the <a href="http://www.metahill.com/blog">blog</a>.</p>
-            <p>Do you want to <a href="http://www.metahill.com/login.php">Sign in</a> or <a href="http://www.metahill.com/signup.php">Sign up</a>?</p>
+            <p class="shaded">Visit our <a href="//www.metahill.com/help">help page</a> or the <a href="//www.metahill.com/blog">blog</a>.<br>
+            Do you want to <a href="//www.metahill.com/login.php">Sign in</a> or <a href="//www.metahill.com/signup.php">Sign up</a>?</p>
             <footer>
-                <a href="http://www.metahill.com/blog" target="_blank">Blog</a>&nbsp;|&nbsp;
-                <a href="http://www.metahill.com/help" target="_blank">Help</a>
+                <a href="//www.metahill.com/blog" target="_blank">Blog</a>&nbsp;|&nbsp;
+                <a href="//www.metahill.com/help" target="_blank">Help</a>
             </footer>
         </article>
     </section>
 </body>
 
+
+    <script src="//www.metahill.com/js/vendor/jquery-2.0.3.min.js"></script>
+    <script async src="//www.metahill.com/js/login.js" ></script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

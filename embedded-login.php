@@ -118,42 +118,57 @@
 
 
             </aside>
+
             <table id="login-chooser">
                 <tr>
-                    <td colspan="3">
-                        <h2>Sign in<hr class="style-two"></h2>
+                    <td colspan="5">
+                        <h2 id="sign-in-text">Sign in or <a target="_blank" href="signup.php?source=embedded.php&<?php echo $_SERVER['QUERY_STRING']; ?>">Sign up</a></h2>
                     </td>
                 </tr>
                 <tr>
                     <td class="content">
-                        <form method="post" id="login-native">
-                            <input type="text" name="username" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
-                            <input type="password" name="password" placeholder="Password" /><br/>
-                            <input type="submit" value="Sign in" class="btn btn-success" />
-                            <?php 
-                                login();
-                                if($wasAccountActivationEmailSent) {
-                                    echo '<div class="alert alert-success">'.
-                                            'We have sent you an email. Please check your inbox (+spam folder).'.
-                                         '</div>';
-                                }
-                            ?>
+                        <div id="login-native-content">
+                             <form method="post" id="login-native">
+                                <input id="login-native-username" type="text" name="username" autofocus="autofocus" placeholder="Email or Username" <?php if(isset($_POST['username'])) { echo 'value="' . htmlspecialchars($_POST['username']) . '"'; } ?> />
+                                <input type="password" name="password" placeholder="Password" <?php if(isset($_POST['username'])) { echo 'autofocus'; } ?> />
+                                <input type="submit" value="Sign in" class="btn btn-success" />
+                                <?php 
+                                    login();
+                                    if($wasAccountActivationEmailSent) {
+                                        echo '<div class="alert alert-success">'.
+                                                'We have sent you an email. Please check your inbox (+spam folder).'.
+                                              '</div>';
+                                    }
+                                ?>
 
-                        </form>
-                    </td>
-                    <td>
-                        <p class="or">or</p>
+                            </form>
+                        </div>
                     </td>
                     <td class="content">
-                        <a href="#" onclick="fb_login();"><img class="facebook-login" src="img/facebook-login.png" border="0" alt="Sign up with facebook"></a>
+                        <span>
+                            <a href="#" onclick="fb_login();">
+                                <span class="login-circle">f</span>
+                            </a>
+                        </span>
+                        <span>
+                            <a href="#" onclick="fb_login();">
+                                <span class="login-title">I have Facebook</span>
+                            </a>
+                        </span>
                     </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <hr class="style-two">
-                        <p class="no-account-yet">I don't have an account. <a target="_blank" href="signup.php?source=embedded.php&<?php echo $_SERVER['QUERY_STRING']; ?>">Sign up</a> or <a href="join-as-guest.php?source=embedded.php&<?php echo $_SERVER['QUERY_STRING']; ?>">join as a guest</a>.</p>
+                    <td class="content">
+                        <span>
+                            <a href="join-as-guest.php?source=embedded.php&skip-verify=true&<?php echo $_SERVER['QUERY_STRING']; ?>">
+                                <span class="login-circle">g</span>
+                            </a>
+                        </span>
+                        <span>
+                            <a href="join-as-guest.php?source=embedded.php&skip-verify=true&<?php echo $_SERVER['QUERY_STRING']; ?>">
+                                <span class="login-title">I am a guest</span>
+                            </a>
+                        </span>
                     </td>
-                </tr>           
+                </tr>         
             </table>
         </article>
     </section>

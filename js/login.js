@@ -1,4 +1,27 @@
 $(function() {
+
+    function hideContentElements() {
+        $('#login-chooser .content').each(function(i, e) {$(e).hide();});
+    }
+
+    function showContentElements() {
+        $('#login-chooser .content').each(function(i, e) {$(e).show('slow');});
+    }
+
+    hideContentElements();
+    setTimeout(function() {
+        showContentElements();
+    }, 0);
+
+
+    (function focusLoginField() {
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('#login-native-username').focus();
+            }, 500);
+        });
+    })();
+
     // remove "add-new-room"-popover if you click anywhere
     $('body').on('click', function (e) {
         $('#login-native-button').each(function() {
@@ -24,7 +47,7 @@ $(function() {
             if(h < 685) {
                 footer.css('bottom', h - 635);
             } else {
-                footer.css('bottom', '50px');
+                footer.css('bottom', '25px');
             }
 
             // set background
@@ -33,7 +56,9 @@ $(function() {
                 headerSize = 0;
             }
             
-            $('#main-container').height($(window).height()-headerSize);
+            var containerHeight = $(window).height()-headerSize;
+            containerHeight = Math.max(containerHeight, 600);
+            $('#main-container').height(containerHeight);
         };
     })());
 

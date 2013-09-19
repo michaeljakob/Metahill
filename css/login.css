@@ -1,25 +1,55 @@
 #main-container {
-    height: 10000px;
-    color: #dfdfdf;
+    color: #333;
     text-align: center;
-    background: #222;
+    background: #FCE790;
 }
 
 @media all and (min-width: 800px) {
     #main-container.login {
-        background: url('../img/background-login.jpg');
+        background: url('../img/background-login.jpg') no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
     }
+    
     #main-container.signup {
-        background: url('../img/background-signup.jpg');
+        background: url('../img/background-signup.jpg') no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
     }
+
     #main-container.not-found {
-        background: url('../img/background-404.jpg');
+        background: url('../img/background-404.jpg') no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
         color: #fff;
     }
 }
 
+.shaded {
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px !important;
+    font-weight: 300;
+    display: inline-block;
+    color: #333
+}
+
 #welcome {
     padding-top: 30px;
+}
+
+#welcome-statement {
+    background: rgba(255, 255, 255, .9);
+    border-radius: 20px;
+    color: #333;
+    display: inline-table;
+    padding: 20px;
 }
 
 #login-native {
@@ -27,11 +57,12 @@
     margin: auto;
 }
 
-#login-native > input {
+input {
     width: 185px;
+    border-radius: 10px;
 }
 
-#login-native > input[type='submit'] {
+input[type='submit'] {
     width: 200px;
 }
 
@@ -64,13 +95,31 @@
     width: 300px;
 }
 
-#login-chooser td.content > a span {
+#login-chooser td.content a span {
     margin-top: 12px;
+    margin-bottom: 20px;
 }
 
 #login-chooser td.content > div {
     padding: 20px 0;
 
+}
+
+#login-chooser tr:last-child td {
+    padding-top: 20px;
+}
+
+.or, .login-title, .no-account-yet, #sign-in-text  {
+    background: rgba(255, 255, 255, .9);
+    color: #333;
+    display: inline;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#sign-in-text {
+    padding-left: 50px;
+    padding-right: 50px;
 }
 
 #login-chooser p.or {
@@ -125,6 +174,14 @@ form .label {
     display: table;
 }
 
+form .label-alert {
+    background: #333;
+}
+
+form .label-success {
+    background: #62c462;
+}
+
 .desc {
     text-align: center;
     font-size: 24px;
@@ -136,19 +193,18 @@ form .label {
 
 
 ::selection {
-    background: white;
+    background: rgba(0,0,0,.15);
 }
 
 footer {
     width: 400px;
     padding: 15px;
-    border-radius: 3px;
-    color: #282828;
+    border-radius: 10px;
     position: absolute;
     left: 50%;
     bottom: 50px;
     margin-left: -210px;
-    background: #f0f0f0;
+    background: rgba(255, 255, 255, .9);
 }
 
 #share {
@@ -169,12 +225,12 @@ footer {
 }
 
 h1.desc {
-    max-width: 60%;
     margin: auto;
 }
 
 .no-account-yet {
-    margin-top: 5px;
+    font-size: 25px;
+    font-weight: 300;
 }
 
 .top-hr {
@@ -182,21 +238,16 @@ h1.desc {
     margin-bottom: 12px;
 }
 
-.content > a {
-
-
-}
-
 .content > a:hover {
     text-decoration: none;
 }
 
 .login-circle {
-    display: block;
+    display: inline-block;
     width: 70px;
     height: 70px;
     margin: auto;
-    background: #f0f0f0;
+    background: rgba(255, 255, 255, .9);
     border-radius: 50%;
     margin-bottom: 10px;
     line-height: 70px;
@@ -211,6 +262,27 @@ h1.desc {
     transition-duration: 500ms;
 }
 
+
+.content span:nth-child(2) {
+    display: block;
+}
+
+.content span:nth-child(2) a > span {
+    -webkit-transition-duration: 500ms;
+    -moz-transition-duration: 500ms;
+    -o-transition-duration: 500ms;
+    transition-duration: 500ms;
+}
+
+.login-circle:hover {
+    background: #fff;
+}
+
+
+.content span:nth-child(2) a {
+    text-decoration: none;
+}
+
 .login-circle:hover {
     -webkit-transform: scale(1.1);
     -moz-transform: scale(1.1);
@@ -218,8 +290,8 @@ h1.desc {
     transform: scale(1.1);
 }
 
-.login-title {
-    font-weight: bold;
+.content span:nth-child(2) a > span:hover {
+    color: #369;
 }
 
 .popover-title {
@@ -240,3 +312,4 @@ h1.desc {
     -o-transform: scale(1.1);
     transform: scale(1.1);
 }
+

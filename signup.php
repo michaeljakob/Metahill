@@ -116,9 +116,9 @@
     
     <section id="main-container" class="signup">
         <article id="welcome">
-            <h1>Join metahill today!</h1>
+            <h1 class="shaded">Join metahill today!</h1>
             <form method="post" id="action-chooser" autocomplete="off">
-                <h2 class="desc">Sign up using email</h2>
+                <h2 class="desc shaded">Sign up here or <a href="login.php">Sign in</a></h2>
                 
                 <input type="text" autocomplete="off" placeholder="Username" pattern="[^@]*" name="username" id="reg_name" value="<?php if(isset($_POST["username"])) echo htmlspecialchars($_POST["username"]); ?>" />
                 <span class="label"></span>
@@ -128,12 +128,11 @@
                 <span class="label"></span>
                 
 
-                <input type="submit" value="Sign up" class="btn btn-success" />
+                <input type="submit" value="Sign up" disabled="disabled" class="btn btn-success" />
                 <?php 
                     $isEmailAddressInUse = !createUser();
                 ?>
             </form>
-            <p>I have an account. <a href="login.php">Sign in</a>.</p>
             <footer>
                 <a href="blog" target="_blank">Blog</a>&nbsp;|
                 <a href="help" target="_blank">Help</a>&nbsp;|
@@ -147,6 +146,7 @@
     <script async src="js/base.js" ></script>
     <script async src="js/helper.js" ></script>
     <script async src="js/signup.js" ></script>
+    <script async src="js/login.js" ></script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -160,7 +160,6 @@
 
     <?php
         // if email address was in use, verify username anyway
-        var_dump($isEmailAddressInUse);
         if($isEmailAddressInUse) {
             echo "<script>";
 

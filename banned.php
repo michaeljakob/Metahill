@@ -1,5 +1,5 @@
 <?php
-    session_destroy();
+    @session_destroy();
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,11 +17,15 @@
 
 <section id="main-container" class="signup">
     <article id="welcome">
-        <h1>You have been banned.</h1>
-        <p class="desc">Your behaviour in the past was neither honorable<br>nor was it kind to other members.</p><br>
-        <p class="desc">We therefore fell the decision to permanently<br> exclude you from our community.</p>
-        <p class="desc">This decision is final.</p>
+        <h1 class="shaded">You have been banned.</h1><br>
+        <p class="desc shaded">Your behaviour in the past was neither honorable<br>nor was it kind to other members.<br>
+        We therefore fell the decision to permanently<br> exclude you from our community.<br>
+        This decision is final.</p>
     </article>
 </section>
+
+
+<script src="js/vendor/jquery-2.0.3.min.js"></script>
+<script async src="js/login.js"></script>
 </body>
 </html>

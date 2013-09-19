@@ -11,9 +11,9 @@
     
     <section id="main-container" class="signup">
         <article id="welcome">
-            <h1>Your password has been changed!</h1>
+            <h1 class="shaded">Your password has been changed!</h1><br>
             <form method="post" id="action-chooser">
-                <p class="desc">To sign in with it, <a href="logout.php">go here</a>.</p>
+                <p class="desc shaded">To sign in with it, <a href="logout.php">go here</a>.</p>
             </form>
             <footer>
                 <a href="blog" target="_blank">Blog</a>&nbsp;|
@@ -35,5 +35,8 @@
       ga('send', 'pageview');
 
     </script>
+
+<script src="js/vendor/jquery-2.0.3.min.js"></script>
+<script async src="js/login.js"></script>
 </body>
 </html>

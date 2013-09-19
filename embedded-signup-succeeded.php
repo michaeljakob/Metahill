@@ -15,14 +15,16 @@
 <body>
     <section id="main-container" class="signup">
         <article id="welcome">
-            <h1>Your account has been created!</h1>
+            <h1 class="shaded">Your account has been created!</h1><br>
             <form method="post" id="action-chooser">
-                <p class="desc">We have sent you an email.</p>
-                <p class="desc">Please check your inbox (+spam folder).</p>
+                <p class="desc shaded">We have sent you an email.<br>
+                Please check your inbox (+spam folder).</p>
             </form>
       </article>
     </section>
     
+  <script src="js/vendor/jquery-2.0.3.min.js"></script>
+  <script async src="js/login.js"></script>
     <script async="async">
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

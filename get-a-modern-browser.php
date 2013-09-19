@@ -55,6 +55,7 @@
     
     <script src="js/vendor/jquery-2.0.3.min.js" ></script>
     <script src="js/base.js" ></script>
+    <script src="js/login.js" ></script>
     <script>
         $(function() {
             if(!metahill.base.support.isInternetExplorer) {
