@@ -2,3 +2,6 @@
 php/database-config.php
 metahill-server/*
 image-upload/*
+dart/*
+admin/*
+
