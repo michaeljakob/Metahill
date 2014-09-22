@@ -151,6 +151,10 @@ input[type='submit'] {
     font-size: 25px;
 }
 
+#action-chooser > input[type="text"] {
+    margin: 5px 0 0 0;
+}
+
 
 
 input {

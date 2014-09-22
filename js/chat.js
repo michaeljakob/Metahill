@@ -14,8 +14,8 @@ $(function(){
     }
 
     // open connection
-    var mAddress = 'ws://127.0.0.1:1337';
-    //var mAddress = 'ws://81.169.246.231:443';
+    // var mAddress = 'ws://127.0.0.1:1337';
+    var mAddress = 'ws://srv.metahill.com:2357';
 
     metahill.chat.isOnline = true;
 

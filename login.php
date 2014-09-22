@@ -71,7 +71,7 @@
 <link type="text/plain" rel="author" href="http://www.metahill.com/humans.txt" />
 
 
-<title>Metahill | Chatrooms for enthusiasts</title>
+<title>Metahill | Chat rooms for professional and enthusiast programmers.</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 
@@ -123,9 +123,9 @@
 
             </aside>
             <div id="welcome-statement">
-                <h1 class="desc">At metahill, you can meet other enthusiasts and chat with them in real-time.</h1>
+                <h1 class="desc">Chat rooms for professional and enthusiast programmers.</h1>
                 <h1 class="desc">It is entirely free, ad-free and community-driven.</h1>
-                <h1 class="desc">Simple.</h1>
+                <h1 class="desc">Made simple.</h1>
             </div>
             <table id="login-chooser">
                 <tr>

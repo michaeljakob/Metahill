@@ -64,7 +64,7 @@ $(function() {
 
 $(function() {
     var adminNames = ['Michael'];
-    var modNames = ['Weexe'];
+    var modNames = ['maxi'];
 
     metahill.base.user.isAdmin = function(userName) {
         return adminNames.indexOf(userName) !== -1;

@@ -236,7 +236,7 @@ $(function() {
         if(verificaton.isNameValid) {
             $('#modals-new-room-name-status').hide();
         } else {
-            $('#modals-new-room-name-status').html('Only use alphanumeric symbols plus -,_,#').show();
+            $('#modals-new-room-name-status').html('Only use alphanumeric symbols or -, _, #').show();
         }
     }
 
@@ -263,6 +263,7 @@ $(function() {
         }
         verifyNewRoomInput();
     });
+
     $('#modals-new-room-topic').bind('propertychange keyup input paste', function() {
         var len = $(this).val().trim().length;
         verificaton.isTopicLengthOk = len >= 20 && len <= 400;        

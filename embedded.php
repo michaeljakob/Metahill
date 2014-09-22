@@ -39,7 +39,7 @@
 <meta name="keywords" content="instant messager, IM, instant messaging, free chat rooms, free chat, chat, chatrooms, chat-room, realtime, real-time, chat, share-images, share images, image upload, community based, community driven, adfree, free, better irc, enthusiasts, community-based, online meetings, troubi, social network, better facebook, better twitter, better google plus, facebook alternative, twitter alternative, metahill, troubi, fun, enthusiasts, experts, connection, network, community, forum, internet relay chat, usenet newsgroups, knowledge, science, learning, homework, self-helping, users help users">
 
 <base href="http://127.0.0.1/metahill.com/"/>
-<title>Metahill | Chatrooms for enthusiasts</title>
+<title>Metahill | Chat rooms for professional and enthusiast programmers.</title>
 <link rel="stylesheet" type="text/css" href="css/base.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/index.css?v=<?php echo $version; ?>"/>
 <link rel="stylesheet" type="text/css" href="css/chat.css?v=<?php echo $version; ?>"/>
