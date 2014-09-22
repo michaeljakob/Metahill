@@ -1,19 +1,5 @@
 $(function() {
 
-    function hideContentElements() {
-        $('#login-chooser .content').each(function(i, e) {$(e).hide();});
-    }
-
-    function showContentElements() {
-        $('#login-chooser .content').each(function(i, e) {$(e).show('slow');});
-    }
-
-    hideContentElements();
-    setTimeout(function() {
-        showContentElements();
-    }, 0);
-
-
     (function focusLoginField() {
         $(document).ready(function() {
             setTimeout(function() {

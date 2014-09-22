@@ -75,7 +75,7 @@
 <link type="text/plain" rel="author" href="http://www.metahill.com/humans.txt" />
 
 
-<title>Metahill | Chatrooms for enthusiasts</title>
+<title>Metahill | Chat rooms for professional and enthusiast programmers.</title>
 <link rel="stylesheet" type="text/css" href="css/base.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
 <link rel="stylesheet" type="text/css" href="css/embedded/login.css">
