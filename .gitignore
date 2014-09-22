@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 *.DS_Store
+=======
+.DS_STORE
+>>>>>>> 86b50285d0f97f54bc8d1f998731cb11df78d46b
 php/database-config.php
 metahill-server/*
 image-upload/*
 dart/*
 admin/*
+<<<<<<< HEAD
+=======
+
+>>>>>>> 86b50285d0f97f54bc8d1f998731cb11df78d46b
