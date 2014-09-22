@@ -1,7 +1,6 @@
-.DS_STORE
+*.DS_STORE
 php/database-config.php
 metahill-server/*
 image-upload/*
 dart/*
 admin/*
-
